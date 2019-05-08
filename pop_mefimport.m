@@ -1,7 +1,5 @@
-% pop_sample() - description of the function. If less than
-%                three arguments are given, a window pops up
-%                to ask for the value of the additional 
-%                parameters.   
+function [EEG, cmd] = pop_mefimport(EEG, filepath, filename, varargin)
+% POP_MEFIMPORT Import MEF data into EEGLab with GUI
 %
 % Usage:
 %   >>  OUTEEG = pop_sample( INEEG, type, param3 );
@@ -18,29 +16,20 @@
 % See also:
 %   SAMPLE, EEGLAB 
 
-% Copyright (C) <year>  <name of author>
+% Copyright 2019 Richard J. Cui. Created: Tue 05/07/2019 10:33:48.169 PM
+% $Revision: 0.1 $  $Date: Tue 05/07/2019 10:33:48.169 PM $
 %
-% This program is free software; you can redistribute it and/or modify
-% it under the terms of the GNU General Public License as published by
-% the Free Software Foundation; either version 2 of the License, or
-% (at your option) any later version.
+% 1026 Rocky Creek Dr NE
+% Rochester, MN 55906, USA
 %
-% This program is distributed in the hope that it will be useful,
-% but WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-% GNU General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with this program; if not, write to the Free Software
-% Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-function [EEG, com] = pop_sample( EEG, typeproc, param3 );
+% Email: richard.cui@utoronto.ca
 
 % the command output is a hidden output that does not have to
 % be described in the header
 
-com = ''; % this initialization ensure that the function will return something
-          % if the user press the cancel button            
+EEG = struct([]); % this initialization ensure that the function will return something
+                  % if the user press the cancel button    
+cmd = '';
 
 % display help if not enough arguments
 % ------------------------------------
@@ -74,6 +63,6 @@ end;
 
 % return the string command
 % -------------------------
-com = sprintf('pop_sample( %s, %d, [%s] );', inputname(1), typeproc, int2str(param3));
+cmd = sprintf('pop_sample( %s, %d, [%s] );', inputname(1), typeproc, int2str(param3));
 
 return;

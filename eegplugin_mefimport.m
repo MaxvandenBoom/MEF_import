@@ -44,15 +44,15 @@ catch_strings = q.catch_strings;
 % Setup menus of importing MEF files into EEGLAB
 % ----------------------------------------------
 % find import data menu
-importmenu = findobj(fig,'tag','import data');
+importmenu = findobj(fig, 'tag', 'import data');
 
 % menu callback
-cmd_mefimp = [try_strings.no_check, 'EEG = pop_mefimport;',...
+mef_imp = [try_strings.no_check, 'EEG = pop_mefimport;',...
     catch_strings.new_and_hist];
 
 % create menus in EEGLab
-uimenu(importmenu, 'label', 'Import UP-MSEL .MEF file', 'callback',...
-    cmd_mefimp, 'separator', 'on', 'position',length(get(menu,'children'))+1);
+uimenu(importmenu, 'label', 'From UP-MSEL .mef file', 'callback',...
+    mef_imp, 'separator', 'on');
 
 end % function
  
