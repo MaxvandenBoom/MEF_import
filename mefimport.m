@@ -37,7 +37,7 @@ function EEG = mefimport(EEG, filepath, filename, varargin)
 % See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
-% $Revision: 0.1 $  $Date: Wed 05/08/2019  3:19:29.986 PM $
+% $Revision: 0.2 $  $Date: Thu 05/09/2019 10:12:17.013 AM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -64,6 +64,7 @@ mef = MultiscaleElectrophysiologyFile(filepath, fname{1});
 % set EEG structure
 % -----------------
 if isempty(EEG)
+    % if EEGLAB is included in pathway, this can be done with eeg_emptyset.m
     EEG = struct('setname', '',...
                  'filename', '',...
                  'filepath', '',...

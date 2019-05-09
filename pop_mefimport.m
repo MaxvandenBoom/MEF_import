@@ -1,13 +1,14 @@
-function [EEG, cmd] = pop_mefimport(EEG, filepath, filename, varargin)
+function [EEG, com] = pop_mefimport(EEG, filepath, filename, varargin)
 % POP_MEFIMPORT Import MEF data into EEGLab with GUI
 %
 % Syntax:
-%   [EEG, cmd] = pop_mefimport(EEG)
-%   [EEG, cmd] = pop_mefimport(EEG, filepath)
-%   [EEG, cmd] = pop_mefimport(EEG, filepath, filename)
-%   [EEG, cmd] = pop_mefimport(EEG, filepath, filename, start_end)
-%   [EEG, cmd] = pop_mefimport(EEG, filepath, filename, start_end, unit)
+%   [EEG, com] = pop_mefimport(EEG)
+%   [EEG, com] = pop_mefimport(EEG, filepath)
+%   [EEG, com] = pop_mefimport(EEG, filepath, filename)
+%   [EEG, com] = pop_mefimport(EEG, filepath, filename, start_end)
+%   [EEG, com] = pop_mefimport(EEG, filepath, filename, start_end, unit)
 %
+% Input(s):
 %   filepath        - [str] full file path
 %   filename        - [str/cell str] the name(s) of the data files in the
 %                     directory of 'filepath'. One file name can be in
@@ -56,19 +57,24 @@ if nargin == 0
 end % if	
 
 q = parseInputs(EEG, filepath, filename, varargin{:});
+EEG = q.EEG;
+filepath = q.filepath;
+filename = q.filename;
+start_end = q.start_end;
+unit = q.unit;
 
 % =========================================================================
 % main
 % =========================================================================
-if isempty(filepath) && isempty(filename)
-    EEG = gui_mefimport(EEG);
-else
-    EEG = mefimport(EEG, filepath, filename, start_end, unit);
+if isempty(filename)
+    % use GUI to get the necessary information
+    [filepath, filename, start_end, unit] = gui_mefimport;
 end % if
+EEG = mefimport(EEG, filepath, filename, start_end, unit);
     
 % return the string command
 % -------------------------
-cmd = sprintf('%s(EEG, [filename, [pathname, [start_end, [unit]]]] )', mfilename);
+com = sprintf('%s(EEG, [filename, [pathname, [start_end, [unit]]]] )', mfilename);
 
 end % funciton
 

@@ -1,15 +1,39 @@
 function varargout = gui_mefimport(varargin)
-% Begin initialization code - DO NOT EDIT
-% GUI_MEFIMPORT Graphic UI for importing .MEF datafile
+% GUI_MEFIMPORT Graphic UI for importing MEF datafile
+% 
+% Syntax:
+%   [filepath, filename, start_end, unit] = gui_mefimport()
+% 
+% Input(s):
+% 
+% Output(s):
+%   filepath        - [str] full file path
+%   filename        - [str/cell str] the name(s) of the data files in the
+%                     directory of 'filepath'. One file name can be in
+%                     string or cell string.  More than one, the names are
+%                     in cell string.
+%   start_end       - [1 x 2 array] (optional) [start time/index, end time/index] of 
+%                     the signal to be extracted fromt he file (default:
+%                     the entire signal)
+%   unit            - [str] (optional) unit of start_end: 'Index' (default), 'uUTC',
+%                     'Second', 'Minute', 'Hour', and 'Day'
+% 
+% Note:
+%   gui_mefimport does not import MEF by itself, but instead gets the
+%   necessary information about the data and then relys on mefimport.m to
+%   import MEF data into EEGLab.
+% 
+% See also pop_mefimport, mefimport.
 
 % Copyright 2019 Richard J. Cui. Created: Sun 04/28/2019  9:51:01.691 PM
-% $Revision: 0.1 $  $Date: Sun 04/28/2019  9:51:01.691 PM $
+% $Revision: 0.2 $  $Date: Thu 05/09/2019 10:31:59.845 AM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
 %
 % Email: richard.cui@utoronto.ca
 
+% Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
@@ -33,7 +57,7 @@ function gui_mefimport_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 guidata(hObject, handles);
 
-set(handles.checkbox_channel, 'Value', 0)
+set(handles.checkbox_segment, 'Value', 0)
 set(handles.pushbutton_selall, 'Enable', 'off')
 set(handles.uitable_channel,'Data', [], 'Enable', 'off')
 
@@ -115,8 +139,8 @@ end
 function edit_path_Callback(hObject, eventdata, handles)
 
 
-function checkbox_channel_Callback(hObject, eventdata, handles)
-CB1= get(handles.checkbox_channel, 'Value');
+function checkbox_segment_Callback(hObject, eventdata, handles)
+CB1= get(handles.checkbox_segment, 'Value');
 Table= get(handles.uitable_channel, 'Data');
 if CB1 == 1
     set(handles.uitable_channel, 'Enable', 'on')
