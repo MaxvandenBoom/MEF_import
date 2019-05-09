@@ -7,6 +7,9 @@ function EEG = mefimport(EEG, filepath, filename, varargin)
 %   EEG = mefimport(EEG, filepath, filename, start_end, unit)
 %
 % Input(s):
+%   EEG             - [struct] EEGLab dataset structure. See Note for
+%                     addtional information about the details of the
+%                     structure.
 %   filepath        - [str] full file path
 %   filename        - [str/cell str] the name(s) of the data files in the
 %                     directory of 'filepath'. One file name can be in
@@ -31,8 +34,7 @@ function EEG = mefimport(EEG, filepath, filename, varargin)
 %   https://sccn.ucsd.edu/wiki/A05:_Data_Structures, or see the help
 %   information of eeg_checkset.m.
 %
-% See also: 
-%   eeglab, eeg_checkset. 
+% See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
 % $Revision: 0.1 $  $Date: Wed 05/08/2019  3:19:29.986 PM $

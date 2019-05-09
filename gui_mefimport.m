@@ -13,8 +13,8 @@ function varargout = gui_mefimport(varargin)
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @pop_mefimport_OpeningFcn, ...
-                   'gui_OutputFcn',  @pop_mefimport_OutputFcn, ...
+                   'gui_OpeningFcn', @gui_mefimport_OpeningFcn, ...
+                   'gui_OutputFcn',  @gui_mefimport_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -29,7 +29,7 @@ end
 % End initialization code - DO NOT EDIT
 
 
-function pop_mefimport_OpeningFcn(hObject, eventdata, handles, varargin)
+function gui_mefimport_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 guidata(hObject, handles);
 
@@ -39,7 +39,7 @@ set(handles.uitable_channel,'Data', [], 'Enable', 'off')
 
 uiwait();
 
-function varargout = pop_mefimport_OutputFcn(hObject, eventdata, handles)
+function varargout = gui_mefimport_OutputFcn(hObject, eventdata, handles)
 if isempty(handles)
     varargout{1}= [];
     varargout{2}= '';
