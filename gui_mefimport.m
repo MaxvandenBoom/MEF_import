@@ -20,10 +20,10 @@ function varargout = gui_mefimport(varargin)
 % 
 % Note:
 %   gui_mefimport does not import MEF by itself, but instead gets the
-%   necessary information about the data and then relys on mefimport.m to
+%   necessary information about the data and then relys on gui_mefimport.m to
 %   import MEF data into EEGLab.
 % 
-% See also pop_mefimport, mefimport.
+% See also pop_mefimport, gui_mefimport.
 
 % Copyright 2019 Richard J. Cui. Created: Sun 04/28/2019  9:51:01.691 PM
 % $Revision: 0.2 $  $Date: Thu 05/09/2019 10:31:59.845 AM $
@@ -71,15 +71,18 @@ uiwait();
 
 function varargout = gui_mefimport_OutputFcn(hObject, eventdata, handles)
 if isempty(handles)
-    varargout{1}= [];
-    varargout{2}= '';
-    guinpx= findobj('Tag', 'MEFIMPORT');
-    delete(guinpx)
-    return
+    varargout{1} = '';
+    varargout{2} = '';
+    varargout{3} = [];
+    varargout{4} = '';
 else
-    varargout{1} = handles.EEG;
-    varargout{2} = handles.command;
-end
+    varargout{1} = handles.filepath;
+    varargout{2} = handles.filename;
+    varargout{3} = handles.start_end;
+    varargout{4} = handles.unit;
+end % if
+guimef = findobj('Tag', 'gui_mefimport');
+delete(guimef)
 
 function [start_end, unit] = gerStartend(list_mef, handles)
 % get start and end point
@@ -176,116 +179,78 @@ SelectedCells = eventdata.Indices;
 
 
 function pushbutton_ok_Callback(hObject, eventdata, handles)
-ED1= get(handles.edit_path, 'String');
-Table= get(handles.uitable_channel, 'Data');
-eventIdx= cell2mat(Table(:,4));
-selEvent= Table(eventIdx,1);
+% get the data file information
 
-[filepath, filename]= fileparts(ED1);
+% filepath
+handles.filepath = get(handles.edit_path, 'String');
 
-[progr_ver, dim, fs, n_chs, CH_LABS, DATA, EVENT_STRUCT, ICA]= read_npx(filename, filepath,selEvent);
+% filename
+Table = get(handles.uitable_channel, 'Data');
+fname = Table(:, 1)';
+handles.filename = fname;
 
-EEG= eeg_emptyset;
-EEG.setname= [filename '.set'];
-EEG.filename= [filename '.npx'];
-EEG.subject= '';
-EEG.group= '';
-EEG.condition= '';
-EEG.session= [];
-EEG.comments= ['Original File: ' filepath filesep filename '.npx'];
-EEG.nbchan= n_chs;
+% start_end
+start_pt = str2double(get(handles.edit_start, 'String'));
+end_pt = str2double(get(handles.edit_end, 'String'));
+handles.start_end = [start_pt, end_pt];
 
-if ndims(DATA) == 3
-    EEG.trials= size(DATA,3);
-else
-    EEG.trials= 1;
-end
+% unit
+unit_list = get(handles.popupmenu_unit, 'String');
+choice = get(handles.popupmenu_unit, 'Value');
+handles.unit = unit_list{choice};
 
-EEG.pnts= size(DATA,2);
-EEG.srate=fs;
-EEG.xmin= 0;
-EEG.xmax= EEG.pnts/EEG.srate;
-EEG.times= [];
-EEG.data= DATA;
+guidata(hObject, handles);
 
-if ~isempty(ICA)
-    EEG.icawinv= ICA.InvW;
-    EEG.icasphere= ICA.Sp;
-    EEG.icaweights= ICA.W;
-    EEG.icachansind= 1:1:n_ICAcomps;
-end
-
-EEG.chanlocs =[];
-
-for i= 1:size(CH_LABS, 1)
-    EEG.chanlocs(1,i).labels= CH_LABS(i,:);
-end
-
-offset= 0;
-
-for i=1: length(EVENT_STRUCT)
-       
-    Event_name= EVENT_STRUCT(i,1).name;
-    Event_class= EVENT_STRUCT(i,1).Class;
-        
-    isF= isfield(EVENT_STRUCT(1,1), 'VSB');
-    if isF ==1
-        Event_occ= length(EVENT_STRUCT(i,1).VSB);
-        
-        for j= 1:Event_occ
-            
-            k= offset+ j;
-            EEG.event(k).type= Event_name;
-            EEG.event(k).position= [];
-            EEG.event(k).latency= EVENT_STRUCT(i,1).VSB(j);
-            
-            if  Event_class== 1
-                EEG.event(k).duration= 0;
-            elseif Event_class== 2
-                EEG.event(k).duration= (EVENT_STRUCT(i,1).VSE(j)- EVENT_STRUCT(i,1).VSB(j)) ;
-            end
-        end
-         offset= length(EEG.event);  
-    else
-        Event_occ=0;
-    end
-     
-end
-
-[EEG] = eeg_checkset(EEG);
-disp('Done')
-
-handles.EEG= EEG;
-handles.command= '';
-guidata(hObject,handles);
+% close the GUI
 uiresume();
+guimef= findobj('Tag', 'gui_mefimport');
+close(guimef)
 
 
-function pushbutton_cancer_Callback(hObject, eventdata, handles)
+function pushbutton_cancel_Callback(hObject, eventdata, handles)
+
+handles.filepath = '';
+handles.filename = '';
+handles.start_end = [];
+handles.unit = '';
+guidata(hObject, handles)
 
 uiresume();
-guimef= findobj('Tag', 'MEFIMPORT');
-delete(guimef)
+guimef= findobj('Tag', 'gui_mefimport');
+close(guimef)
 
 
 function pushbutton_deselall_Callback(hObject, eventdata, handles)
-Table= get(handles.uitable_channel, 'Data');
-[r,c]= size(Table);
-for i=1:r
-    Table{i,4}= true;
+Table = get(handles.uitable_channel, 'Data');
+r = size(Table, 1);
+for i = 1:r
+    Table{i, end} = false;
 end
+
 set(handles.uitable_channel, 'Data', Table)
+set(handles.uitable_channel, 'Enable' , 'On')
 
+function gui_mefimport_CloseRequestFcn(hObject, eventdata, handles)
 
-function MEFIMPORT_CloseRequestFcn(hObject, eventdata, handles)
-EEG= [];
-command= '';
-handles.EEG= EEG;
-handles.command= command;
-guidata(hObject,handles);
+if ~isfield(handles, 'filepath')
+    handles.filepath = '';
+end % if
+
+if ~isfield(handles, 'filename')
+    handles.filename = '';
+end % if
+
+if ~isfield(handles, 'start_end')
+    handles.start_end = [];
+end % if
+
+if ~isfield(handles, 'unit')
+    handles.unit = '';
+end % if
+guidata(hObject, handles)
+
 uiresume();
-guimef= findobj('Tag', 'MEFIMPORT');
-delete(guimef)
+
 
 function edit_start_Callback(hObject, eventdata, handles)
 % hObject    handle to edit_start (see GCBO)
@@ -340,6 +305,7 @@ function popupmenu_unit_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns popupmenu_unit contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu_unit
+
 
 
 % --- Executes during object creation, after setting all properties.

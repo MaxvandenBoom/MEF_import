@@ -52,6 +52,7 @@ function [EEG, com] = pop_mefimport(EEG, filepath, filename, varargin)
 % display help if not enough arguments
 % ------------------------------------
 if nargin == 0
+    com = '';
 	help mfilename
 	return
 end % if	
@@ -69,9 +70,14 @@ unit = q.unit;
 if isempty(filename)
     % use GUI to get the necessary information
     [filepath, filename, start_end, unit] = gui_mefimport;
+    % if GUI is cancelled
+    if isempty(filepath) && isempty(filename)
+        return
+    end % if
 end % if
 EEG = mefimport(EEG, filepath, filename, start_end, unit);
-    
+EEG = eeg_checkset(EEG); % from eeglab functions
+
 % return the string command
 % -------------------------
 com = sprintf('%s(EEG, [filename, [pathname, [start_end, [unit]]]] )', mfilename);
