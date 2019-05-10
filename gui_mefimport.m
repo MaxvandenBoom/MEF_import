@@ -53,19 +53,22 @@ end
 % End initialization code - DO NOT EDIT
 
 function gui_mefimport_OpeningFcn(hObject, eventdata, handles, varargin)
-handles.output = hObject;
-guidata(hObject, handles);
-
 % initialization
 % --------------
 set(handles.checkbox_segment, 'Value', 0)
 set(handles.pushbutton_deselall, 'Enable', 'off')
 set(handles.uitable_channel,'Data', [], 'Enable', 'off')
 set(handles.popupmenu_unit, 'String', {'Index', 'uUTC', 'mSec', 'Second',...
-    'Hour', 'Day'})
+    'Hour'}, 'Enable', 'Off')
 set(handles.edit_start, 'Enable', 'Off')
 set(handles.edit_end, 'Enable', 'Off')
 set(handles.uitable_channel, 'Enable' , 'Off')
+set(handles.checkbox_segment, 'Enable', 'Off')
+
+handles.old_unit = 'Index';
+
+handles.output = hObject;
+guidata(hObject, handles);
 
 uiwait();
 
@@ -148,8 +151,14 @@ for k = 1:num_mef
     
     rownames{k} = num2str(k);
 end % for
-set(handles.uitable_channel, 'Data', Table, 'RowName', rownames, 'Enable' , 'Off')
+
+handles.list_mef = list_mef;
+guidata(hObject, handles)
+
+set(handles.uitable_channel, 'Data', Table, 'RowName', rownames, 'Enable' , 'On')
 set(handles.pushbutton_deselall, 'Enable', 'On')
+set(handles.checkbox_segment, 'Enable', 'On')
+set(handles.popupmenu_unit, 'Enable', 'On')
 
 
 function edit_path_CreateFcn(hObject, eventdata, handles)
@@ -161,18 +170,14 @@ function edit_path_Callback(hObject, eventdata, handles)
 
 
 function checkbox_segment_Callback(hObject, eventdata, handles)
-CB1= get(handles.checkbox_segment, 'Value');
-Table= get(handles.uitable_channel, 'Data');
-if CB1 == 1
-    set(handles.uitable_channel, 'Enable', 'on')
-    set(handles.uitable_channel, 'Data', Table)
-    set(handles.uitable_channel,'ColumnEditable',[false false false true]);
-    set(handles.uitable_channel,'CellSelectionCallback',@uitable_channel_CellSelectionCallback)
-    set(handles.pushbutton_deselall, 'Enable', 'on')
-else
-    set(handles.uitable_channel, 'Enable', 'off')
-    set(handles.pushbutton_deselall, 'Enable', 'off')
-end
+
+if get(handles.checkbox_segment, 'Value') == true
+    set(handles.edit_start, 'Enable', 'On')
+    set(handles.edit_end, 'Enable', 'On')
+elseif get(handles.checkbox_segment, 'Value') == false
+    set(handles.edit_start, 'Enable', 'Off')
+    set(handles.edit_end, 'Enable', 'Off')
+end % if
 
 function SelectedCells= uitable_channel_CellSelectionCallback(hObject, eventdata, handles)
 SelectedCells = eventdata.Indices;
@@ -187,7 +192,8 @@ handles.filepath = get(handles.edit_path, 'String');
 % filename
 Table = get(handles.uitable_channel, 'Data');
 fname = Table(:, 1)';
-handles.filename = fname;
+choice = cell2mat(Table(:, end));
+handles.filename = fname(choice);
 
 % start_end
 start_pt = str2double(get(handles.edit_start, 'String'));
@@ -305,6 +311,39 @@ function popupmenu_unit_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns popupmenu_unit contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu_unit
+
+% unit
+unit_list = get(handles.popupmenu_unit, 'String');
+choice = get(handles.popupmenu_unit, 'Value');
+unit = unit_list{choice};
+old_unit = handles.old_unit;
+
+if strcmpi(unit, old_unit) == true
+    return
+end % if
+
+% mef
+list_mef = handles.list_mef;
+mef = MultiscaleElectrophysiologyFile(list_mef(1).folder, list_mef(1).name);
+
+% change value according to the unit chosen
+old_start = str2double(get(handles.edit_start, 'String'));
+old_end = str2double(get(handles.edit_end, 'String'));
+if strcmpi(old_unit, 'index') == true % convert to index
+    new_se_ind = [old_start, old_end];
+else
+    new_se_ind = mef.SampleTime2Index([old_start, old_end], old_unit);
+end % if
+if strcmpi(unit, 'index') == true
+    new_se = new_se_ind;
+else
+    new_se = mef.SampleIndex2Time(new_se_ind, unit);
+end % if
+
+set(handles.edit_start, 'String', num2str(new_se(1), 32));
+set(handles.edit_end, 'String', num2str(new_se(2), 32));
+handles.old_unit = unit;
+guidata(hObject, handles)
 
 
 
