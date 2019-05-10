@@ -52,14 +52,20 @@ else
 end
 % End initialization code - DO NOT EDIT
 
-
 function gui_mefimport_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 guidata(hObject, handles);
 
+% initialization
+% --------------
 set(handles.checkbox_segment, 'Value', 0)
-set(handles.pushbutton_selall, 'Enable', 'off')
+set(handles.pushbutton_deselall, 'Enable', 'off')
 set(handles.uitable_channel,'Data', [], 'Enable', 'off')
+set(handles.popupmenu_unit, 'String', {'Index', 'uUTC', 'mSec', 'Second',...
+    'Hour', 'Day'})
+set(handles.edit_start, 'Enable', 'Off')
+set(handles.edit_end, 'Enable', 'Off')
+set(handles.uitable_channel, 'Enable' , 'Off')
 
 uiwait();
 
@@ -75,67 +81,79 @@ else
     varargout{2} = handles.command;
 end
 
+function [start_end, unit] = gerStartend(list_mef, handles)
+% get start and end point
+
+filepath = list_mef.folder;
+filename = list_mef.name;
+
+unit_list = get(handles.popupmenu_unit, 'String');
+choice = get(handles.popupmenu_unit, 'Value');
+unit = unit_list{choice};
+
+mef = MultiscaleElectrophysiologyFile(filepath, filename);
+uutc_start = mef.Header.recording_start_time;
+uutc_end = mef.Header.recording_end_time;
+start_end_index = mef.SampleTime2Index([uutc_start, uutc_end]);
+switch lower(unit)
+    case 'index'
+        start_end = start_end_index;
+    otherwise
+        start_end = mef.SampleTime2Index([uutc_start, uutc_end], unit);
+end % switch
 
 function pushbutton_folder_Callback(hObject, eventdata, handles)
-[filename, filepath]= uigetfile('*.mef', 'Select an NPX file');
-fullFileName= [filepath filename];
+% get data folder and obtain corresponding data information
 
-if fullFileName == 0
+% get data folder
+% ---------------
+filepath= uigetdir;
+if filepath == 0
     return
 else
-    set(handles.edit_path, 'String', fullFileName);
+    set(handles.edit_path, 'String', filepath);
 end
 
-XX= struct;
-XX= xml2struct(fullFileName);
-XX= XX.DOC;
+% get data info
+% -------------
+list_mef = dir(fullfile(filepath, '*.mef'));
+if isempty(list_mef)
+    return
+end % if
 
-field_ex= isfield(XX.Events, 'Type');
+% get start and end points of imported signal
+start_end = gerStartend(list_mef(1), handles);
+set(handles.edit_start, 'String', num2str(start_end(1)))
+set(handles.edit_end, 'String', num2str(start_end(2)))
 
-if field_ex == 1
-    n_events = length(XX.Events.Type);
-    for i=1:n_events
-        
-        if n_events == 1
-            EVENT_LIST= XX.Events.Type.Attributes.Name;
-            num= 1;
-            EVENT_CLASS= XX.Events.Type.Attributes.Class;
-        else
-            EVENT_LIST= XX.Events.Type{1,i}.Attributes.Name;
-            EVENT_CLASS= XX.Events.Type{1,i}.Attributes.Class;
-            if isfield(XX.Events.Type{1,i}, 'Event')
-                num= length(XX.Events.Type{1,i}.Event);
-            else
-                num= 1;
-            end
-        end
-        if strcmp(EVENT_CLASS,'0')==1 || strcmp(EVENT_CLASS,'3')==1
-            EVENT_CLASS_label='external';
-        elseif strcmp(EVENT_CLASS,'1')==1
-            EVENT_CLASS_label='spot';
-        elseif strcmp(EVENT_CLASS,'2')==1
-            EVENT_CLASS_label='state';
-        else
-            EVENT_CLASS_label=EVENT_CLASS;
-        end
-        
-        Table{i,1}= EVENT_LIST;
-        Table{i,2}= num;
-        Table{i,3}= EVENT_CLASS_label;
-        Table{i,4}= false;
-        RowNames{i}= num2str(i); 
-    end
+% get channel information
+num_mef = numel(list_mef); % number of mef/channels in the folder
+colname = get(handles.uitable_channel, 'ColumnName');
+num_colname = numel(colname);
+Table = cell(num_mef, num_colname);
+rownames = cell(num_mef, 1);
+for k = 1:num_mef
+    fp_k = list_mef(k).folder;
+    fn_k = list_mef(k).name;
+    mef = MultiscaleElectrophysiologyFile(fp_k, fn_k);
+    Table{k, 1} = mef.Header.channel_name;
+    Table{k, 2} = mef.Header.sampling_frequency;
+    Table{k, 3} = mef.Header.number_of_samples;
+    Table{k, 4} = mef.Header.number_of_index_entries;
+    Table{k, 5} = mef.Header.number_of_discontinuity_entries;
+    Table{k, 6} = true;
     
-else
-    return    
-end
+    rownames{k} = num2str(k);
+end % for
+set(handles.uitable_channel, 'Data', Table, 'RowName', rownames, 'Enable' , 'Off')
+set(handles.pushbutton_deselall, 'Enable', 'On')
 
-set(handles.uitable_channel, 'Data', Table, 'RowName', RowNames, 'Enable', 'off')
 
 function edit_path_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
 function edit_path_Callback(hObject, eventdata, handles)
 
 
@@ -147,17 +165,17 @@ if CB1 == 1
     set(handles.uitable_channel, 'Data', Table)
     set(handles.uitable_channel,'ColumnEditable',[false false false true]);
     set(handles.uitable_channel,'CellSelectionCallback',@uitable_channel_CellSelectionCallback)
-    set(handles.pushbutton_selall, 'Enable', 'on')
+    set(handles.pushbutton_deselall, 'Enable', 'on')
 else
     set(handles.uitable_channel, 'Enable', 'off')
-    set(handles.pushbutton_selall, 'Enable', 'off')
+    set(handles.pushbutton_deselall, 'Enable', 'off')
 end
 
 function SelectedCells= uitable_channel_CellSelectionCallback(hObject, eventdata, handles)
 SelectedCells = eventdata.Indices;
 
 
-function pushbutton_save_Callback(hObject, eventdata, handles)
+function pushbutton_ok_Callback(hObject, eventdata, handles)
 ED1= get(handles.edit_path, 'String');
 Table= get(handles.uitable_channel, 'Data');
 eventIdx= cell2mat(Table(:,4));
@@ -243,19 +261,21 @@ guidata(hObject,handles);
 uiresume();
 
 
-function pushbutton_close_Callback(hObject, eventdata, handles)
-uiresume();
-guinpx= findobj('Tag', 'LOADNPX');
-delete(guinpx)
-return
+function pushbutton_cancer_Callback(hObject, eventdata, handles)
 
-function pushbutton_selall_Callback(hObject, eventdata, handles)
+uiresume();
+guimef= findobj('Tag', 'MEFIMPORT');
+delete(guimef)
+
+
+function pushbutton_deselall_Callback(hObject, eventdata, handles)
 Table= get(handles.uitable_channel, 'Data');
 [r,c]= size(Table);
 for i=1:r
     Table{i,4}= true;
 end
 set(handles.uitable_channel, 'Data', Table)
+
 
 function MEFIMPORT_CloseRequestFcn(hObject, eventdata, handles)
 EEG= [];
@@ -266,5 +286,72 @@ guidata(hObject,handles);
 uiresume();
 guimef= findobj('Tag', 'MEFIMPORT');
 delete(guimef)
+
+function edit_start_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_start (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_start as text
+%        str2double(get(hObject,'String')) returns contents of edit_start as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_start_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit_start (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_end_Callback(hObject, eventdata, handles)
+% hObject    handle to edit_end (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit_end as text
+%        str2double(get(hObject,'String')) returns contents of edit_end as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_end_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit_end (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in popupmenu_unit.
+function popupmenu_unit_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu_unit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu_unit contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu_unit
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu_unit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu_unit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: listbox controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
 
 % [EOF]
