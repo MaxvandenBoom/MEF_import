@@ -191,7 +191,8 @@ handles.filepath = get(handles.edit_path, 'String');
 
 % filename
 Table = get(handles.uitable_channel, 'Data');
-fname = Table(:, 1)';
+list_mef = handles.list_mef;
+fname = {list_mef.name};
 choice = cell2mat(Table(:, end));
 handles.filename = fname(choice);
 
