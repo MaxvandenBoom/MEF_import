@@ -1,4 +1,4 @@
-function [EEG, com] = pop_mefimport(EEG, filepath, filename, varargin)
+function [EEG, com] = pop_mefimport(EEG, varargin)
 % POP_MEFIMPORT Import MEF data into EEGLab with GUI
 %
 % Syntax:
@@ -39,7 +39,7 @@ function [EEG, com] = pop_mefimport(EEG, filepath, filename, varargin)
 % See also EEGLAB, mefimport.
 
 % Copyright 2019 Richard J. Cui. Created: Tue 05/07/2019 10:33:48.169 PM
-% $Revision: 0.1 $  $Date: Tue 05/07/2019 10:33:48.169 PM $
+% $Revision: 0.2 $  $Date: Sat 05/11/2019 12:27:39.358 AM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -57,7 +57,7 @@ if nargin == 0
 	return
 end % if	
 
-q = parseInputs(EEG, filepath, filename, varargin{:});
+q = parseInputs(EEG, varargin{:});
 EEG = q.EEG;
 filepath = q.filepath;
 filename = q.filename;
