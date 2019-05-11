@@ -1,13 +1,13 @@
-function EEG = mefimport(EEG, filepath, filename, varargin)
+function OUTEEG = mefimport(INEEG, filepath, filename, varargin)
 % MEFIMPORT Import MEF data into EEG structure
 %
 % Usage:
-%   EEG = mefimport(EEG, filepath, filename)
-%   EEG = mefimport(EEG, filepath, filename, start_end)
-%   EEG = mefimport(EEG, filepath, filename, start_end, unit)
+%   OUTEEG = mefimport(INEEG, filepath, filename)
+%   OUTEEG = mefimport(INEEG, filepath, filename, start_end)
+%   OUTEEG = mefimport(INEEG, filepath, filename, start_end, unit)
 %
 % Input(s):
-%   EEG             - [struct] EEGLab dataset structure. See Note for
+%   INEEG           - [struct] EEGLab dataset structure. See Note for
 %                     addtional information about the details of the
 %                     structure.
 %   filepath        - [str] full file path
@@ -22,7 +22,7 @@ function EEG = mefimport(EEG, filepath, filename, varargin)
 %                     'Second', 'Minute', 'Hour', and 'Day'
 % 
 % Outputs:
-%   EEG             - [struct] EEGLab dataset structure. See Note for
+%   OUTEEG           - [struct] EEGLab dataset structure. See Note for
 %                     addtional information about the details of the
 %                     structure.
 % 
@@ -37,7 +37,7 @@ function EEG = mefimport(EEG, filepath, filename, varargin)
 % See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
-% $Revision: 0.2 $  $Date: Thu 05/09/2019 10:12:17.013 AM $
+% $Revision: 0.3 $  $Date: Sun 05/12/2019 12:15:35.133 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -47,8 +47,8 @@ function EEG = mefimport(EEG, filepath, filename, varargin)
 % =========================================================================
 % parse inputs
 % =========================================================================
-q = parseInputs(EEG, filepath, filename, varargin{:});
-EEG = q.EEG;
+q = parseInputs(INEEG, filepath, filename, varargin{:});
+INEEG = q.INEEG;
 filepath = q.filepath;
 filename = q.filename;
 start_end = q.start_end;
@@ -63,9 +63,9 @@ mef = MultiscaleElectrophysiologyFile(filepath, fname{1});
 
 % set EEG structure
 % -----------------
-if isempty(EEG)
+if isempty(INEEG)
     % if EEGLAB is included in pathway, this can be done with eeg_emptyset.m
-    EEG = struct('setname', '',...
+    OUTEEG = struct('setname', '',...
                  'filename', '',...
                  'filepath', '',...
                  'subject','',...
@@ -105,6 +105,8 @@ if isempty(EEG)
                  'history', '',...
                  'saved', 'no',...
                  'etc', []);
+else
+    OUTEEG = INEEG; % careful, if don't clear working space
 end % if
 
 % =========================================================================
@@ -112,75 +114,74 @@ end % if
 % =========================================================================
 % setname
 % -------
-EEG.setname = sprintf('Data from %s', mef.Header.institution);
+OUTEEG.setname = sprintf('Data from %s', mef.Header.institution);
 
-% filename
-% --------
-EEG.filename = filename;
-
-% filepath
-% --------
-EEG.filepath = filepath;
+% subject
+% -------
+OUTEEG.subject = mef.Header.subject_id;
 
 % trials
 % ------
-EEG.trials = 1; % assume continuous recording, not epoched
-
-% pnts
-% ----
-EEG.pnts = mef.Header.number_of_samples;
+OUTEEG.trials = 1; % assume continuous recording, not epoched
 
 % nbchan
 % ------
 % MEF records each channel in different file
-EEG.nbchan = numel(fname);
+OUTEEG.nbchan = numel(fname);
 
 % srate
 % -----
-EEG.srate = mef.Header.sampling_frequency; % in Hz
+OUTEEG.srate = mef.Header.sampling_frequency; % in Hz
 
-% xmin, xmax
-% ----------
+% xmin, xmax (in second)
+% ----------------------
 % continuous data, the entire signal is one epoch
-EEG.xmin = mef.SampleIndex2Time(1, 'second');
-EEG.xmax = mef.SampleIndex2Time(mef.Header.number_of_samples, 'second');
+OUTEEG.xmin = mef.SampleIndex2Time(start_end(1), 'second');
+OUTEEG.xmax = mef.SampleIndex2Time(start_end(2), 'second');
 
-% times
+% times (in second)
 % -----
 if isempty(start_end)
     [~, t] = mef.importSignal;
 else
-    [~, t] = mef.importSignal(start_end, unit);
+    [~, t] = mef.importSignal(start_end, unit); % t in sample index
 end % if
-EEG.times = (t-1)*1e6/mef.Header.sampling_frequency/1000;
+OUTEEG.times = (t-1)/mef.Header.sampling_frequency; 
 
-% etc
-% ---
-EEG.etc = sprintf('Acauisition system is %s and compression algorithm is %s.',...
+% pnts
+% ----
+OUTEEG.pnts = numel(t);
+
+% comments
+% --------
+OUTEEG.comments = sprintf('Acauisition system - %s\ncompression algorithm - %s',...
     mef.Header.acquisition_system, mef.Header.compression_algorithm);
 
 % saved
 % -----
-EEG.saved = 'no'; % nost saved yet
+OUTEEG.saved = 'no'; % nost saved yet
 
 % data and chanlocs
 % -----------------
-data = zeros(EEG.nbchan, length(EEG.times));
+data = zeros(OUTEEG.nbchan, length(OUTEEG.times));
 chanlocs = struct([]);
-for k = 1:EEG.nbchan
+for k = 1:OUTEEG.nbchan
     ch_k = fname{k};
-    fprintf('Importing MEF data %s...\n', ch_k)
+    fprintf('Importing MEF data %s [%d/%d]...\n', ch_k, k, OUTEEG.nbchan)
     
-    mef_k = MultiscaleElectrophysiologyFile(fullfile(EEG.filepath, ch_k));
+    mef_k = MultiscaleElectrophysiologyFile(fullfile(filepath, ch_k));
     if isempty(start_end)
         data(k, :) = mef_k.importSignal;
     else
         data(k, :) = mef_k.importSignal(start_end, unit);
     end % if
+    % remove process mean
+    % data(k, :) = data(k, :) - mean(data(k, :));
+    
     chanlocs(k).labels = mef_k.Header.channel_name;
 end % for
-EEG.data = data;
-EEG.chanlocs = chanlocs;
+OUTEEG.data = data;
+OUTEEG.chanlocs = chanlocs;
 
 end % function
 
@@ -196,7 +197,7 @@ expectedUnit = {'index', 'uutc', 'second', 'minute', 'hour', 'day'};
 
 % parse rules
 p = inputParser;
-p.addRequired('EEG', @(x) isempty(x) || isstruct(x));
+p.addRequired('INEEG', @(x) isempty(x) || isstruct(x));
 p.addRequired('filepath', @ischar);
 p.addRequired('filename', @(x) ischar(x) || iscellstr(x) || isstring(x));
 p.addOptional('start_end', defaultSE,...
@@ -206,7 +207,7 @@ p.addOptional('unit', defaultUnit,...
 
 % parse and return the results
 p.parse(varargin{:});
-q.EEG = p.Results.EEG;
+q.INEEG = p.Results.INEEG;
 q.filepath = p.Results.filepath;
 q.filename = p.Results.filename;
 q.start_end = p.Results.start_end;
