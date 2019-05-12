@@ -37,7 +37,7 @@ function OUTEEG = mefimport(INEEG, filepath, filename, varargin)
 % See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
-% $Revision: 0.3 $  $Date: Sun 05/12/2019 12:15:35.133 PM $
+% $Revision: 0.4 $  $Date: Sun 05/12/2019  3:27:29.780 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -135,9 +135,19 @@ OUTEEG.srate = mef.Header.sampling_frequency; % in Hz
 
 % xmin, xmax (in second)
 % ----------------------
-% continuous data, the entire signal is one epoch
-OUTEEG.xmin = mef.SampleIndex2Time(start_end(1), 'second');
-OUTEEG.xmax = mef.SampleIndex2Time(start_end(2), 'second');
+% continuous data, according to the segment to be imported
+switch lower(unit)
+    case 'index'
+        OUTEEG.xmin = mef.SampleIndex2Time(start_end(1), 'second');
+        OUTEEG.xmax = mef.SampleIndex2Time(start_end(2), 'second');
+    case 'second'
+        OUTEEG.xmin = start_end(1);
+        OUTEEG.xmax = start_end(2);
+    otherwise
+        se_index = mef.SampleTime2Index(start_end, unit);
+        OUTEEG.xmin = mef.SampleIndex2Time(se_index(1), 'second');
+        OUTEEG.xmax = mef.SampleIndex2Time(se_index(2), 'second');        
+end % switch
 
 % times (in second)
 % -----
