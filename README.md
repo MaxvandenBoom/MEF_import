@@ -10,11 +10,14 @@ The code repository for **MEF_import** is hosted on GitHub at https://github.com
 Installation
 ------------
 1. Download, decompress and copy the directory into the directory of plugins of EEGLAB
-1. Lunch EEGLAB in MATLAT, e.g. >>eeglab
+1. Lunch EEGLAB in MATLAB, e.g. >>eeglab
 1. From EEGLAB GUI, select File > Import Data > Using EEGLAB functions and plugins > From UP-MSEL .mef file
 1. Follow the instructions on the screen
 1. A data sample 'sample_mef' folder is provided in the package.
 
 MEF format
 ----------
-Multiscale Electrophysiology Format (MEF) is a novel electrophysiology file format designed for large-scale storage of electrophysiological recordings.  MEF can achieve significant data size reduction when compared to existing techniques with stat-of-the-art lossless data compression.  It satisfies the Health Insurance Portability and Accountability Act (HIPAA) to encrypt any patient protected health information transmitted over a public network.  The details of MEF file can be found on [International Epilepsy Portal](https://main.ieeg.org): https://main.ieeg.org/?q=node/28. 
+Multiscale Electrophysiology Format (MEF) is a novel electrophysiology file format designed for large-scale storage of electrophysiological recordings.
+MEF can achieve significant data size reduction when compared to existing techniques with stat-of-the-art lossless data compression.
+It satisfies the Health Insurance Portability and Accountability Act (HIPAA) to encrypt any patient protected health information transmitted over a public network.
+The details of MEF file can be found at https://www.mayo.edu/research/labs/epilepsy-neurophysiology/mef-example-source-code from [Mayo Systems Electrophysiology Lab](http://msel.mayo.edu/) and on [International Epilepsy Portal](https://main.ieeg.org): https://main.ieeg.org/?q=node/28. 
