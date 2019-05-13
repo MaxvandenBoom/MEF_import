@@ -17,4 +17,7 @@ Installation
 
 MEF format
 ----------
-Multiscale Electrophysiology Format (MEF) is a novel electrophysiology file format designed for large-scale storage of electrophysiological recordings.  MEF can achieve significant data size reduction when compared to existing techniques with stat-of-the-art lossless data compression.  It satisfies the Health Insurance Portability and Accountability Act (HIPAA) to encrypt any patient protected health information transmitted over a public network.  The details of MEF file can be found on [International Epilepsy Portal](https://main.ieeg.org): https://main.ieeg.org/?q=node/28. 
+Multiscale Electrophysiology Format (MEF) is a novel electrophysiology file format designed for large-scale storage of electrophysiological recordings.
+MEF can achieve significant data size reduction when compared to existing techniques with stat-of-the-art lossless data compression.
+It satisfies the Health Insurance Portability and Accountability Act (HIPAA) to encrypt any patient protected health information transmitted over a public network.
+The details of MEF file can be found at https://www.mayo.edu/research/labs/epilepsy-neurophysiology/mef-example-source-code from [Mayo Systems Electrophysiology Lab](http://msel.mayo.edu/) and on [International Epilepsy Portal](https://main.ieeg.org): https://main.ieeg.org/?q=node/28. 
