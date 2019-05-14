@@ -6,7 +6,7 @@ University of Toronto
 
 To install the MEF_import plugin for EEGLAB:
 1). Download, decompress and copy the directory into the directory of plugins of EEGLAB
-2). Lunch EEGLAB in MATLAT, e.g. >>eeglab
+2). Launch EEGLAB in MATLAT, e.g. >>eeglab
 3). From EEGLAB GUI, select File > Import Data > Using EEGLAB functions and plugins > From UP-MSEL .mef file
 4). Follow the instructions on the screen
 5). A data sample 'sample_mef' folder is provided in the package.
