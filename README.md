@@ -1,7 +1,7 @@
 Import MEF data into EEGLAB
 ===========================
 
-**MEF_import** is a EEGLAB plugin that imports data compressed in Multiscale Electrophysiology Format (or MEF, see below) into [EEGLAB](https://sccn.ucsd.edu/eeglab/index.php).
+**MEF_import** is a EEGLAB plugin that imports data compressed in Multiscale Electrophysiology Format (or MEF Ver2.1, see below) into [EEGLAB](https://sccn.ucsd.edu/eeglab/index.php).
 
 **MEF_import** is protected by the GPL v3 Open Source License.
 
