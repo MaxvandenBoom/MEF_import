@@ -9,7 +9,7 @@ function seg_cont = analyzeContinuity(this, varargin)
 % Imput(s):
 %   this            - [obj] MultiscaleElectrophysiologyFile object
 %   wholename       - [str] filepath + filename of MEF file
-%   password        - [str] password of the data
+%   password        - [str] subject password of the data
 % 
 % Output(s):
 %   seg_cont        - [table] N x 7, information of segments of continuity
@@ -35,18 +35,18 @@ function seg_cont = analyzeContinuity(this, varargin)
 % See also .
 
 % Copyright 2019 Richard J. Cui. Created: Sat 05/04/2019 10:35:40.540 PM
-% $Revision: 0.1 $  $Date: Sat 05/04/2019 10:35:40.540 PM $
+% $Revision: 0.2 $  $Date: Mon 05/20/2019  3:30:28.116 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
 %
 % Email: richard.cui@utoronto.ca
 
-q = parseInputs(varargin{:});
+q = parseInputs(this, varargin{:});
 
 if isempty(q)
     wholename = fullfile(this.FilePath, this.FileName);
-    pw = this.Password;
+    pw = this.SubjectPassword;
 else
     wholename = fullfile(q.filepath, q.filename);
     pw = q.password;
@@ -122,10 +122,10 @@ end
 % =========================================================================
 % subroutines
 % =========================================================================
-function q = parseInputs(varargin)
+function q = parseInputs(this, varargin)
 
 % defaults
-default_pw = '';
+default_pw = this.SubjectPassword;
 
 % parse rules
 p = inputParser;

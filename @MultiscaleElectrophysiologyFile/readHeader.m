@@ -144,7 +144,7 @@ function header = readHeader(this, varargin)
 % See also .
 
 % Copyright 2019 Richard J. Cui. Created: Mon 04/29/2019 10:33:58.517 PM
-% $Revision: 0.2 $  $Date: Thu 05/02/2019  3:11:01.648 PM $
+% $Revision: 0.3 $  $Date: Mon 05/20/2019  3:00:16.892 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -162,7 +162,7 @@ else
     % update
     this.FilePath = q.filepath;
     this.FileName = q.filename;
-    this.Password = q.password;
+    this.SubjectPassword = q.password;
 end % if
 
 header = read_mef_header(wholename, pw);
