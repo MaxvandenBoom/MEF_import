@@ -26,7 +26,7 @@ function varargout = gui_mefimport(varargin)
 % See also pop_mefimport, gui_mefimport.
 
 % Copyright 2019 Richard J. Cui. Created: Sun 04/28/2019  9:51:01.691 PM
-% $Revision: 0.2 $  $Date: Thu 05/09/2019 10:31:59.845 AM $
+% $Revision: 0.3 $  $Date: Mon 05/20/2019 11:10:49.989 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -359,5 +359,25 @@ function popupmenu_unit_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in pushbutton_setpasswords.
+function pushbutton_setpasswords_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_setpasswords (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+geometry = {[0.5, 1.27], [0.5, 1], [0.5, 1]};
+uilist = {...
+    {'style', 'text', 'string', 'Subject', 'fontweight', 'bold'},...
+    {'style', 'edit', 'string', '', 'tooltipstring', 'Input subject password'},...
+    {'style', 'text', 'string', 'Session', 'fontweight', 'bold'},...
+    {'style', 'edit', 'string', '', 'tooltipstring', 'Input Session password'},...
+    {'style', 'text', 'string', 'Data', 'fontweight', 'bold'},...
+    {'style', 'edit', 'string', '', 'tooltipstring', 'Input Data password'},...    
+    };
+
+res = inputgui(geometry, uilist, 'pophelp(''pop_mefimport'')', ...
+    'Set MEF passwords -- gui_mefimport()');
 
 % [EOF]
