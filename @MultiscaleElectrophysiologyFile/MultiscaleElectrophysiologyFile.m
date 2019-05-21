@@ -138,6 +138,9 @@ classdef MultiscaleElectrophysiologyFile < handle
         [sample_index, sample_yn] = SampleTime2Index(this, varargin) % time --> index
         [sample_time, sample_yn] = SampleIndex2Time(this, varargin) % index --> time
         [x, t] = importSignal(this, varargin) % import MEF signal into MATLAB
+        this = setSubjectPassword(this, password) % set MEF subject password
+        this = setSessionPassword(this, password) % set MEF session password
+        this = setDataPassword(this, password) % set MEF data password
     end % methods
 end % classdef
 
