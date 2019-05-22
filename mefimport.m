@@ -5,6 +5,7 @@ function OUTEEG = mefimport(INEEG, filepath, filename, varargin)
 %   OUTEEG = mefimport(INEEG, filepath, filename)
 %   OUTEEG = mefimport(INEEG, filepath, filename, start_end)
 %   OUTEEG = mefimport(INEEG, filepath, filename, start_end, unit)
+%   OUTEEG = mefimport(INEEG, filepath, filename, start_end, unit, password)
 %
 % Input(s):
 %   INEEG           - [struct] EEGLab dataset structure. See Note for
@@ -20,6 +21,10 @@ function OUTEEG = mefimport(INEEG, filepath, filename, varargin)
 %                     the entire signal)
 %   unit            - [str] (optional) unit of start_end: 'Index' (default), 'uUTC',
 %                     'Second', 'Minute', 'Hour', and 'Day'
+%   password        - [str] (optional) passwords of MEF file
+%                     .subject      : subject password (default - '')
+%                     .session
+%                     .data
 % 
 % Outputs:
 %   OUTEEG           - [struct] EEGLab dataset structure. See Note for
@@ -53,6 +58,7 @@ filepath = q.filepath;
 filename = q.filename;
 start_end = q.start_end;
 unit = q.unit;
+pw = q.password;
 
 if ischar(filename)
     fname = {filename};
@@ -60,6 +66,9 @@ else
     fname = filename;
 end % if
 mef = MultiscaleElectrophysiologyFile(filepath, fname{1});
+mef.setSubjectPassword(pw.subject);
+mef.setSessionPassword(pw.session);
+mef.setDataPassword(pw.data);
 
 % set EEG structure
 % -----------------
@@ -204,6 +213,7 @@ function q = parseInputs(varargin)
 defaultSE = [];
 defaultUnit = 'index';
 expectedUnit = {'index', 'uutc', 'second', 'minute', 'hour', 'day'};
+default_pw = struct('subject', '', 'session', '', 'data', '');
 
 % parse rules
 p = inputParser;
@@ -214,6 +224,7 @@ p.addOptional('start_end', defaultSE,...
     @(x) isnumeric(x) & numel(x) == 2 & x(1) <= x(2));
 p.addOptional('unit', defaultUnit,...
     @(x) any(validatestring(x, expectedUnit)));
+p.addOptional('password', default_pw, @isstruct);
 
 % parse and return the results
 p.parse(varargin{:});
@@ -222,6 +233,7 @@ q.filepath = p.Results.filepath;
 q.filename = p.Results.filename;
 q.start_end = p.Results.start_end;
 q.unit = p.Results.unit;
+q.password = p.Results.password;
 
 end % function
 

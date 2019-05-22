@@ -2,7 +2,7 @@ function varargout = gui_mefimport(varargin)
 % GUI_MEFIMPORT Graphic UI for importing MEF datafile
 % 
 % Syntax:
-%   [filepath, filename, start_end, unit] = gui_mefimport()
+%   [filepath, filename, start_end, unit, password] = gui_mefimport()
 % 
 % Input(s):
 % 
@@ -17,6 +17,10 @@ function varargout = gui_mefimport(varargin)
 %                     the entire signal)
 %   unit            - [str] (optional) unit of start_end: 'Index' (default), 'uUTC',
 %                     'Second', 'Minute', 'Hour', and 'Day'
+%   password        - [str] passwords of MEF files
+%                     .subject      : subject password
+%                     .session
+%                     .data
 % 
 % Note:
 %   gui_mefimport does not import MEF by itself, but instead gets the
@@ -26,7 +30,7 @@ function varargout = gui_mefimport(varargin)
 % See also pop_mefimport, gui_mefimport.
 
 % Copyright 2019 Richard J. Cui. Created: Sun 04/28/2019  9:51:01.691 PM
-% $Revision: 0.3 $  $Date: Mon 05/20/2019 11:10:49.989 PM $
+% $Revision: 0.4 $  $Date: Tue 05/21/2019  8:56:23.378 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -64,8 +68,13 @@ set(handles.edit_start, 'Enable', 'Off')
 set(handles.edit_end, 'Enable', 'Off')
 set(handles.uitable_channel, 'Enable' , 'Off')
 set(handles.checkbox_segment, 'Enable', 'Off')
+set(handles.pushbutton_setpasswords, 'Enable', 'off')
 
 handles.old_unit = 'Index';
+
+handles.subject_pw = '';
+handles.session_pw = '';
+handles.data_pw = '';
 
 handles.output = hObject;
 guidata(hObject, handles);
@@ -78,11 +87,15 @@ if isempty(handles)
     varargout{2} = '';
     varargout{3} = [];
     varargout{4} = '';
+    varargout{5} = [];
 else
     varargout{1} = handles.filepath;
     varargout{2} = handles.filename;
     varargout{3} = handles.start_end;
     varargout{4} = handles.unit;
+    password = struct('subject', handles.subject_pw, 'session',...
+        handles.session_pw, 'data', handles.data_pw);
+    varargout{5} = password;
 end % if
 guimef = findobj('Tag', 'gui_mefimport');
 delete(guimef)
@@ -159,6 +172,7 @@ set(handles.uitable_channel, 'Data', Table, 'RowName', rownames, 'Enable' , 'On'
 set(handles.pushbutton_deselall, 'Enable', 'On')
 set(handles.checkbox_segment, 'Enable', 'On')
 set(handles.popupmenu_unit, 'Enable', 'On')
+set(handles.pushbutton_setpasswords, 'Enable', 'On')
 
 
 function edit_path_CreateFcn(hObject, eventdata, handles)
@@ -367,7 +381,7 @@ function pushbutton_setpasswords_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-geometry = {[0.5, 1.27], [0.5, 1], [0.5, 1]};
+geometry = {[0.5, 1.27], [0.5, 1.27], [0.5, 1.27]};
 uilist = {...
     {'style', 'text', 'string', 'Subject', 'fontweight', 'bold'},...
     {'style', 'edit', 'string', '', 'tooltipstring', 'Input subject password'},...
@@ -379,5 +393,12 @@ uilist = {...
 
 res = inputgui(geometry, uilist, 'pophelp(''pop_mefimport'')', ...
     'Set MEF passwords -- gui_mefimport()');
+
+if ~isempty(res)
+    handles.subject_pw = res{1};
+    handles.session_pw = res{2};
+    handles.data_pw = res{3};
+end % if
+guidata(hObject, handles)
 
 % [EOF]
