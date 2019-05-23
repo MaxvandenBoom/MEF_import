@@ -31,14 +31,14 @@ function bid = readBlockIndexData(this, varargin)
 % See also .
 
 % Copyright 2019 Richard J. Cui. Created: Tue 04/30/2019 10:11:41.380 PM
-% $Revision: 0.1 $  $Date: Tue 04/30/2019 10:11:41.380 PM $
+% $Revision: 0.2 $  $Date: Mon 05/20/2019  3:25:26.086 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
 %
 % Email: richard.cui@utoronto.ca
 
-q = parseInputs(varargin{:});
+q = parseInputs(this, varargin{:});
 
 if ~isempty(q)
     % update
@@ -83,10 +83,10 @@ fclose(fp);
 
 end % function
 
-function q = parseInputs(varargin)
+function q = parseInputs(this, varargin)
 
 % defaults
-default_pw = '';
+default_pw = this.SessionPassword; % use session pw
 
 % parse rules
 p = inputParser;

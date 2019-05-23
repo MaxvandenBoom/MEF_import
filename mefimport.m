@@ -5,6 +5,7 @@ function OUTEEG = mefimport(INEEG, filepath, filename, varargin)
 %   OUTEEG = mefimport(INEEG, filepath, filename)
 %   OUTEEG = mefimport(INEEG, filepath, filename, start_end)
 %   OUTEEG = mefimport(INEEG, filepath, filename, start_end, unit)
+%   OUTEEG = mefimport(INEEG, filepath, filename, start_end, unit, password)
 %
 % Input(s):
 %   INEEG           - [struct] EEGLab dataset structure. See Note for
@@ -20,6 +21,10 @@ function OUTEEG = mefimport(INEEG, filepath, filename, varargin)
 %                     the entire signal)
 %   unit            - [str] (optional) unit of start_end: 'Index' (default), 'uUTC',
 %                     'Second', 'Minute', 'Hour', and 'Day'
+%   password        - [str] (optional) passwords of MEF file
+%                     .subject      : subject password (default - '')
+%                     .session
+%                     .data
 % 
 % Outputs:
 %   OUTEEG           - [struct] EEGLab dataset structure. See Note for
@@ -37,7 +42,7 @@ function OUTEEG = mefimport(INEEG, filepath, filename, varargin)
 % See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
-% $Revision: 0.4 $  $Date: Sun 05/12/2019  3:27:29.780 PM $
+% $Revision: 0.5 $  $Date: Wed 05/22/2019  4:05:54.127 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -53,13 +58,18 @@ filepath = q.filepath;
 filename = q.filename;
 start_end = q.start_end;
 unit = q.unit;
+pw = q.password;
 
 if ischar(filename)
     fname = {filename};
 else
     fname = filename;
 end % if
-mef = MultiscaleElectrophysiologyFile(filepath, fname{1});
+mef = MultiscaleElectrophysiologyFile(filepath, fname{1},...
+    'SubjectPassword', pw.subject);
+mef.setSubjectPassword(pw.subject);
+mef.setSessionPassword(pw.session);
+mef.setDataPassword(pw.data);
 
 % set EEG structure
 % -----------------
@@ -179,14 +189,16 @@ for k = 1:OUTEEG.nbchan
     ch_k = fname{k};
     fprintf('Importing MEF data %s [%d/%d]...\n', ch_k, k, OUTEEG.nbchan)
     
-    mef_k = MultiscaleElectrophysiologyFile(fullfile(filepath, ch_k));
+    mef_k = MultiscaleElectrophysiologyFile(filepath, ch_k,...
+        'SubjectPassword', pw.subject);
+    mef_k.setSessionPassword(pw.session);
+    mef_k.setDataPassword(pw.data);
+    
     if isempty(start_end)
         data(k, :) = mef_k.importSignal;
     else
         data(k, :) = mef_k.importSignal(start_end, unit);
     end % if
-    % remove process mean
-    % data(k, :) = data(k, :) - mean(data(k, :));
     
     chanlocs(k).labels = mef_k.Header.channel_name;
 end % for
@@ -204,6 +216,7 @@ function q = parseInputs(varargin)
 defaultSE = [];
 defaultUnit = 'index';
 expectedUnit = {'index', 'uutc', 'second', 'minute', 'hour', 'day'};
+default_pw = struct('subject', '', 'session', '', 'data', '');
 
 % parse rules
 p = inputParser;
@@ -214,6 +227,7 @@ p.addOptional('start_end', defaultSE,...
     @(x) isnumeric(x) & numel(x) == 2 & x(1) <= x(2));
 p.addOptional('unit', defaultUnit,...
     @(x) any(validatestring(x, expectedUnit)));
+p.addOptional('password', default_pw, @isstruct);
 
 % parse and return the results
 p.parse(varargin{:});
@@ -222,6 +236,7 @@ q.filepath = p.Results.filepath;
 q.filename = p.Results.filename;
 q.start_end = p.Results.start_end;
 q.unit = p.Results.unit;
+q.password = p.Results.password;
 
 end % function
 

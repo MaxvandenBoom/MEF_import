@@ -23,7 +23,7 @@ function [sample_index, sample_yn] = SampleTime2Index(this, varargin)
 % See also .
 
 % Copyright 2019 Richard J. Cui. Created: Sun 05/05/2019 10:29:21.071 PM
-% $Revision: 0.3 $  $Date: Thu 05/09/2019 11:15:44.427 PM $
+% $Revision: 0.4 $  $Date: Wed 05/22/2019  3:54:16.630 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA

@@ -23,7 +23,7 @@ function [x, t] = importSignal(this, varargin)
 % See also .
 
 % Copyright 2019 Richard J. Cui. Created: Mon 04/29/2019 10:33:58.517 PM
-% $Revision: 0.2 $  $Date: Sat 05/11/2019  1:07:53.450 AM $
+% $Revision: 0.3 $  $Date: Mon 05/20/2019  3:47:58.071 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -52,7 +52,7 @@ wholename = fullfile(this.FilePath, this.FileName);
 % =========================================================================
 % load the data
 % =========================================================================
-pw = this.Password;
+pw = this.SessionPassword;
 x = decompress_mef(wholename, se_index(1), se_index(2), pw);
 x = double(x(:)).'; % change to row vector
 % find the indices corresponding to physically collected data
