@@ -1,5 +1,5 @@
-Import MEF data into EEGLAB
-===========================
+Import MEF data into EEGLAB (Version 0.5)
+=========================================
 
 **MEF_import** is a EEGLAB plugin that imports data compressed in Multiscale Electrophysiology Format (or MEF Ver2.1, see below) into [EEGLAB](https://sccn.ucsd.edu/eeglab/index.php).
 
@@ -10,10 +10,11 @@ The code repository for **MEF_import** is hosted on GitHub at https://github.com
 Installation
 ------------
 1. Download, decompress and copy the directory into the directory of plugins of EEGLAB
+1. Rename the directory of the plugin to 'MEF_import0.5'
 1. Launch EEGLAB in MATLAB, e.g. >>eeglab
 1. From EEGLAB GUI, select File > Import Data > Using EEGLAB functions and plugins > From UP-MSEL .mef file
 1. Follow the instructions on the screen
-1. A data sample 'sample_mef' folder is provided in the package.
+1. A data sample 'sample_mef' folder is provided in the package (data passwords: 'erlichda' for Subject password; 'sieve' for Session password; no password required for Data password)
 
 MEF format
 ----------
