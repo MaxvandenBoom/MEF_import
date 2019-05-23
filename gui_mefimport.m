@@ -30,7 +30,7 @@ function varargout = gui_mefimport(varargin)
 % See also pop_mefimport, gui_mefimport.
 
 % Copyright 2019 Richard J. Cui. Created: Sun 04/28/2019  9:51:01.691 PM
-% $Revision: 0.4 $  $Date: Tue 05/21/2019  8:56:23.378 PM $
+% $Revision: 0.5 $  $Date: Wed 05/22/2019 11:36:43.635 AM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -68,7 +68,6 @@ set(handles.edit_start, 'Enable', 'Off')
 set(handles.edit_end, 'Enable', 'Off')
 set(handles.uitable_channel, 'Enable' , 'Off')
 set(handles.checkbox_segment, 'Enable', 'Off')
-set(handles.pushbutton_setpasswords, 'Enable', 'off')
 
 handles.old_unit = 'Index';
 
@@ -100,7 +99,7 @@ end % if
 guimef = findobj('Tag', 'gui_mefimport');
 delete(guimef)
 
-function [start_end, unit] = gerStartend(list_mef, handles)
+function [start_end, unit] = getStartend(list_mef, handles, subj_pw)
 % get start and end point
 
 filepath = list_mef.folder;
@@ -110,7 +109,7 @@ unit_list = get(handles.popupmenu_unit, 'String');
 choice = get(handles.popupmenu_unit, 'Value');
 unit = unit_list{choice};
 
-mef = MultiscaleElectrophysiologyFile(filepath, filename);
+mef = MultiscaleElectrophysiologyFile(filepath, filename, 'SubjectPassword', subj_pw);
 uutc_start = mef.Header.recording_start_time;
 uutc_end = mef.Header.recording_end_time;
 start_end_index = mef.SampleTime2Index([uutc_start, uutc_end]);
@@ -140,10 +139,33 @@ if isempty(list_mef)
     return
 end % if
 
-% get start and end points of imported signal
-start_end = gerStartend(list_mef(1), handles);
-set(handles.edit_start, 'String', num2str(start_end(1)))
-set(handles.edit_end, 'String', num2str(start_end(2)))
+% check password requirement
+subj_pw = handles.subject_pw;
+sess_pw = handles.session_pw;
+data_pw = handles.data_pw;
+mef = MultiscaleElectrophysiologyFile(list_mef(1).folder, list_mef(1).name);
+if mef.Header.subject_encryption_used && isempty(subj_pw)
+    fprintf('Warning: Subject password is required, but may not be provided\n')
+end % if
+if mef.Header.session_encryption_used && isempty(sess_pw)
+    fprintf('Warning: Session password is required, but may not be provided\n')
+end % if
+if mef.Header.data_encryption_used && isempty(data_pw)
+    fprintf('Warning: Data password is required, but may not be provided\n')
+end % if
+
+% get start and end points of imported signal in sample index
+[start_end, unit] = getStartend(list_mef(1), handles, subj_pw);
+if strcmpi(unit, 'index') % get recoridng start time in unit
+    record_start = 0;
+else
+    record_start = mef.SampleIndex2Time(1, unit);
+end % if
+set(handles.edit_start, 'String', num2str(start_end(1)-record_start))
+set(handles.edit_end, 'String', num2str(start_end(2)-record_start))
+handles.start_end = start_end;
+handles.old_unit = unit;
+handles.unit = unit;
 
 % get channel information
 num_mef = numel(list_mef); % number of mef/channels in the folder
@@ -154,7 +176,7 @@ rownames = cell(num_mef, 1);
 for k = 1:num_mef
     fp_k = list_mef(k).folder;
     fn_k = list_mef(k).name;
-    mef = MultiscaleElectrophysiologyFile(fp_k, fn_k);
+    mef = MultiscaleElectrophysiologyFile(fp_k, fn_k, 'SubjectPassword', subj_pw);
     Table{k, 1} = mef.Header.channel_name;
     Table{k, 2} = mef.Header.sampling_frequency;
     Table{k, 3} = mef.Header.number_of_samples;
@@ -172,7 +194,6 @@ set(handles.uitable_channel, 'Data', Table, 'RowName', rownames, 'Enable' , 'On'
 set(handles.pushbutton_deselall, 'Enable', 'On')
 set(handles.checkbox_segment, 'Enable', 'On')
 set(handles.popupmenu_unit, 'Enable', 'On')
-set(handles.pushbutton_setpasswords, 'Enable', 'On')
 
 
 function edit_path_CreateFcn(hObject, eventdata, handles)
@@ -210,15 +231,26 @@ fname = {list_mef.name};
 choice = cell2mat(Table(:, end));
 handles.filename = fname(choice);
 
-% start_end
-start_pt = str2double(get(handles.edit_start, 'String'));
-end_pt = str2double(get(handles.edit_end, 'String'));
-handles.start_end = [start_pt, end_pt];
-
 % unit
 unit_list = get(handles.popupmenu_unit, 'String');
 choice = get(handles.popupmenu_unit, 'Value');
 handles.unit = unit_list{choice};
+
+% start_end
+fp = list_mef(1).folder;
+fn = list_mef(1).name;
+pw = handles.subject_pw;
+mef = MultiscaleElectrophysiologyFile(fp, fn, 'SubjectPassword', pw);
+unit = handles.unit;
+if strcmpi(unit, 'index') % get recoridng start time in unit
+    record_start = 0;
+else
+    record_start = mef.SampleIndex2Time(1, unit);
+end % if
+
+start_pt = str2double(get(handles.edit_start, 'String'))+record_start;
+end_pt = str2double(get(handles.edit_end, 'String'))+record_start;
+handles.start_end = [start_pt, end_pt];
 
 guidata(hObject, handles);
 
@@ -339,11 +371,22 @@ end % if
 
 % mef
 list_mef = handles.list_mef;
-mef = MultiscaleElectrophysiologyFile(list_mef(1).folder, list_mef(1).name);
+mef = MultiscaleElectrophysiologyFile(list_mef(1).folder, list_mef(1).name,...
+    'SubjectPassword', handles.subject_pw);
 
 % change value according to the unit chosen
-old_start = str2double(get(handles.edit_start, 'String'));
-old_end = str2double(get(handles.edit_end, 'String'));
+if strcmpi(old_unit, 'index') % get recoridng start time in unit
+    record_start_old = 0;
+else
+    record_start_old = mef.SampleIndex2Time(1, old_unit);
+end % if
+if strcmpi(unit, 'index') % get recoridng start time in unit
+    record_start = 0;
+else
+    record_start = mef.SampleIndex2Time(1, unit);
+end % if
+old_start = str2double(get(handles.edit_start, 'String'))+record_start_old;
+old_end = str2double(get(handles.edit_end, 'String'))+record_start_old;
 if strcmpi(old_unit, 'index') == true % convert to index
     new_se_ind = [old_start, old_end];
 else
@@ -355,8 +398,9 @@ else
     new_se = mef.SampleIndex2Time(new_se_ind, unit);
 end % if
 
-set(handles.edit_start, 'String', num2str(new_se(1), 32));
-set(handles.edit_end, 'String', num2str(new_se(2), 32));
+set(handles.edit_start, 'String', num2str(new_se(1)-record_start, 32));
+set(handles.edit_end, 'String', num2str(new_se(2)-record_start, 32));
+handles.start_end = new_se;
 handles.old_unit = unit;
 guidata(hObject, handles)
 
@@ -384,11 +428,14 @@ function pushbutton_setpasswords_Callback(hObject, eventdata, handles)
 geometry = {[0.5, 1.27], [0.5, 1.27], [0.5, 1.27]};
 uilist = {...
     {'style', 'text', 'string', 'Subject', 'fontweight', 'bold'},...
-    {'style', 'edit', 'string', '', 'tooltipstring', 'Input subject password'},...
+    {'style', 'edit', 'string', '', 'horizontalalignment', 'left',...
+        'tooltipstring', 'Input subject password'},...
     {'style', 'text', 'string', 'Session', 'fontweight', 'bold'},...
-    {'style', 'edit', 'string', '', 'tooltipstring', 'Input Session password'},...
+    {'style', 'edit', 'string', '', 'horizontalalignment', 'left',...
+        'tooltipstring', 'Input Session password'},...
     {'style', 'text', 'string', 'Data', 'fontweight', 'bold'},...
-    {'style', 'edit', 'string', '', 'tooltipstring', 'Input Data password'},...    
+    {'style', 'edit', 'string', '', 'horizontalalignment', 'left',...
+        'tooltipstring', 'Input Data password'},...    
     };
 
 res = inputgui(geometry, uilist, 'pophelp(''pop_mefimport'')', ...

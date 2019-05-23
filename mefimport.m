@@ -42,7 +42,7 @@ function OUTEEG = mefimport(INEEG, filepath, filename, varargin)
 % See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
-% $Revision: 0.4 $  $Date: Sun 05/12/2019  3:27:29.780 PM $
+% $Revision: 0.5 $  $Date: Wed 05/22/2019  4:05:54.127 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -65,7 +65,8 @@ if ischar(filename)
 else
     fname = filename;
 end % if
-mef = MultiscaleElectrophysiologyFile(filepath, fname{1});
+mef = MultiscaleElectrophysiologyFile(filepath, fname{1},...
+    'SubjectPassword', pw.subject);
 mef.setSubjectPassword(pw.subject);
 mef.setSessionPassword(pw.session);
 mef.setDataPassword(pw.data);
@@ -188,14 +189,16 @@ for k = 1:OUTEEG.nbchan
     ch_k = fname{k};
     fprintf('Importing MEF data %s [%d/%d]...\n', ch_k, k, OUTEEG.nbchan)
     
-    mef_k = MultiscaleElectrophysiologyFile(fullfile(filepath, ch_k));
+    mef_k = MultiscaleElectrophysiologyFile(filepath, ch_k,...
+        'SubjectPassword', pw.subject);
+    mef_k.setSessionPassword(pw.session);
+    mef_k.setDataPassword(pw.data);
+    
     if isempty(start_end)
         data(k, :) = mef_k.importSignal;
     else
         data(k, :) = mef_k.importSignal(start_end, unit);
     end % if
-    % remove process mean
-    % data(k, :) = data(k, :) - mean(data(k, :));
     
     chanlocs(k).labels = mef_k.Header.channel_name;
 end % for
