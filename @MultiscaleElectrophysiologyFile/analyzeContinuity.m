@@ -84,7 +84,7 @@ fclose(fp);
 
 % block start-end
 blk_start = a+1; % 1st block indexed as one
-b = [a, header.number_of_index_entries];
+b = [a; header.number_of_index_entries];
 blk_end = b(2:end);
 seg_cont{:, {'BlockStart', 'BlockEnd'}} = [blk_start, blk_end];
 

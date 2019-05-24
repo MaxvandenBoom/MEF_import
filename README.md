@@ -12,9 +12,9 @@ Installation
 1. Download, decompress and copy the directory into the directory of plugins of EEGLAB
 1. Rename the directory of the plugin to 'MEF_import0.5'
 1. Launch EEGLAB in MATLAB, e.g. >>eeglab
-1. From EEGLAB GUI, select File > Import Data > Using EEGLAB functions and plugins > From UP-MSEL .mef file
+1. From EEGLAB GUI, select File > Import Data > Using EEGLAB functions and plugins > From MSEL-UPenn .mef file
 1. Follow the instructions on the screen
-1. A data sample 'sample_mef' folder is provided in the package (data passwords: 'erlichda' for Subject password; 'sieve' for Session password; no password required for Data password)
+1. A data sample 'sample_mef' folder is provided in the package (passwords: 'erlichda' for Subject password; 'sieve' for Session password; no password required for Data password)
 
 MEF format
 ----------
