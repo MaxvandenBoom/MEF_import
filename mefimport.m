@@ -44,7 +44,7 @@ function OUTEEG = mefimport(INEEG, filepath, filename, varargin)
 % See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
-% $Revision: 0.6 $  $Date: Fri 05/24/2019 11:24:35.981 PM $
+% $Revision: 0.7 $  $Date: Sat 05/25/2019  8:18:39.137 AM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -68,8 +68,10 @@ if ischar(filename)
 else
     fname = filename;
 end % if
-% mef = MultiscaleElectrophysiologyFile(filepath, fname{1},...
-%     'SubjectPassword', pw.subject);
+if isempty(mef1)
+    mef1 = MultiscaleElectrophysiologyFile(filepath, fname{1},...
+        'SubjectPassword', pw.subject);
+end % if
 mef1.setSubjectPassword(pw.subject);
 mef1.setSessionPassword(pw.session);
 mef1.setDataPassword(pw.data);
