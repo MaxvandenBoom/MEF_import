@@ -6,7 +6,7 @@ University of Toronto
 
 To install the MEF_import plugin for EEGLAB:
 1). Download, decompress and copy the directory into the directory of plugins of EEGLAB
-2). Rename the directory of the plugin to 'MEF_import0.5'
+2). Rename the directory of the plugin to 'MEF_import0.8'
 3). Launch EEGLAB in MATLAB, e.g. >>eeglab
 4). From EEGLAB GUI, select File > Import Data > Using EEGLAB functions and plugins > From Mayo Clinic .mef file
 5). Follow the instructions on the screen
