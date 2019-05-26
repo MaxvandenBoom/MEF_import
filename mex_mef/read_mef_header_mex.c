@@ -14,11 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 // 
-// mex -output read_mef_header read_mef_header_mex.c  mef_lib.c
+// mex -output read_mef_header read_mef_header_mex.c mef_lib.c
 //
 */
 
-// modified by Richard J. Cui (richard.cui@utoronto.ca) on Sat 05/25/2019 10:48:41.038 PM
+/* 
+ modified by Richard J. Cui.
+ $Revision: 0.2 $  $Date: Sun 05/26/2019  9:49:16.550 AM $
+
+ 1026 Rocky Creek Dr NE
+ Rochester, MN 55906, USA
+ 
+ Email: richard.cui@utoronto.ca
+ */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -64,7 +72,7 @@ int read_mef_header(char *f_name, MEF_HEADER_INFO *hdr_info, char *password)
     
 	if ((read_mef_header_block(header, hdr_info, password))) {
 		printf("[read_mef_header] header read error for file \"%s\" => exiting\n", f_name);
-		return(1); // RJC
+		return(1);		
 	}
 	free(header); header=NULL;
 	
