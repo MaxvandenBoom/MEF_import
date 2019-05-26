@@ -1,6 +1,33 @@
+//
+/*# Copyright 2012, Mayo Foundation, Rochester MN. All rights reserved
+# Written by Ben Brinkmann, Matt Stead, Dan Crepeau, and Vince Vasoli
+# usage and modification of this source code is governed by the Apache 2.0 license
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+// 
+// mex -output decompress_mef decompress_mef_mex.c mef_lib.c
+//
+*/
 
+/* 
+ modified by Richard J. Cui.
+ $Revision: 0.2 $  $Date: Sun 05/26/2019  9:49:16.550 AM $
+
+ 1026 Rocky Creek Dr NE
+ Rochester, MN 55906, USA
+ 
+ Email: richard.cui@utoronto.ca
+ */
 //mex decomp_mef_mex.c mef_lib.c -o decomp_mef
-// modified by Richard J. Cui (richard.cui@utoronto.ca) on Sun 05/26/2019 12:39:12.973 AM
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -14,13 +41,15 @@
 
 void decomp_mef(char *f_name, unsigned long long int start_idx, unsigned long long int end_idx, int *decomp_data, char *password)
 {
-	char			*c, *comp_data, *cdp, *last_block_p, encryptionKey[240];
-	unsigned char		*header, *diff_buffer;
+	char			*c;
+	unsigned char		*header;
 	int			*dcdp, *temp_data_buf;
 	unsigned int		cpu_endianness, n_read, comp_data_len, bytes_decoded, tot_samples;
 	unsigned int		i, n_index_entries, tot_index_fields, kept_samples, skipped_samples;
 	unsigned long long int	start_block_file_offset, end_block_file_offset, start_block_idx, end_block_idx;
 	unsigned long long int	*index_data, last_block_len;
+    ui1         encryptionKey[240], *cdp, *comp_data, *last_block_p;
+    si1         *diff_buffer;
 	FILE			*fp;
 	MEF_HEADER_INFO		hdr_info;
 	RED_BLOCK_HDR_INFO	block_hdr;
@@ -62,7 +91,7 @@ void decomp_mef(char *f_name, unsigned long long int start_idx, unsigned long lo
 	}
 
 	if (hdr_info.data_encryption_used)
-		AES_KeyExpansion(4, 10, (ui1 *) encryptionKey, hdr_info.session_password); 
+		AES_KeyExpansion(4, 10, encryptionKey, hdr_info.session_password); 
 	else
 		*encryptionKey = 0;
 	
@@ -114,7 +143,7 @@ void decomp_mef(char *f_name, unsigned long long int start_idx, unsigned long lo
 	
 	/* allocate input buffer */
 	comp_data_len = (unsigned int) (end_block_file_offset - start_block_file_offset + last_block_len);
-	comp_data = (char *) malloc(comp_data_len); 
+	comp_data = (ui1 *) malloc(comp_data_len); 
 	if (comp_data == NULL) {
 		printf("[decomp_mef] could not allocate enough memory for file \"%s\" => exiting\n", f_name);
 		return;
@@ -133,9 +162,9 @@ void decomp_mef(char *f_name, unsigned long long int start_idx, unsigned long lo
 	
 	// decode first block to temp array
 	cdp = comp_data;  
-	diff_buffer = (unsigned char *) malloc(hdr_info.maximum_block_length * 4);
+	diff_buffer = (si1 *) malloc(hdr_info.maximum_block_length * 4);
 	temp_data_buf = (int *) malloc(hdr_info.maximum_block_length * 4);
-	bytes_decoded = (unsigned int) RED_decompress_block((ui1 *) cdp, temp_data_buf, (si1 *) diff_buffer, (ui1 *) encryptionKey, 0, hdr_info.data_encryption_used, &block_hdr);
+	bytes_decoded = (unsigned int) RED_decompress_block(cdp, temp_data_buf, diff_buffer, encryptionKey, 0, hdr_info.data_encryption_used, &block_hdr);
 	cdp += bytes_decoded;
 	
 	// copy requested samples from first block to output buffer
@@ -158,15 +187,15 @@ void decomp_mef(char *f_name, unsigned long long int start_idx, unsigned long lo
   //  printf("end_block_file_offset = %lu, start_block_file_offset = %lu\n", end_block_file_offset, start_block_file_offset);
     
 	while (cdp < last_block_p) {
-        read_RED_block_header((ui1 *) cdp, &block_hdr);
-		bytes_decoded = (unsigned int) RED_decompress_block((ui1 *) cdp, dcdp, (si1 *) diff_buffer, (ui1 *) encryptionKey, 0, hdr_info.data_encryption_used, &block_hdr);
+        read_RED_block_header(cdp, &block_hdr);
+		bytes_decoded = (unsigned int) RED_decompress_block(cdp, dcdp, diff_buffer, encryptionKey, 0, hdr_info.data_encryption_used, &block_hdr);
         fflush(stdout);
 		cdp += bytes_decoded;
 		dcdp += block_hdr.sample_count; 
 	}
 	
 	// decode last block to temp array
-	(void) RED_decompress_block((ui1 *) cdp, temp_data_buf, (si1 *) diff_buffer, (ui1 *) encryptionKey, 0, hdr_info.data_encryption_used, &block_hdr);
+	(void) RED_decompress_block(cdp, temp_data_buf, diff_buffer, encryptionKey, 0, hdr_info.data_encryption_used, &block_hdr);
 
 	// copy requested samples from last block to output buffer
 	kept_samples = (unsigned int) (end_idx - end_block_idx + 1);
@@ -185,9 +214,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
 	char			*f_name, *password;
 	int			buf_len, status, decomp_data_len, *decomp_data;
-    mwSize         dims[2];
 	unsigned long long int	start_idx, end_idx, long_decomp_data_len;
 	void			decomp_mef();
+    mwSize          dims[2];
 	
 	//  Check for proper number of arguments 
 	if (nrhs != 4) 
@@ -253,7 +282,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	decomp_data_len = (int) long_decomp_data_len;
 	dims[0] = decomp_data_len; dims[1] = 1;
 	plhs[0] = mxCreateNumericArray(2, dims, mxINT32_CLASS, mxREAL);
-    
+	
 	// Create a C pointer to a copy of the output matrix. 
 	decomp_data = (int *) mxGetPr(plhs[0]);
 	if (decomp_data == NULL) {
