@@ -32,7 +32,7 @@ function varargout = gui_mefimport(varargin)
 % See also pop_mefimport, gui_mefimport.
 
 % Copyright 2019 Richard J. Cui. Created: Sun 04/28/2019  9:51:01.691 PM
-% $Revision: 0.6 $  $Date: Fri 05/24/2019 11:15:13.689 PM $
+% $Revision: 0.7 $  $Date: Tue 05/28/2019  4:35:17.924 PM$
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -265,6 +265,7 @@ handles.filepath = '';
 handles.filename = '';
 handles.start_end = [];
 handles.unit = '';
+handles.mef1 = [];
 guidata(hObject, handles)
 
 uiresume();
