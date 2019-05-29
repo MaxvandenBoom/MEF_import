@@ -4,7 +4,7 @@ function maf_fname = gui_mafimport()
 [file, path] = uigetfile('*.maf', 'Select a MAF file');
 
 if file
-    maf_fname = fullfile(file, path);
+    maf_fname = fullfile(path, file);
 else
     maf_fname = '';
 end % if

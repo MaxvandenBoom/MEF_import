@@ -39,7 +39,7 @@ function [EEG, com] = pop_mefimport(EEG, varargin)
 % See also EEGLAB, mefimport.
 
 % Copyright 2019 Richard J. Cui. Created: Tue 05/07/2019 10:33:48.169 PM
-% $Revision: 0.5 $  $Date: Mon 05/27/2019  9:43:38.179 PM$
+% $Revision: 0.6 $  $Date:Tue 05/28/2019  9:56:47.412 PM$
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -91,10 +91,10 @@ end % if
 
 % keep some data in eeglab space
 % ------------------------------
-maf_data.mef1 = mef1;
-maf_data.start_end = start_end;
-maf_data.unit = unit;
-EEG.etc.maf_data = maf_data;
+mef_data.mef1 = mef1;
+mef_data.start_end = start_end;
+mef_data.unit = unit;
+EEG.etc.mef_data = mef_data;
 
 % return the string command
 % -------------------------
