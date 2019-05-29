@@ -26,7 +26,7 @@ function [EEG, com] = pop_mafimport(EEG, varargin)
 % See also EEGLAB, mafimport, pop_mefimport.
 
 % Copyright 2019 Richard J. Cui. Created: Tue 05/28/2019  3:14:55.269 PM
-% $Revision: 0.1 $  $Date: Tue 05/28/2019  3:14:55.269 PM$
+% $Revision: 0.2 $  $Date: Wed 05/29/2019  3:20:19.227 PM$
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -93,7 +93,15 @@ idx = lat_ind >= se_ind(1) & lat_ind <= se_ind(2); % only choose those in start_
 evt_t.latency = lat_ind-se_ind(1)+1;
 evt_t(~idx, :) = [];
 
-if ~isempty(evt_t)
+if isempty(evt_t)
+    supergui( 'geomhoriz', { 1 1 1 }, 'uilist', { ...
+        { 'style', 'text', 'string',...
+        'No known event found in the signal under investigation.',...
+        'HorizontalAlignment', 'center' },...
+        { }, ...
+        { 'style', 'pushbutton' , 'string', 'OK', 'callback',...
+        'close(gcbf);' } } );
+else
     % combine with original event
     ur_evt = EEG.urevent;
     ur_t = struct2table(ur_evt); % convert to table
