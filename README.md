@@ -10,7 +10,7 @@ The code repository for **MEF_import** is hosted on GitHub at https://github.com
 Installation
 ------------
 1. Download, decompress and copy the directory into the directory of plugins of EEGLAB
-1. Rename the directory of the plugin to 'MEF_import1.0'
+1. Rename the directory of the plugin to MEF_import1.0
 1. Launch EEGLAB in MATLAB, e.g. >> eeglab
 1. Follow the instructions on the screen
 
