@@ -14,6 +14,10 @@ Installation
 1. Launch EEGLAB in MATLAB, e.g. >> eeglab
 1. Follow the instructions on the screen
 
+Mex file
+--------
+Two mex files are required to read MEF data. Run 'make_mex_mef.m' in the folder of 'mef_matlab/mex_mef' to build the mex files for different operating systems.
+ 
 Data preparation
 ----------------
 1. Put all the MEF files for different channels/electrodes of a single recording session under a single directory. 
@@ -25,10 +29,13 @@ Input MEF data
 1. If passwords are required, push "Set Passwords" to input the passwords.
 1. Select the folder of the dataset.  A list of available channel is shown in the table below.
 1. Choose part of the signal to import if needed.
+1. Discontinuity of recording is marked as event 'Discont'.
 
 Input MAF data
 --------------
-1. 
+From EEGLAB GUI, select File > Import event info > From Mayo Clinic .maf file
+
+Currently, the importer can only recognize events of seizure onset and seizure offset.
 
 MEF format
 ----------
