@@ -24,7 +24,7 @@ function [sample_time, sample_yn] = SampleIndex2Time(this, varargin)
 % See also SampleTime2Index.
 
 % Copyright 2019 Richard J. Cui. Created: Mon 05/06/2019  9:29:08.940 PM
-% $Revision: 0.3 $  $Date: Fri 05/24/2019  4:07:08.928 PM $
+% $Revision: 0.4 $  $Date: Wed 05/29/2019 11:26:30.068 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -61,7 +61,7 @@ for k = 1:num_seg
     end_k = cont_start_end(k, 2);
     ind_k = sorted_si >= start_k & sorted_si <= end_k;
     
-    if ~isempty(ind_k)
+    if sum(ind_k) ~= 0
         st_k = cont.SampleTimeStart(k);
         index_diff = sorted_si(ind_k)-start_k;
         time_diff = index_diff*MPS/fs;
