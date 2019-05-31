@@ -24,7 +24,7 @@ function [sample_time, sample_yn] = SampleIndex2Time(this, varargin)
 % See also SampleTime2Index.
 
 % Copyright 2019 Richard J. Cui. Created: Mon 05/06/2019  9:29:08.940 PM
-% $Revision: 0.4 $  $Date: Wed 05/29/2019 11:26:30.068 PM $
+% $Revision: 0.5 $  $Date: Thu 05/30/2019 11:22:03.407 PM$
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -44,8 +44,6 @@ MPS = 1e6; % microsecond per second
 sample_time = zeros(size(sample_index));
 sample_yn = false(size(sample_index));
 [sorted_si, orig_index] = sort(sample_index);
-sorted_sample_time = sample_index;
-sorted_sample_yn = sample_yn;
 
 if isempty(this.Continuity)
     this.analyzeContinuity;
@@ -55,21 +53,37 @@ cont = this.Continuity;
 % within continuous segment
 % -------------------------
 cont_start_end = cont{:, {'SampleIndexStart', 'SampleIndexEnd'}};
-num_seg = size(cont_start_end, 1); % number of segments
-for k = 1:num_seg
-    start_k = cont_start_end(k, 1);
-    end_k = cont_start_end(k, 2);
-    ind_k = sorted_si >= start_k & sorted_si <= end_k;
-    
-    if sum(ind_k) ~= 0
-        st_k = cont.SampleTimeStart(k);
-        index_diff = sorted_si(ind_k)-start_k;
-        time_diff = index_diff*MPS/fs;
-        sorted_st_k = st_k+time_diff;
-        sorted_sample_time(ind_k) = round(sorted_st_k); % uUTC integer
-        sorted_sample_yn(ind_k) = true;
-    end % if
-end % for
+% sorted_sample_time = sample_index;
+% sorted_sample_yn = sample_yn;
+% num_seg = size(cont_start_end, 1); % number of segments
+% for k = 1:num_seg
+%     start_k = cont_start_end(k, 1);
+%     end_k = cont_start_end(k, 2);
+%     ind_k = sorted_si >= start_k & sorted_si <= end_k;
+%     
+%     if sum(ind_k) ~= 0
+%         st_k = cont.SampleTimeStart(k);
+%         index_diff = sorted_si(ind_k)-start_k;
+%         time_diff = index_diff*MPS/fs;
+%         sorted_st_k = st_k+time_diff;
+%         sorted_sample_time(ind_k) = round(sorted_st_k); % uUTC integer
+%         sorted_sample_yn(ind_k) = true;
+%     end % if
+% end % for
+
+% choose continuity segment that in the range of sample indexes
+if numel(sorted_si) == 1
+    sel_cont_ind = sorted_si <= cont_start_end(:, 2) ...
+        & sorted_si >= cont_start_end(:, 1);
+else
+    sel_cont_ind = sorted_si(1) <= cont_start_end(:, 2) ...
+        & sorted_si(2) >= cont_start_end(:, 1);
+end % if
+sel_cont = cont(sel_cont_ind, :); % select the segment of continuity in the
+                                  % range of sorted_si
+sel_cont_start_end = cont_start_end(sel_cont_ind, :);                                  
+[sorted_sample_time, sorted_sample_yn] = inContLoopCont(sel_cont_start_end,...
+    sel_cont, sorted_si, MPS, fs);
 
 % within discontinous segment
 % ----------------------------
@@ -121,6 +135,30 @@ end
 % =========================================================================
 % subroutines
 % =========================================================================
+function [s_ind, s_yn] = inContLoopCont(cont_se, cont, sorted_si, MPS, fs)
+% within continuous segment loop through continuity segments
+
+s_ind = zeros(size(sorted_si));
+s_yn = false(size(sorted_si));
+
+num_seg = size(cont_se, 1); % number of segments
+for k = 1:num_seg
+    start_k = cont_se(k, 1);
+    end_k = cont_se(k, 2);
+    ind_k = sorted_si >= start_k & sorted_si <= end_k;
+    
+    if sum(ind_k) ~= 0
+        st_k = cont.SampleTimeStart(k);
+        index_diff = sorted_si(ind_k)-start_k;
+        time_diff = index_diff*MPS/fs;
+        sorted_st_k = st_k+time_diff;
+        s_ind(ind_k) = round(sorted_st_k); % uUTC integer
+        s_yn(ind_k) = true;
+    end % if
+end % for
+
+end % function
+
 function q = parseInputs(varargin)
 
 % defaults
