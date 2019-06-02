@@ -15,7 +15,7 @@ function event_table = getMAFEvent(this, maf_file)
 % See also .
 
 % Copyright 2019 Richard J. Cui. Created: Mon 05/27/2019  5:08:20.075 PM
-% $Revision: 0.4 $  $Date: Mon 05/27/2019  5:08:20.075 PM $
+% $Revision: 0.5 $  $Date: Sun 06/02/2019  2:51:12.672 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -68,6 +68,11 @@ for k = 1:num_mafevents
     
 end % for
 event_table = cell2table(event, 'VariableNames', var_names);
+
+% sort event_table according to latency
+% -------------------------------------
+[~, lat_index] = sort(event_table.Latency);
+event_table = event_table(lat_index, :);
 
 end
 
