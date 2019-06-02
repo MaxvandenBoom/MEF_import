@@ -24,7 +24,7 @@ function [sample_time, sample_yn] = SampleIndex2Time(this, varargin)
 % See also SampleTime2Index.
 
 % Copyright 2019 Richard J. Cui. Created: Mon 05/06/2019  9:29:08.940 PM
-% $Revision: 0.7 $  $Date: Sun 06/02/2019 12:00:04.051 AM$
+% $Revision: 0.8 $  $Date: Sun 06/02/2019  3:14:58.390 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -53,11 +53,9 @@ cont = this.Continuity;
 cont_start_end = cont{:, {'SampleIndexStart', 'SampleIndexEnd'}};
 
 % choose continuity segment that in the range of sample indexes
-if numel(sorted_si) == 1
-    sorted_si = sorted_si*[1 1];
-end % if
+num_si = numel(sorted_si);
 sel_cont_ind = sorted_si(1) <= cont_start_end(:, 2) ...
-    & sorted_si(end) >= cont_start_end(:, 1);
+    & sorted_si(num_si) >= cont_start_end(:, 1);
 sel_cont = cont(sel_cont_ind, :); % select the segment of continuity in the
                                   % range of sorted_si
 sel_cont_start_end = cont_start_end(sel_cont_ind, :);                                  
