@@ -23,7 +23,7 @@ function [sample_index, sample_yn] = SampleTime2Index(this, varargin)
 % See also SampleIndex2Time.
 
 % Copyright 2019 Richard J. Cui. Created: Sun 05/05/2019 10:29:21.071 PM
-% $Revision: 0.5 $  $Date:Mon 06/03/2019  3:14:55.917 PM $
+% $Revision: 0.6 $  $Date: Mon 06/03/2019  4:52:48.362 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -77,20 +77,22 @@ sel_cont_start_end = cont_start_end(sel_cont_ind, :);
 % ----------------------------
 % TODO: need to segment the data for very large chunck of times in the
 % discontinuity segments, similar with the case of continuity
-a = cont_start_end.';
-b = cat(1, -inf, a(:), inf);
-discont_start_end = reshape(b, 2, numel(b)/2).';
-num_seg = size(discont_start_end, 1); % number of segments
-for k = 1:num_seg
-    start_k = discont_start_end(k, 1);
-    end_k = discont_start_end(k, 2);
-    ind_k = sorted_st > start_k & sorted_st < end_k;
-    
-    if sum(ind_k) ~= 0
-        sorted_sample_index(ind_k) = NaN; % if between one index difference
-        sorted_sample_yn(ind_k) = false;
-    end % if
-end % for
+if this.Header.number_of_discontinuity_entries > 1 % if discont in recording
+    a = cont_start_end.';
+    b = cat(1, -inf, a(:), inf);
+    discont_start_end = reshape(b, 2, numel(b)/2).';
+    num_seg = size(discont_start_end, 1); % number of segments
+    for k = 1:num_seg
+        start_k = discont_start_end(k, 1);
+        end_k = discont_start_end(k, 2);
+        ind_k = sorted_st > start_k & sorted_st < end_k;
+        
+        if sum(ind_k) ~= 0
+            sorted_sample_index(ind_k) = NaN; % if between one index difference
+            sorted_sample_yn(ind_k) = false;
+        end % if
+    end % for
+end % if
 
 % output
 % ------
