@@ -20,10 +20,10 @@ function [sample_index, sample_yn] = SampleTime2Index(this, varargin)
 % 
 % Note:
 % 
-% See also .
+% See also SampleIndex2Time.
 
 % Copyright 2019 Richard J. Cui. Created: Sun 05/05/2019 10:29:21.071 PM
-% $Revision: 0.4 $  $Date: Wed 05/22/2019  3:54:16.630 PM $
+% $Revision: 0.5 $  $Date:Mon 06/03/2019  3:14:55.917 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -50,13 +50,9 @@ end % switch
 
 % set paras
 % ----------
-fs = this.Header.sampling_frequency;
-MPS = 1e6; % microsecond per second
 sample_index = zeros(size(sample_time));
 sample_yn = false(size(sample_time));
 [sorted_st, orig_index] = sort(sample_time);
-sorted_sample_index = sample_index;
-sorted_sample_yn = sample_yn;
 
 if isempty(this.Continuity)
     this.analyzeContinuity;
@@ -66,24 +62,21 @@ cont = this.Continuity;
 % within continuous segment
 % -------------------------
 cont_start_end = cont{:, {'SampleTimeStart', 'SampleTimeEnd'}};
-num_seg = size(cont_start_end, 1); % number of segments
-for k = 1:num_seg
-    start_k = cont_start_end(k, 1);
-    end_k = cont_start_end(k, 2);
-    ind_k = sorted_st >= start_k & sorted_st <= end_k;
-    
-    if ~isempty(ind_k)
-        si_k = cont.SampleIndexStart(k);
-        time_diff = sorted_st(ind_k) - start_k;
-        ind_diff = floor(time_diff*fs/MPS);
-        sorted_ti_k = si_k+ind_diff;
-        sorted_sample_index(ind_k) = sorted_ti_k;
-        sorted_sample_yn(ind_k) = true;
-    end % if
-end % for
+
+% choose continuity segment that in the range of sample indexes
+num_st = numel(sorted_st);
+sel_cont_ind = sorted_st(1) <= cont_start_end(:, 2)...
+    & sorted_st(num_st) >= cont_start_end(:, 1);
+sel_cont = cont(sel_cont_ind, :); % select the segment of continuity in the
+                                  % range of sorted_si
+sel_cont_start_end = cont_start_end(sel_cont_ind, :);                                  
+[sorted_sample_index, sorted_sample_yn] = inContLoopCont(sel_cont_start_end,...
+    sel_cont, sorted_st);
 
 % within discontinous segment
 % ----------------------------
+% TODO: need to segment the data for very large chunck of times in the
+% discontinuity segments, similar with the case of continuity
 a = cont_start_end.';
 b = cat(1, -inf, a(:), inf);
 discont_start_end = reshape(b, 2, numel(b)/2).';
@@ -94,17 +87,7 @@ for k = 1:num_seg
     ind_k = sorted_st > start_k & sorted_st < end_k;
     
     if sum(ind_k) ~= 0
-        if start_k == -inf
-            si_k = cont.SampleIndexStart(k);
-            time_diff = sorted_st(ind_k)-end_k;
-            ind_diff = floor(time_diff*fs/MPS);
-        else
-            si_k = cont.SampleIndexEnd(k-1);
-            time_diff = sorted_st(ind_k) - start_k;
-            ind_diff = ceil(time_diff*fs/MPS);
-        end % if
-        sorted_ti_k = si_k+ind_diff;
-        sorted_sample_index(ind_k) = sorted_ti_k;
+        sorted_sample_index(ind_k) = NaN; % if between one index difference
         sorted_sample_yn(ind_k) = false;
     end % if
 end % for
@@ -119,6 +102,63 @@ end
 % =========================================================================
 % subroutines
 % =========================================================================
+function [s_index, s_yn] = inContLoopCont(cont_se, cont, sorted_st)
+
+blk_len = 2^20; % length of one block of sample times
+num_st = numel(sorted_st);
+if num_st >= 3*blk_len
+    verb = true;
+else
+    verb = false;
+end % if
+
+s_index = zeros(size(sorted_st));
+s_yn = false(size(sorted_st));
+
+num_blk = ceil(num_st/blk_len);
+if verb, wh = waitbar(0, 'Coverting sample times to indexes...'); end % if
+for k = 1:num_blk
+    start_k = (k-1)*blk_len+1;
+    end_k = k*blk_len;
+    if end_k >= num_st
+        end_k = num_st;
+    end % if
+    st_k = sorted_st(start_k:end_k);
+    [s_index_k, s_yn_k] = inContLoopCont_blk(cont_se, cont, st_k);
+    
+    s_index(start_k:end_k) = s_index_k;
+    s_yn(start_k:end_k) = s_yn_k;
+    if verb, waitbar(k/num_blk, wh), end % if
+end % for
+if verb, close(wh), end % if
+
+end % function
+
+function [s_index, s_yn] = inContLoopCont_blk(cont_se, cont, sorted_st)
+% within continuous segment loop through continuity segments
+
+s_index = zeros(size(sorted_st));
+s_yn = false(size(sorted_st));
+
+num_seg = size(cont_se, 1); % number of segments
+for k = 1:num_seg
+    start_k = cont_se(k, 1); % start time
+    end_k = cont_se(k, 2); % end time
+    ind_k = sorted_st >= start_k & sorted_st <= end_k;
+    
+    if sum(ind_k) ~= 0
+        si_k = cont.SampleIndexStart(k);
+        ei_k = cont.SampleIndexEnd(k);
+        slop_k = (ei_k-si_k)/(end_k-start_k);
+        time_diff = sorted_st(ind_k) - start_k;
+        sorted_ti_k = si_k+slop_k*time_diff;
+        s_index(ind_k) = round(sorted_ti_k); % align time to the nearest index
+        s_yn(ind_k) = true;
+    end % if
+end % for
+
+end % funciton
+
 function q = parseInputs(varargin)
 
 % defaults
