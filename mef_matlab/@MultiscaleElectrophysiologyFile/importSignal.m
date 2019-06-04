@@ -55,7 +55,11 @@ wholename = fullfile(this.FilePath, this.FileName);
 
 % verbose
 num_samples = diff(start_end)+1;
-if num_samples > 2^20, verbo = true; end % if
+if num_samples > 2^20
+    verbo = true; 
+else
+    verbo = false;
+end % if
 
 % =========================================================================
 % load the data
