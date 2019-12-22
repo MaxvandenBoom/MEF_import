@@ -15,7 +15,7 @@ function [EEG, com] = pop_mefimport(EEG, varargin)
 %                     string or cell string.  More than one, the names are
 %                     in cell string.
 %   start_end       - [1 x 2 array] (optional) [start time/index, end time/index] of 
-%                     the signal to be extracted fromt he file (default:
+%                     the signal to be extracted from the file (default:
 %                     the entire signal)
 %   unit            - [str] (optional) unit of start_end: 'Index' (default), 'uUTC',
 %                     'Second', 'Minute', 'Hour', and 'Day'
@@ -24,6 +24,7 @@ function [EEG, com] = pop_mefimport(EEG, varargin)
 %   EEG             - [struct] EEGLab dataset structure. See Note for
 %                     addtional information about the details of the
 %                     structure.
+%   com             - [str] the command output
 % 
 % Note:
 %   All MEF files in one directory are assumed to be data files for
@@ -33,13 +34,13 @@ function [EEG, com] = pop_mefimport(EEG, varargin)
 %   https://sccn.ucsd.edu/wiki/A05:_Data_Structures, or see the help
 %   information of eeg_checkset.m.
 %
-%   The command output is a hidden output that does not have to
-% be described in the header
+%   The command output is a hidden output that does not have to be
+%   described in the header.
 % 
 % See also EEGLAB, mefimport.
 
 % Copyright 2019 Richard J. Cui. Created: Tue 05/07/2019 10:33:48.169 PM
-% $Revision: 0.6 $  $Date:Tue 05/28/2019  9:56:47.412 PM$
+% $Revision: 0.7 $  $Date: Fri 12/20/2019  3:27:10.868 PM$
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
