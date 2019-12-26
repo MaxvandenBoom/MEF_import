@@ -3,9 +3,10 @@ function OUTEEG = mefimport(INEEG, filepath, filename, varargin)
 %
 % Usage:
 %   OUTEEG = mefimport(INEEG, filepath, filename)
-%   OUTEEG = mefimport(INEEG, filepath, filename, start_end)
-%   OUTEEG = mefimport(INEEG, filepath, filename, start_end, unit)
-%   OUTEEG = mefimport(INEEG, filepath, filename, start_end, unit, password)
+%   OUTEEG = mefimport(____, start_end)
+%   OUTEEG = mefimport(____, start_end, unit)
+%   OUTEEG = mefimport(____, start_end, unit, password)
+%   OUTEEG = mefimport(____, start_end, unit, password, mef1)
 %
 % Input(s):
 %   INEEG           - [struct] EEGLab dataset structure. See Note for
@@ -46,7 +47,7 @@ function OUTEEG = mefimport(INEEG, filepath, filename, varargin)
 % See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
-% $Revision: 0.9 $  $Date: Tue 06/04/2019  4:26:55.371 PM $
+% $Revision: 1.0 $  $Date: Thu 12/26/2019  4:07:53.604 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
