@@ -1,12 +1,12 @@
 function [EEG, com] = pop_mefimport_2p1(EEG, varargin)
-% POP_MEFIMPORT_2P1 Import MEF 2.1 data into EEGLab with GUI
+% POP_MEFIMPORT_2P1 Import MEF 2.1 data into EEGLab with or without GUI
 %
 % Syntax:
-%   [EEG, com] = pop_mefimport(EEG)
-%   [EEG, com] = pop_mefimport(EEG, filepath)
-%   [EEG, com] = pop_mefimport(EEG, filepath, filename)
-%   [EEG, com] = pop_mefimport(EEG, filepath, filename, start_end)
-%   [EEG, com] = pop_mefimport(EEG, filepath, filename, start_end, unit)
+%   [EEG, com] = pop_mefimport_2p1(EEG)
+%   [EEG, com] = pop_mefimport_2p1(EEG, filepath)
+%   [EEG, com] = pop_mefimport_2p1(EEG, filepath, filename)
+%   [EEG, com] = pop_mefimport_2p1(EEG, filepath, filename, start_end)
+%   [EEG, com] = pop_mefimport_2p1(EEG, filepath, filename, start_end, unit)
 %
 % Input(s):
 %   filepath        - [str] full file path
