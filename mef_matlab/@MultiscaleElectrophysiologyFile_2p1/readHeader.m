@@ -12,7 +12,7 @@ function header = readHeader(this, varargin)
 %   password        - [str] password of the data
 % 
 % Output(s):
-%   header          - [struc] HEADER information of MEF file
+%   header          - [struc] HEADER information of MEF 2.1 file
 %                     .institution      : [$(63)] Institution
 %                     .unencrypted_text_field
 %                                       : [$(63)] Unencrypted Text Field (general
@@ -144,7 +144,7 @@ function header = readHeader(this, varargin)
 % See also .
 
 % Copyright 2019 Richard J. Cui. Created: Mon 04/29/2019 10:33:58.517 PM
-% $Revision: 0.3 $  $Date: Mon 05/20/2019  3:00:16.892 PM $
+% $Revision: 0.4 $  $Date: Sat 11/16/2019 11:19:57.825 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
