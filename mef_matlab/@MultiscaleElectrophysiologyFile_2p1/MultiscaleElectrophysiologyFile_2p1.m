@@ -69,7 +69,7 @@ classdef MultiscaleElectrophysiologyFile_2p1 < handle
     % ----------------
     methods
         function this = MultiscaleElectrophysiologyFile_2p1(varargin)
-            % construct MultiscaleElectrophysiologyFile object
+            % construct MultiscaleElectrophysiologyFile_2p1 object
             % ------------------------------------------------
             % defaults
             default_pw = '';
