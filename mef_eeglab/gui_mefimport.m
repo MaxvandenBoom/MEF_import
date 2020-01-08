@@ -32,7 +32,7 @@ function varargout = gui_mefimport(varargin)
 % See also pop_mefimport, gui_mefimport.
 
 % Copyright 2019 Richard J. Cui. Created: Sun 04/28/2019  9:51:01.691 PM
-% $Revision: 0.9 $  $Date: Sun 12/29/2019  4:22:18.705 PM$
+% $Revision: 0.9 $  $Date: Wed 01/08/2020 11:39:57.259 AM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -146,13 +146,13 @@ data_pw = handles.data_pw;
 mef1 = MultiscaleElectrophysiologyFile_2p1(list_mef(1).folder, list_mef(1).name,...
     'SubjectPassword', subj_pw);
 if mef1.Header.subject_encryption_used && isempty(subj_pw)
-    fprintf('Warning: Subject password is required, but may not be provided\n')
+    warning('Subject password is required, but may not be provided')
 end % if
 if mef1.Header.session_encryption_used && isempty(sess_pw)
-    fprintf('Warning: Session password is required, but may not be provided\n')
+    warning('Session password is required, but may not be provided')
 end % if
 if mef1.Header.data_encryption_used && isempty(data_pw)
-    fprintf('Warning: Data password is required, but may not be provided\n')
+    warning('Data password is required, but may not be provided')
 end % if
 
 % get start and end points of imported signal in sample index
