@@ -31,7 +31,7 @@ classdef MultiscaleElectrophysiologyFile_2p1 < handle
     % See also this.readHeader.
     
     % Copyright 2019 Richard J. Cui. Created: Mon 04/29/2019  8:11:02.485 PM
-    % $Revision: 0.7 $  $Date: Sun 12/29/2019 12:47:45.988 PM $
+    % $Revision: 0.8 $  $Date: Wed 01/08/2020 11:39:57.259 AM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -43,7 +43,7 @@ classdef MultiscaleElectrophysiologyFile_2p1 < handle
     % =====================================================================
     % MAF file info
     % -------------
-    properties
+    properties (Hidden = true)
         MafFilePath     % [str] filepath of MAF file
         MafFileName     % [str] filename of MAF file including ext (.maf)
         MAF             % [struct] MAF data structure
@@ -51,7 +51,7 @@ classdef MultiscaleElectrophysiologyFile_2p1 < handle
     
     % MEF file info
     % -------------
-    properties (SetAccess = protected)
+    properties (SetAccess = protected, Hidden = true)
         FilePath        % [str] filepath of MEF file
         FileName        % [str] filename of MEF file including ext (.mef)
         SubjectPassword % [str] subject password of MEF file
@@ -69,7 +69,7 @@ classdef MultiscaleElectrophysiologyFile_2p1 < handle
     % ----------------
     methods
         function this = MultiscaleElectrophysiologyFile_2p1(varargin)
-            % construct MultiscaleElectrophysiologyFile_2p1 object
+            % construct MultiscaleElectrophysiologyFile object
             % ------------------------------------------------
             % defaults
             default_pw = '';
@@ -118,7 +118,7 @@ classdef MultiscaleElectrophysiologyFile_2p1 < handle
                 mef_ver = sprintf('%d.%d', this.Header.header_version_major,...
                     this.Header.header_version_minor);
                 if strcmp(mef_ver, '2.1') == false
-                    fprintf('Warning: The MEF file is compressed with MEF format version %s, rather than 2.1. The results may be unpredictable.\n',...
+                    warning('The MEF file is compressed with MEF format version %s, rather than 2.1. The results may be unpredictable',...
                         mef_ver)
                 end % if
                 

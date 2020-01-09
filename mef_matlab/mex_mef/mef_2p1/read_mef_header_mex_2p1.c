@@ -20,7 +20,7 @@
 
 /* 
  modified by Richard J. Cui.
- $Revision: 0.2 $  $Date: Sun 05/26/2019  9:49:16.550 AM $
+ $Revision: 0.3 $  $Date: Thu 01/09/2020  3:50:49.575 PM $
 
  1026 Rocky Creek Dr NE
  Rochester, MN 55906, USA
@@ -34,7 +34,7 @@
 #include <math.h>
 #include "mex.h"
 #include "matrix.h"
-#include "mef.h"
+#include "mef_2p1.h"
 
 #define BIG_ENDIAN_CODE  	0
 #define LITTLE_ENDIAN_CODE	1

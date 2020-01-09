@@ -1,18 +1,18 @@
 function this = setDataPassword(this, password)
-% MULTISCALEELECTROPHYSIOLOGYFILE_2P1.SETDATAPASSWORD set Data Password of MEF 2.1 file
+% SETDATAPASSWORD set Data Password of MEF file
 % 
 % Syntax:
 %   this = setSessionPassword(this, password)
 % 
 % Input(s):
-%   this        - [obj] MultiscaleElectrophysiologyFile_2p1 object
+%   this        - [obj] MultiscaleElectrophysiologyFile object
 %   password    - [str] Data password
 % 
 % Output(s):
-%   this        - output MultiscaleElectrophysiologyFile_2p1
+%   this        - output MultiscaleElectrophysiologyFile
 
 % Copyright 2019 Richard J. Cui. Created: Mon 05/20/2019 10:02:51.052 PM
-% $Revision: 0.2 $  $Date: Sun 12/29/2019  4:43:20.432 PM $
+% $Revision: 0.1 $  $Date: Mon 05/20/2019 10:02:51.052 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA

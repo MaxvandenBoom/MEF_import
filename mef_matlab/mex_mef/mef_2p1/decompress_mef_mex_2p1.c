@@ -20,21 +20,21 @@
 
 /* 
  modified by Richard J. Cui.
- $Revision: 0.4 $  $Date: Tue 06/04/2019  3:09:17.684 PM $
+ $Revision: 0.5 $  $Date: Thu 01/09/2020  3:50:49.575 PM $
 
  1026 Rocky Creek Dr NE
  Rochester, MN 55906, USA
  
  Email: richard.cui@utoronto.ca
  */
-//mex decomp_mef_mex.c mef_lib.c -o decomp_mef
+//mex decomp_mef_mex_2p1.c mef_lib_2p1.c -o decomp_mef_2p1
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include "mex.h"
-#include "mef.h"
+#include "mef_2p1.h"
 
 #define BIG_ENDIAN_CODE		0
 #define LITTLE_ENDIAN_CODE	1

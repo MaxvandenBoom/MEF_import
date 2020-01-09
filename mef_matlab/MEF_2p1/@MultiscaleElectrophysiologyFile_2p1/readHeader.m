@@ -1,5 +1,5 @@
 function header = readHeader(this, varargin)
-% MULTISCALEELECTROPHYSIOLOGYFILE_2p1.READHEADER Read HEADER structure from MEF 2.1 file
+% MULTISCALEELECTROPHYSIOLOGYFILE.READHEADER Read HEADER structure from MEF file
 % 
 % Syntax:
 %   header = readHeader(this)
@@ -7,7 +7,7 @@ function header = readHeader(this, varargin)
 %   header = readHeader(this, wholename, password)
 % 
 % Imput(s):
-%   this            - [obj] MultiscaleElectrophysiologyFile_2p1 object
+%   this            - [obj] MultiscaleElectrophysiologyFile object
 %   wholename       - [str] filepath + filename of MEF file
 %   password        - [str] password of the data
 % 
@@ -144,7 +144,7 @@ function header = readHeader(this, varargin)
 % See also .
 
 % Copyright 2019 Richard J. Cui. Created: Mon 04/29/2019 10:33:58.517 PM
-% $Revision: 0.5 $  $Date: Sun 12/29/2019  4:43:20.432 PM $
+% $Revision: 0.5 $  $Date: Thu 01/09/2020  4:11:13.040 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -165,7 +165,7 @@ else
     this.SubjectPassword = q.password;
 end % if
 
-header = read_mef_header(wholename, pw);
+header = read_mef_header_2p1(wholename, pw);
 this.Header = header;
 
 end %function

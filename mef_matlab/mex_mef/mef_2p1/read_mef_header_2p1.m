@@ -1,7 +1,7 @@
-% READ_MEF_HEADER Read HEADER structure from MEF file
+% READ_MEF_HEADER_2P1 Read HEADER structure from MEF 2.1 file
 % 
 % Syntax:
-%   header = read_mef_header(wholename, password)
+%   header = read_mef_header_2p1(wholename, password)
 % 
 % Imput(s):
 %   wholename       - [str] filepath + filename of MEF file
@@ -139,8 +139,8 @@
 % 
 % See also .
 
-% Copyright 2019 Richard J. Cui. Created: Mon 04/29/2019 10:33:58.517 PM
-% $Revision: 0.2 $  $Date: Thu 05/02/2019  3:11:01.648 PM $
+% Copyright 2019-2020 Richard J. Cui. Created: Mon 04/29/2019 10:33:58.517 PM
+% $Revision: 0.3 $  $Date: Thu 01/09/2020  3:50:49.575 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
