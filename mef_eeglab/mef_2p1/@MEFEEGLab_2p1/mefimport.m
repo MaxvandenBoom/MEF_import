@@ -192,7 +192,8 @@ OUTEEG.saved = 'no'; % not saved yet
 
 % data and chanlocs
 % -----------------
-data = this.importSession(begin_stop, bs_unit);
+data = this.importSession(begin_stop, bs_unit, sess_path,...
+    'SelectedChannel', sel_chan, 'Password', pw);
 OUTEEG.data = data;
 % chanlocs
 % --------
@@ -214,7 +215,7 @@ function q = parseInputs(varargin)
 default_bs = [];
 default_ut = 'uutc';
 expected_ut = {'index', 'uutc', 'second', 'minute', 'hour', 'day'};
-default_sc - [];
+default_sc = [];
 default_pw = struct('subject', '', 'session', '', 'data', '');
 
 % parse rules

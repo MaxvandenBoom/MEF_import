@@ -27,7 +27,9 @@ classdef MEFEEGLab_2p1 < MEFSession_2p1
     % properties
     % =====================================================================    
     properties
-        
+        SelectedChannel     % channels selected
+        StartEnd            % start and end points to import the session
+        SEUnit              % unit of StartEnd
     end % properties
     
     % =====================================================================

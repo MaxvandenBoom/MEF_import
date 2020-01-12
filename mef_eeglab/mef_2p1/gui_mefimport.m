@@ -2,27 +2,12 @@ function varargout = gui_mefimport(varargin)
 % GUI_MEFIMPORT Graphic UI for importing MEF 2.1 datafile
 % 
 % Syntax:
-%   [filepath, filename, start_end, unit, password, mef1] = gui_mefimport()
+%   this = gui_mefimport()
 % 
 % Input(s):
 % 
 % Output(s):
-%   filepath        - [str] full file path
-%   filename        - [str/cell str] the name(s) of the data files in the
-%                     directory of 'filepath'. One file name can be in
-%                     string or cell string.  More than one, the names are
-%                     in cell string.
-%   start_end       - [1 x 2 array] (optional) [start time/index, end time/index] of 
-%                     the signal to be extracted fromt he file (default:
-%                     the entire signal)
-%   unit            - [str] (optional) unit of start_end: 'Index' (default), 'uUTC',
-%                     'Second', 'Minute', 'Hour', and 'Day'
-%   password        - [str] passwords of MEF files
-%                     .subject      : subject password
-%                     .session
-%                     .data
-%   mef1            - [obj] MultiscaleElectrophysiologyFile_2p1 object of
-%                     channel 1
+%   this            - [obj] MEFEEGLab_2p1 object
 % 
 % Note:
 %   gui_mefimport does not import MEF by itself, but instead gets the
@@ -32,7 +17,7 @@ function varargout = gui_mefimport(varargin)
 % See also pop_mefimport, gui_mefimport.
 
 % Copyright 2019-2020 Richard J. Cui. Created: Sun 04/28/2019  9:51:01.691 PM
-% $Revision: 0.9 $  $Date: Wed 01/08/2020 11:39:57.259 AM $
+% $Revision: 1.0 $  $Date: Sat 01/11/2020  7:12:04.931 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -71,7 +56,7 @@ set(handles.edit_end, 'Enable', 'Off')
 set(handles.uitable_channel, 'Enable' , 'Off')
 set(handles.checkbox_segment, 'Enable', 'Off')
 
-handles.old_unit = 'Index';
+handles.old_unit = 'uUTC';
 
 handles.subject_pw = '';
 handles.session_pw = '';
@@ -85,91 +70,75 @@ uiwait();
 function varargout = gui_mefimport_OutputFcn(hObject, eventdata, handles)
 if isempty(handles)
     varargout{1} = '';
-    varargout{2} = '';
-    varargout{3} = [];
-    varargout{4} = '';
-    varargout{5} = [];
-    varargout{6} = [];
+    varargout{2} = [];
+    varargout{3} = '';
+    varargout{4} = [];
 else
-    varargout{1} = handles.filepath;
-    varargout{2} = handles.filename;
-    varargout{3} = handles.start_end;
-    varargout{4} = handles.unit;
-    password = struct('subject', handles.subject_pw, 'session',...
-        handles.session_pw, 'data', handles.data_pw);
-    varargout{5} = password;
-    varargout{6} = handles.mef1;
+    varargout{1} = handles.sel_chan;
+    varargout{2} = handles.start_end;
+    varargout{3} = handles.unit;
+    varargout{4} = handles.this;
 end % if
 guimef = findobj('Tag', 'gui_mefimport');
 delete(guimef)
 
-function [start_end, unit, mef] = getStartend(mef, handles)
+function [start_end, unit, this] = getStartend(this, handles)
 % get start and end point
 
 unit_list = get(handles.popupmenu_unit, 'String');
 choice = get(handles.popupmenu_unit, 'Value');
 unit = unit_list{choice};
 
-uutc_start = mef.Header.recording_start_time;
-uutc_end = mef.Header.recording_end_time;
-start_end_index = mef.SampleTime2Index([uutc_start, uutc_end]);
+uutc_start = this.BeginStop(1);
+uutc_end = this.BeginStop(2);
+start_end_index = this.SampleTime2Index([uutc_start, uutc_end]);
 switch lower(unit)
     case 'index'
         start_end = start_end_index;
     otherwise
-        start_end = mef.SampleTime2Index([uutc_start, uutc_end], unit);
+        start_end = this.SampleTime2Index([uutc_start, uutc_end], unit);
 end % switch
+
+this.StartEnd = start_end;
+this.SEUnit = unit;
 
 function pushbutton_folder_Callback(hObject, eventdata, handles)
 % get data folder and obtain corresponding data information
 
 % get data folder
 % ---------------
-filepath= uigetdir;
-if filepath == 0
+sess_path= uigetdir;
+if sess_path == 0
     return
 else
-    set(handles.edit_path, 'String', filepath);
+    set(handles.edit_path, 'String', sess_path);
 end
 
 % get data info
 % -------------
-list_mef = dir(fullfile(filepath, '*.mef'));
-if isempty(list_mef)
-    return
-end % if
-
-% check password requirement
+% get password
 subj_pw = handles.subject_pw;
 sess_pw = handles.session_pw;
 data_pw = handles.data_pw;
-mef1 = MultiscaleElectrophysiologyFile_2p1(list_mef(1).folder, list_mef(1).name,...
-    'SubjectPassword', subj_pw);
-if mef1.Header.subject_encryption_used && isempty(subj_pw)
-    warning('Subject password is required, but may not be provided')
-end % if
-if mef1.Header.session_encryption_used && isempty(sess_pw)
-    warning('Session password is required, but may not be provided')
-end % if
-if mef1.Header.data_encryption_used && isempty(data_pw)
-    warning('Data password is required, but may not be provided')
-end % if
+pw = struct('Subject', subj_pw, 'Session', sess_pw, 'Data', data_pw);
+this = MEFEEGLab_2p1(sess_path, pw);
 
 % get start and end points of imported signal in sample index
-[start_end, unit, mef1] = getStartend(mef1, handles);
+[start_end, unit, this] = getStartend(this, handles);
 if strcmpi(unit, 'index') % get recoridng start time in unit
     record_start = 0;
 else
-    record_start = mef1.SampleIndex2Time(1, unit);
+    record_start = this.SampleIndex2Time(1, unit);
 end % if
 set(handles.edit_start, 'String', num2str(start_end(1)-record_start))
 set(handles.edit_end, 'String', num2str(start_end(2)-record_start))
 handles.start_end = start_end;
 handles.old_unit = unit;
 handles.unit = unit;
-handles.mef1 = mef1;
+handles.mef1 = this;
 
 % get channel information
+% TODO
 num_mef = numel(list_mef); % number of mef/channels in the folder
 colname = get(handles.uitable_channel, 'ColumnName');
 num_colname = numel(colname);
@@ -225,15 +194,15 @@ function pushbutton_ok_Callback(hObject, eventdata, handles)
 
 if isfield(handles, 'edit_path') && isfield(handles, 'list_mef')...
         && ~isempty(handles.edit_path) && ~isempty(handles.list_mef)
-    % filepath
-    handles.filepath = get(handles.edit_path, 'String');
+    % sess_path
+    handles.sess_path = get(handles.edit_path, 'String');
     
-    % filename
+    % sel_chan
     Table = get(handles.uitable_channel, 'Data');
     list_mef = handles.list_mef;
     fname = {list_mef.name};
     choice = cell2mat(Table(:, end));
-    handles.filename = fname(choice);
+    handles.sel_chan = fname(choice);
     
     % unit
     unit_list = get(handles.popupmenu_unit, 'String');
@@ -271,8 +240,8 @@ end % if
 
 function pushbutton_cancel_Callback(hObject, eventdata, handles)
 
-handles.filepath = '';
-handles.filename = '';
+handles.sess_path = '';
+handles.sel_chan = '';
 handles.start_end = [];
 handles.unit = '';
 handles.mef1 = [];
@@ -295,12 +264,12 @@ set(handles.uitable_channel, 'Enable' , 'On')
 
 function gui_mefimport_CloseRequestFcn(hObject, eventdata, handles)
 
-if ~isfield(handles, 'filepath')
-    handles.filepath = '';
+if ~isfield(handles, 'sess_path')
+    handles.sess_path = '';
 end % if
 
-if ~isfield(handles, 'filename')
-    handles.filename = '';
+if ~isfield(handles, 'sel_chan')
+    handles.sel_chan = '';
 end % if
 
 if ~isfield(handles, 'start_end')
