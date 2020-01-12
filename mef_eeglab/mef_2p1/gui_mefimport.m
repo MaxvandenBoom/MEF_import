@@ -17,7 +17,7 @@ function varargout = gui_mefimport(varargin)
 % See also pop_mefimport, gui_mefimport.
 
 % Copyright 2019-2020 Richard J. Cui. Created: Sun 04/28/2019  9:51:01.691 PM
-% $Revision: 1.0 $  $Date: Sat 01/11/2020  7:12:04.931 PM $
+% $Revision: 1.0 $  $Date: Sun 01/12/2020  2:35:48.393 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -69,15 +69,9 @@ uiwait();
 
 function varargout = gui_mefimport_OutputFcn(hObject, eventdata, handles)
 if isempty(handles)
-    varargout{1} = '';
-    varargout{2} = [];
-    varargout{3} = '';
-    varargout{4} = [];
+    varargout{1} = [];
 else
-    varargout{1} = handles.sel_chan;
-    varargout{2} = handles.start_end;
-    varargout{3} = handles.unit;
-    varargout{4} = handles.this;
+    varargout{1} = handles.this;
 end % if
 guimef = findobj('Tag', 'gui_mefimport');
 delete(guimef)
@@ -135,30 +129,32 @@ set(handles.edit_end, 'String', num2str(start_end(2)-record_start))
 handles.start_end = start_end;
 handles.old_unit = unit;
 handles.unit = unit;
-handles.mef1 = this;
+handles.this = this;
 
 % get channel information
-% TODO
-num_mef = numel(list_mef); % number of mef/channels in the folder
-colname = get(handles.uitable_channel, 'ColumnName');
-num_colname = numel(colname);
-Table = cell(num_mef, num_colname);
-rownames = cell(num_mef, 1);
-for k = 1:num_mef
-    fp_k = list_mef(k).folder;
-    fn_k = list_mef(k).name;
-    mef_k = MultiscaleElectrophysiologyFile_2p1(fp_k, fn_k, 'SubjectPassword', subj_pw);
-    Table{k, 1} = mef_k.Header.channel_name;
-    Table{k, 2} = mef_k.Header.sampling_frequency;
-    Table{k, 3} = mef_k.Header.number_of_samples;
-    Table{k, 4} = mef_k.Header.number_of_index_entries;
-    Table{k, 5} = mef_k.Header.number_of_discontinuity_entries;
+Table = table2cell(this.SessionInformation(:, {'ChannelName',...
+    'SamplingFreq', 'Samples', 'IndexEntry', 'DiscountinuityEntry'}));
+% num_mef = numel(list_mef); % number of mef/channels in the folder
+% colname = get(handles.uitable_channel, 'ColumnName');
+% num_colname = numel(colname);
+% Table = cell(num_mef, num_colname);
+num_chan = size(Table, 1);
+rownames = cell(num_chan, 1);
+for k = 1:num_chan
+    %     fp_k = list_mef(k).folder;
+    %     fn_k = list_mef(k).name;
+    %     mef_k = MultiscaleElectrophysiologyFile_2p1(fp_k, fn_k, 'SubjectPassword', subj_pw);
+    %     Table{k, 1} = mef_k.Header.channel_name;
+    %     Table{k, 2} = mef_k.Header.sampling_frequency;
+    %     Table{k, 3} = mef_k.Header.number_of_samples;
+    %     Table{k, 4} = mef_k.Header.number_of_index_entries;
+    %     Table{k, 5} = mef_k.Header.number_of_discontinuity_entries;
     Table{k, 6} = true;
     
     rownames{k} = num2str(k);
 end % for
 
-handles.list_mef = list_mef;
+handles.list_chan = this.ChannelName;
 guidata(hObject, handles)
 
 set(handles.uitable_channel, 'Data', Table, 'RowName', rownames, 'Enable' , 'On')
@@ -192,35 +188,43 @@ SelectedCells = eventdata.Indices;
 function pushbutton_ok_Callback(hObject, eventdata, handles)
 % get the data file information
 
-if isfield(handles, 'edit_path') && isfield(handles, 'list_mef')...
-        && ~isempty(handles.edit_path) && ~isempty(handles.list_mef)
+if isfield(handles, 'edit_path') && isfield(handles, 'list_chan')...
+        && ~isempty(handles.edit_path) && ~isempty(handles.list_chan)
+    % get MEFEEGLab_2p1 object
+    this = handles.this;
+    
     % sess_path
     handles.sess_path = get(handles.edit_path, 'String');
+    this.SessionPath = handles.sess_path;
     
     % sel_chan
     Table = get(handles.uitable_channel, 'Data');
-    list_mef = handles.list_mef;
-    fname = {list_mef.name};
+    list_chan = handles.list_chan;
     choice = cell2mat(Table(:, end));
-    handles.sel_chan = fname(choice);
+    handles.sel_chan = list_chan(choice);
+    this.SelectedChannel = handles.sel_chan;
     
     % unit
     unit_list = get(handles.popupmenu_unit, 'String');
     choice = get(handles.popupmenu_unit, 'Value');
     handles.unit = unit_list{choice};
+    this.SEUnit = handles.unit;
     
     % start_end
-    mef1 = handles.mef1;
+    this = handles.this;
     unit = handles.unit;
     if strcmpi(unit, 'index') % get recoridng start time in unit
         record_start = 0;
     else
-        record_start = mef1.SampleIndex2Time(1, unit);
+        record_start = this.SampleIndex2Time(1, unit);
     end % if
     
     start_pt = str2double(get(handles.edit_start, 'String'))+record_start;
     end_pt = str2double(get(handles.edit_end, 'String'))+record_start;
     handles.start_end = [start_pt, end_pt];
+    this.StartEnd = handles.start_end;
+    
+    handles.this = this;
     
     guidata(hObject, handles);
     
@@ -244,7 +248,7 @@ handles.sess_path = '';
 handles.sel_chan = '';
 handles.start_end = [];
 handles.unit = '';
-handles.mef1 = [];
+handles.this = [];
 guidata(hObject, handles)
 
 uiresume();
@@ -348,31 +352,31 @@ if strcmpi(unit, old_unit) == true
     return
 end % if
 
-% mef
-mef1 = handles.mef1;
+% MEFEEGLab_2p1 object
+this = handles.this;
 
 % change value according to the unit chosen
 if strcmpi(old_unit, 'index') % get recoridng start time in unit
     record_start_old = 0;
 else
-    record_start_old = mef1.SampleIndex2Time(1, old_unit);
+    record_start_old = this.SampleIndex2Time(1, old_unit);
 end % if
 if strcmpi(unit, 'index') % get recoridng start time in unit
     record_start = 0;
 else
-    record_start = mef1.SampleIndex2Time(1, unit);
+    record_start = this.SampleIndex2Time(1, unit);
 end % if
 old_start = str2double(get(handles.edit_start, 'String'))+record_start_old;
 old_end = str2double(get(handles.edit_end, 'String'))+record_start_old;
 if strcmpi(old_unit, 'index') == true % convert to index
     new_se_ind = [old_start, old_end];
 else
-    new_se_ind = mef1.SampleTime2Index([old_start, old_end], old_unit);
+    new_se_ind = this.SampleTime2Index([old_start, old_end], old_unit);
 end % if
 if strcmpi(unit, 'index') == true
     new_se = new_se_ind;
 else
-    new_se = mef1.SampleIndex2Time(new_se_ind, unit);
+    new_se = this.SampleIndex2Time(new_se_ind, unit);
 end % if
 
 set(handles.edit_start, 'String', num2str(new_se(1)-record_start, 32));

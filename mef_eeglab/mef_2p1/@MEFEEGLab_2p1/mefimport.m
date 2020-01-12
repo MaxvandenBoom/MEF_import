@@ -3,8 +3,8 @@ function OUTEEG = mefimport(this, INEEG, varargin)
 %
 % Usage:
 %   OUTEEG = mefimport(this, INEEG)
-%   OUTEEG = mefimport(__, begin_stop)
-%   OUTEEG = mefimport(__, begin_stop, bs_unit)
+%   OUTEEG = mefimport(__, start_end)
+%   OUTEEG = mefimport(__, start_end, se_unit)
 %   OUTEEG = mefimport(__, 'SelectedChannel', sel_chan, 'Password', pw)
 %
 % Input(s):
@@ -12,10 +12,10 @@ function OUTEEG = mefimport(this, INEEG, varargin)
 %   INEEG           - [struct] EEGLab dataset structure. See Note for
 %                     addtional information about the details of the
 %                     structure.
-%   begin_stop      - [1 x 2 array] (optional) [begin time/index, stop
+%   start_end       - [1 x 2 array] (optional) [start time/index, end
 %                     time/index] of the signal to be extracted fromt the
 %                     file (default: the entire signal)
-%   bs_unit         - [str] (optional) unit of begin_stop: 'uUTC' (default),
+%   se_unit         - [str] (optional) unit of start_end: 'uUTC' (default),
 %                     'Index', 'Second', 'Minute', 'Hour', and 'Day'
 %   sel_chan        - [str array] (para) the names of the selected channels
 %                     (default: all channels)
@@ -42,7 +42,7 @@ function OUTEEG = mefimport(this, INEEG, varargin)
 % See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019-2020 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
-% $Revision: 1.2 $  $Date: Fri 01/10/2020  5:42:05.951 PM $
+% $Revision: 1.3 $  $Date: Sun 01/12/2020  2:35:48.393 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -55,16 +55,16 @@ function OUTEEG = mefimport(this, INEEG, varargin)
 q = parseInputs(this, INEEG, varargin{:});
 INEEG = q.INEEG;
 % begin and stop points
-begin_stop = q.begin_stop;
-if isempty(begin_stop)
-    begin_stop = this.BeginStop;
+start_end = q.start_end;
+if isempty(start_end)
+    start_end = this.StartEnd;
 end % if
 % unit
-bs_unit = q.bs_unit;
+se_unit = q.se_unit;
 % selected channel
 sel_chan = q.SelectedChannel;
 if isempty(sel_chan)
-    sel_chan = this.ChannelName;
+    sel_chan = this.SelectedChannel;
 end % if
 % password
 pw = q.Password;
@@ -149,23 +149,23 @@ OUTEEG.srate = this.SamplingFrequency; % in Hz
 % xmin, xmax (in second)
 % ----------------------
 % continuous data, according to the segment to be imported
-if isempty(begin_stop)
+if isempty(start_end)
     num_samples = this.Samples;
     OUTEEG.xmin = this.SampleIndex2Time(1, 'second');
     OUTEEG.xmax = this.SampleIndex2Time(num_samples, 'second');
 else
     switch lower(unit)
         case 'index'
-            num_samples = diff(begin_stop)+1;
-            OUTEEG.xmin = this.SampleIndex2Time(begin_stop(1), 'second');
-            OUTEEG.xmax = this.SampleIndex2Time(begin_stop(2), 'second');
+            num_samples = diff(start_end)+1;
+            OUTEEG.xmin = this.SampleIndex2Time(start_end(1), 'second');
+            OUTEEG.xmax = this.SampleIndex2Time(start_end(2), 'second');
         case 'second'
-            OUTEEG.xmin = begin_stop(1);
-            OUTEEG.xmax = begin_stop(2);
-            bs_index = this.SampleTime2Index(begin_stop, bs_unit);
+            OUTEEG.xmin = start_end(1);
+            OUTEEG.xmax = start_end(2);
+            bs_index = this.SampleTime2Index(start_end, se_unit);
             num_samples = diff(bs_index)+1;
         otherwise
-            bs_index = mef1.SampleTime2Index(begin_stop, bs_unit);
+            bs_index = mef1.SampleTime2Index(start_end, se_unit);
             num_samples = diff(bs_index)+1;
             OUTEEG.xmin = this.SampleIndex2Time(bs_index(1), 'second');
             OUTEEG.xmax = this.SampleIndex2Time(bs_index(2), 'second');
@@ -192,7 +192,7 @@ OUTEEG.saved = 'no'; % not saved yet
 
 % data and chanlocs
 % -----------------
-data = this.importSession(begin_stop, bs_unit, sess_path,...
+data = this.importSession(start_end, se_unit, sess_path,...
     'SelectedChannel', sel_chan, 'Password', pw);
 OUTEEG.data = data;
 % chanlocs
@@ -212,7 +212,7 @@ end % function
 function q = parseInputs(varargin)
 
 % defaults
-default_bs = [];
+default_se = [];
 default_ut = 'uutc';
 expected_ut = {'index', 'uutc', 'second', 'minute', 'hour', 'day'};
 default_sc = [];
@@ -222,9 +222,9 @@ default_pw = struct('subject', '', 'session', '', 'data', '');
 p = inputParser;
 p.addRequired('this', @(x) isobject(x) & strcmpi(class(x), 'MEFEEGLab_2p1'));
 p.addRequired('INEEG', @(x) isempty(x) || isstruct(x));
-p.addOptional('begin_stop', default_bs,...
+p.addOptional('start_end', default_se,...
     @(x) isnumeric(x) & numel(x) == 2 & x(1) <= x(2));
-p.addOptional('unit', default_ut,...
+p.addOptional('se_unit', default_ut,...
     @(x) any(validatestring(x, expected_ut)));
 p.addParameter('SelectedChannel', default_sc, @isstring) % must be string array
 p.addParameter('Password', default_pw, @isstruct);
