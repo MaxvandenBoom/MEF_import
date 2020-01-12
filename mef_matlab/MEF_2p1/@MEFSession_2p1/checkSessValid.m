@@ -28,7 +28,7 @@ function valid_yn = checkSessValid(this, varargin)
 % Sess also get_sessinfo, MEFSession_2p1.
 
 % Copyright 2020 Richard J. Cui. Created: Fri 01/03/2020  4:19:10.683 PM
-% $ Revision: 0.1 $  $ Date: Wed 01/08/2020 11:06:52.472 AM $
+% $ Revision: 0.3 $  $ Date: Sat 01/11/2020  1:30:58.721 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -76,9 +76,17 @@ else
     dt_yn = check_dataencry(sess_info, pw);
     % check version
     vr_yn = check_ver(sess_info);
+    % check institution
+    in_yn = check_inst(sess_info);
+    % check subject id
+    sb_yn = check_subjid(sess_info);
+    % check acquisition system
+    ac_yn = check_acqsys(sess_info);
+    % check compression algorithm
+    cs_yn = check_compalg(sess_info);
     
     valid_yn = fs_yn & bg_yn & sp_yn & sm_yn & ie_yn & de_yn & sj_yn ...
-               & sn_yn & dt_yn & vr_yn;
+               & sn_yn & dt_yn & vr_yn & in_yn & sb_yn & ac_yn & cs_yn;
 end % if
 
 end
@@ -271,6 +279,58 @@ else
 end % if
 
 vr_yn = cy_yn & vrs_yn;
+
+end % function
+
+function in_yn = check_inst(sess_info)
+% check institution
+
+% check consistency
+in_yn = checkUnique(sess_info.Institution);
+
+if in_yn == false
+    warning('MEFSession_2p1:checkSessValid',...
+        'Institution names of differenct channels are not consistent')
+end % if
+
+end % function
+
+function sb_yn = check_subjid(sess_info)
+% check institution
+
+% check consistency
+sb_yn = checkUnique(sess_info.Institution);
+
+if sb_yn == false
+    warning('MEFSession_2p1:checkSessValid',...
+        'Subject IDs of differenct channels are not consistent')
+end % if
+
+end % function
+
+function ac_yn = check_acqsys(sess_info)
+% check acquisition system
+
+% check consistency
+ac_yn = checkUnique(sess_info.AcquisitionSystem);
+
+if ac_yn == false
+    warning('MEFSession_2p1:checkSessValid',...
+        'Acquisiton systems of differenct channels are not consistent')
+end % if
+
+end % function
+
+function cs_yn = check_compalg(sess_info)
+% check compression algorithm
+
+% check consistency
+cs_yn = checkUnique(sess_info.CompressionAlgorithm);
+
+if cs_yn == false
+    warning('MEFSession_2p1:checkSessValid',...
+        'Compression algorithms of differenct channels are not consistent')
+end % if
 
 end % function
 

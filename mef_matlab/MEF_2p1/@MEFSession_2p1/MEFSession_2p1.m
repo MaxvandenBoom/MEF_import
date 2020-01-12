@@ -19,7 +19,7 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1
     % See also get_sessinfo.
 
 	% Copyright 2019-2020 Richard J. Cui. Created: Mon 12/30/2019 10:52:49.006 PM
-	% $Revision: 0.5 $  $Date: Thu 01/09/2020 10:03:34.521 AM $
+	% $Revision: 0.6 $  $Date: Fri 01/10/2020 10:15:46.733 PM $
 	%
 	% 1026 Rocky Creek Dr NE
 	% Rochester, MN 55906, USA
@@ -33,8 +33,14 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1
         SessionPath         % session directory
         Password            % password structure of the session
         ChannelName         % channel names
+        SamplingFrequency   % in Hz
+        Samples             % number of samples
         BeginStop           % Begin and stop indexes of entire signal
         Unit                % unit of BeginStop
+        Institution         % name of the institute
+        SubjectID           % identification of the subject
+        AcquisitionSystem   % name of the system to record the session
+        CompressionAlgorithm % name of compression algorithm
         SessionInformation  % table of session information (see get_sessinfo.m)
     end % properties
  
