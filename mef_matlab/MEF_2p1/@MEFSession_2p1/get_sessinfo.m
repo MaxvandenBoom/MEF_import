@@ -36,7 +36,7 @@ function varargout = get_sessinfo(this)
 % See also MEFSession_2p1.
 
 % Copyright 2020 Richard J. Cui. Created: Fri 01/03/2020  4:19:10.683 PM
-% $ Revision: 0.2 $  $ Date: Sat 01/11/2020  1:10:10.203 PM $
+% $ Revision: 0.3 $  $ Date: Thu 01/16/2020 10:50:40.905 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -54,6 +54,8 @@ if isempty(sess_info)
     channame = '';
     fs = NaN;
     samples = NaN;
+    num_data_block = [];
+    num_time_gap = [];
     begin_stop = [];
     unit = '';
     institution = '';
@@ -61,13 +63,15 @@ if isempty(sess_info)
     acq_sys = '';
     comp_alg = '';
     warning('MEFSession_2p1:get_sessinfo',...
-        'The session is either empty.')
+        'The session is likely empty.')
 else
     this.SessionInformation = sess_info;
     if this.checkSessValid == true
         channame = sess_info.ChannelName';
         fs = unique(sess_info.SamplingFreq);
         samples = unique(sess_info.Samples);
+        num_data_block = unique(sess_info.IndexEntry);
+        num_time_gap = unique(sess_info.DiscountinuityEntry)-1;
         begin_stop = [unique(sess_info.Begin), unique(sess_info.Stop)];
         institution = unique(sess_info.Institution);
         subj_id = unique(sess_info.SubjectID);
@@ -80,13 +84,15 @@ else
         channame = '';
         fs = NaN;
         samples = NaN;
+        num_data_block = [];
+        num_time_gap = [];
         begin_stop = [];
         unit = '';
         institution = '';
         subj_id = '';
         acq_sys = '';
         comp_alg = '';
- end % if
+    end % if
 end % if
 
 % update paras of MEFSession_2p1
@@ -94,6 +100,8 @@ end % if
 this.ChannelName = channame;
 this.SamplingFrequency = fs;
 this.Samples = samples;
+this.DataBlocks = num_data_block;
+this.TimeGaps = num_time_gap;
 this.BeginStop = begin_stop;
 this.Unit = unit;
 this.Institution = institution;
