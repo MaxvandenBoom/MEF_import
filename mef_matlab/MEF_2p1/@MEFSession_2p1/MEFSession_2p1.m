@@ -98,6 +98,7 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1
         [X, t] = importSession(this, varargin) % import a session
         record_offset = getRecordOffset(this, unit) % get offset time of recording in specified unit
         rel_time = abs2relativeTimePoint(this, abs_time, unit) % absolute to relative time points
+        abs_time = relative2absTimePoint(this, rel_time, unit) % relative to absolute time points
     end % methods
     
 end % classdef
