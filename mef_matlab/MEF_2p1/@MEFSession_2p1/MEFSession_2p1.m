@@ -28,7 +28,13 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1
 
     % =====================================================================
     % properties
-    % =====================================================================    
+    % =====================================================================
+    properties
+        SelectedChannel     % channels selected
+        StartEnd            % start and end points to import the session
+        SEUnit              % unit of StartEnd
+    end % properties
+
     properties 
         SessionPath         % session directory
         Password            % password structure of the session
@@ -86,6 +92,8 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1
         varargout = get_sessinfo(this) % get sess info from data
         valid_yn = checkSessValid(this, varargin) % check validity of session info
         [X, t] = importSession(this, varargin) % import a session
+        record_offset = getRecordOffset(this, unit) % get offset time of recording in specified unit
+        rel_time = abs2relativeTimePoint(this, abs_time, unit) % absolute to relative time points
     end % methods
     
 end % classdef

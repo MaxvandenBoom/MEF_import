@@ -1,7 +1,7 @@
 function OUTEEG = mefimport(this, INEEG, varargin)
 % MEFEEGLAB_2P1.MEFIMPORT Import MEF 2.1 session data into EEG structure
 %
-% Usage:
+% Syntax:
 %   OUTEEG = mefimport(this, INEEG)
 %   OUTEEG = mefimport(__, start_end)
 %   OUTEEG = mefimport(__, start_end, se_unit)
@@ -12,7 +12,7 @@ function OUTEEG = mefimport(this, INEEG, varargin)
 %   INEEG           - [struct] EEGLab dataset structure. See Note for
 %                     addtional information about the details of the
 %                     structure.
-%   start_end       - [1 x 2 array] (optional) [start time/index, end
+%   start_end       - [1 x 2 array] (optional) relative [start time/index, end
 %                     time/index] of the signal to be extracted fromt the
 %                     file (default: the entire signal)
 %   se_unit         - [str] (optional) unit of start_end: 'uUTC',
@@ -43,7 +43,7 @@ function OUTEEG = mefimport(this, INEEG, varargin)
 % See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019-2020 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
-% $Revision: 1.4 $  $Date: Mon 01/13/2020 11:46:32.896 PM $
+% $Revision: 1.6 $  $Date: Mon 01/20/2020  4:30:22.035 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -152,11 +152,14 @@ OUTEEG.srate = this.SamplingFrequency; % in Hz
 
 % xmin, xmax (in second)
 % ----------------------
+% TODO
 % continuous data, according to the segment to be imported
-if isempty(start_end)
-    num_samples = this.Samples;
-    OUTEEG.xmin = this.SampleIndex2Time(1, 'second');
-    OUTEEG.xmax = this.SampleIndex2Time(num_samples, 'second');
+if isempty(start_end) % then use the entire signal
+    begin_stop = this.BeginStop; % absolute time interval
+    start_end = this.abs2relativeTimePoint(begin_stop, this.Unit); % relative time interval
+    se_sec = this.SampleUnitConvert(start_end, this.Unit, 'second');
+    OUTEEG.xmin = se_sec(1);
+    OUTEEG.xmax = se_sec(2);
 else
     switch lower(se_unit)
         case 'index'
@@ -198,6 +201,7 @@ OUTEEG.saved = 'no'; % not saved yet
 data = this.importSession(start_end, se_unit, sess_path,...
     'SelectedChannel', sel_chan, 'Password', pw);
 OUTEEG.data = data;
+
 % chanlocs
 % --------
 chanlocs = struct([]);
