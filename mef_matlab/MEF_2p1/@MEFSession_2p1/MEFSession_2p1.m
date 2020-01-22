@@ -19,7 +19,7 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1
     % See also get_sessinfo.
 
 	% Copyright 2019-2020 Richard J. Cui. Created: Mon 12/30/2019 10:52:49.006 PM
-	% $Revision: 0.7 $  $Date: Thu 01/16/2020 10:50:40.905 PM $
+	% $Revision: 0.8 $  $Date: Tue 01/21/2020  9:10:34.920 PM $
 	%
 	% 1026 Rocky Creek Dr NE
 	% Rochester, MN 55906, USA
@@ -29,12 +29,16 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1
     % =====================================================================
     % properties
     % =====================================================================
+    % properties of importing session
+    % -------------------------------
     properties
         SelectedChannel     % channels selected
         StartEnd            % start and end points to import the session
         SEUnit              % unit of StartEnd
     end % properties
 
+    % properties of session information
+    % ---------------------------------
     properties 
         SessionPath         % session directory
         Password            % password structure of the session
