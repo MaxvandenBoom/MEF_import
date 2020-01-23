@@ -46,7 +46,7 @@ function [EEG, com] = pop_mefimport_2p1(EEG, varargin)
 % See also EEGLAB, mefimport.
 
 % Copyright 2019-2020 Richard J. Cui. Created: Tue 05/07/2019 10:33:48.169 PM
-% $Revision: 1.3 $  $Date: Mon 01/20/2020  4:30:22.035 PM $
+% $Revision: 1.4 $  $Date: Wed 01/22/2020 10:02:38.457 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -94,9 +94,15 @@ if isempty(sess_path)
     end % if
 else
     this = MEFEEGLab_2p1(sess_path, pw);
-    this.SelectedChannel = sel_chan;
-    this.StartEnd = start_end;
+    if isempty(sel_chan)
+        sel_chan = this.ChannelName;
+        this.SelectedChannel = sel_chan;
+    end % if
     this.SEUnit = unit;
+    if isempty(start_end)
+        start_end = this.abs2relativeTimePoint(this.BeginStop, unit);
+        this.StartEnd = start_end; % relative time points
+    end % if
 end % if
 EEG = this.mefimport(EEG);
 EEG = eeg_checkset(EEG); % from eeglab functions
