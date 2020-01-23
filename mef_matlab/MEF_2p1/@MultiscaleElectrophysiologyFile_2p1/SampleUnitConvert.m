@@ -18,10 +18,10 @@ function out_time = SampleUnitConvert(this, in_time, varargin)
 % Note:
 %   in_time and out_time are absolute time points.
 % 
-% See also .
+% See also SessionUnitConvert.
 
 % Copyright 2020 Richard J. Cui. Created: Mon 01/20/2020 10:06:49.507 PM
-% $Revision: 0.1 $  $Date: Mon 01/20/2020 10:06:49.507 PM $
+% $Revision: 0.2 $  $Date: Wed 01/22/2020 10:02:38.457 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
