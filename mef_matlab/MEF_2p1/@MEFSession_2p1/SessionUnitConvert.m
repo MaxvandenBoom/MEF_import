@@ -53,7 +53,7 @@ function q = parseInputs(varargin)
 % default
 default_inut = 'uutc';
 default_outut = 'second';
-expected_ut = {'index', 'uutc', 'second', 'minute', 'hour', 'day'};
+expected_ut = {'index', 'uutc', 'msec', 'second', 'minute', 'hour', 'day'};
 
 % parse rules
 p = inputParser;

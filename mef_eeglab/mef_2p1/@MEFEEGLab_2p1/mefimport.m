@@ -160,7 +160,7 @@ OUTEEG.srate = this.SamplingFrequency; % in Hz
 
 % data
 % ----
-begin_stop = this.relative2absTimePoint(start_end, start_end, se_unit);
+begin_stop = this.relative2absTimePoint(start_end, se_unit);
 [data, t_index] = this.importSession(begin_stop, se_unit, sess_path,...
     'SelectedChannel', sel_chan, 'Password', pw);
 OUTEEG.data = data;
@@ -207,7 +207,7 @@ function q = parseInputs(varargin)
 % defaults
 default_se = [];
 default_ut = '';
-expected_ut = {'index', 'uutc', 'second', 'minute', 'hour', 'day'};
+expected_ut = {'index', 'uutc', 'msec', 'second', 'minute', 'hour', 'day'};
 default_sc = [];
 default_pw = struct([]);
 

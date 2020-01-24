@@ -50,7 +50,7 @@ set(handles.checkbox_segment, 'Value', 0)
 set(handles.pushbutton_deselall, 'Enable', 'off')
 set(handles.uitable_channel,'Data', [], 'Enable', 'off')
 set(handles.popupmenu_unit, 'String', {'Index', 'uUTC', 'mSec', 'Second',...
-    'Hour'}, 'Enable', 'Off')
+    'Hour', 'Day'}, 'Enable', 'Off')
 set(handles.edit_start, 'Enable', 'Off')
 set(handles.edit_end, 'Enable', 'Off')
 set(handles.uitable_channel, 'Enable' , 'Off')
@@ -340,7 +340,7 @@ new_end = this.SessionUnitConvert(old_end, old_unit, unit);
 
 set(handles.edit_start, 'String', num2str(new_start, 32));
 set(handles.edit_end, 'String', num2str(new_end, 32));
-handles.start_end = new_se;
+handles.start_end = [new_start, new_end];
 handles.old_unit = unit;
 guidata(hObject, handles)
 
