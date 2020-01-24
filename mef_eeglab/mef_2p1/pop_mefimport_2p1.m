@@ -96,13 +96,13 @@ else
     this = MEFEEGLab_2p1(sess_path, pw);
     if isempty(sel_chan)
         sel_chan = this.ChannelName;
-        this.SelectedChannel = sel_chan;
     end % if
+    this.SelectedChannel = sel_chan;
     this.SEUnit = unit;
     if isempty(start_end)
         start_end = this.abs2relativeTimePoint(this.BeginStop, unit);
-        this.StartEnd = start_end; % relative time points
     end % if
+    this.StartEnd = start_end; % relative time points
 end % if
 EEG = this.mefimport(EEG);
 EEG = eeg_checkset(EEG); % from eeglab functions
