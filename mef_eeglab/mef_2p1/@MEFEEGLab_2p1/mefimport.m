@@ -43,7 +43,7 @@ function OUTEEG = mefimport(this, INEEG, varargin)
 % See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019-2020 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
-% $Revision: 1.6 $  $Date: Mon 01/20/2020  4:30:22.035 PM $
+% $Revision: 1.7 $  $Date: Thu 01/23/2020  9:20:56.571 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -59,21 +59,29 @@ INEEG = q.INEEG;
 start_end = q.start_end;
 if isempty(start_end)
     start_end = this.StartEnd;
+else
+    this.StartEnd = start_end;
 end % if
 % unit
 se_unit = q.se_unit;
 if isempty(se_unit)
     se_unit = this.SEUnit;
+else
+    this.SEUnit = se_unit;
 end % if
 % selected channel
 sel_chan = q.SelectedChannel;
 if isempty(sel_chan)
     sel_chan = this.SelectedChannel;
+else
+    this.SelectedChannel = sel_chan;
 end % if
 % password
 pw = q.Password;
 if isempty(pw)
     pw = this.Password;
+else
+    this.Password = pw;
 end % if
 
 sess_path = this.SessionPath;
@@ -150,42 +158,26 @@ OUTEEG.nbchan = numel(sel_chan);
 % -----
 OUTEEG.srate = this.SamplingFrequency; % in Hz
 
+% data
+% ----
+begin_stop = this.relative2absTimePoint(start_end, start_end, se_unit);
+[data, t_index] = this.importSession(begin_stop, se_unit, sess_path,...
+    'SelectedChannel', sel_chan, 'Password', pw);
+OUTEEG.data = data;
+
 % xmin, xmax (in second)
 % ----------------------
-% TODO
-% continuous data, according to the segment to be imported
-if isempty(start_end) % then use the entire signal
-    begin_stop = this.BeginStop; % absolute time interval
-    start_end = this.abs2relativeTimePoint(begin_stop, this.Unit); % relative time interval
-    se_sec = this.SampleUnitConvert(start_end, this.Unit, 'second');
-    OUTEEG.xmin = se_sec(1);
-    OUTEEG.xmax = se_sec(2);
-else
-    switch lower(se_unit)
-        case 'index'
-            num_samples = diff(start_end)+1;
-            OUTEEG.xmin = this.SampleIndex2Time(start_end(1), 'second');
-            OUTEEG.xmax = this.SampleIndex2Time(start_end(2), 'second');
-        case 'second'
-            OUTEEG.xmin = start_end(1);
-            OUTEEG.xmax = start_end(2);
-            bs_index = this.SampleTime2Index(start_end, se_unit);
-            num_samples = diff(bs_index)+1;
-        otherwise
-            bs_index = this.SampleTime2Index(start_end, se_unit);
-            num_samples = diff(bs_index)+1;
-            OUTEEG.xmin = this.SampleIndex2Time(bs_index(1), 'second');
-            OUTEEG.xmax = this.SampleIndex2Time(bs_index(2), 'second');
-    end % switch
-end % if
+t_sec = this.SessionUnitConvert(t_index, 'index', 'second');
+OUTEEG.xmin = min(t_sec);
+OUTEEG.xmax = max(t_sec);
 
 % times (in second)
 % ------------------------------------------------------------
-OUTEEG.times = linspace(OUTEEG.xmin, OUTEEG.xmax, num_samples); 
+OUTEEG.times = t_sec; 
 
 % pnts
 % ----
-OUTEEG.pnts = num_samples;
+OUTEEG.pnts = numel(t_sec);
 
 % comments
 % --------
@@ -195,12 +187,6 @@ OUTEEG.comments = sprintf('Acauisition system - %s\ncompression algorithm - %s',
 % saved
 % -----
 OUTEEG.saved = 'no'; % not saved yet
-
-% data and chanlocs
-% -----------------
-data = this.importSession(start_end, se_unit, sess_path,...
-    'SelectedChannel', sel_chan, 'Password', pw);
-OUTEEG.data = data;
 
 % chanlocs
 % --------
