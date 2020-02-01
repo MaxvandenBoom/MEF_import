@@ -1564,10 +1564,10 @@ void	SHA256_update(SHA256_ctx *ctx, const ui1 *message, ui4 len);
 
 
 /************************************************************************************/
-/******************  Library Includes (that depend on meflib_3p0.h)   *******************/
+/******************  Library Includes (that depend on meflib.h)   *******************/
 /************************************************************************************/
 
-#include "mefrec_3p0.h"
+#include "mefrec.h"
 
 
 
