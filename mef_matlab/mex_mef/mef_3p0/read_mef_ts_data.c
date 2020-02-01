@@ -3,16 +3,32 @@
  * 	MEF 3.0 Library Matlab Wrapper
  * 	Read the MEF3 data from a time-series channel
  *	
- *  Copyright 2020, Max van den Boom (Multimodal Neuroimaging Lab, Mayo Clinic, Rochester MN)
- *	Adapted from PyMef (by Jan Cimbalnik, Matt Stead, Ben Brinkmann, and Dan Crepeau)
+ *  Copyright 2020, Max van den Boom (Multimodal Neuroimaging Lab, Mayo 
+ *  Clinic, Rochester MN) <https://github.com/MaxvandenBoom/matmef?. 
+ *  Adapted from PyMef (by Jan Cimbalnik, Matt Stead, Ben Brinkmann, and 
+ *  Dan Crepeau)
  *
  *  
- *  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *  You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *  This program is free software: you can redistribute it and/or modify it
+ *  under the terms of the GNU General Public License as published by the 
+ *  Free Software Foundation, either version 3 of the License, or (at your 
+ *  option) any later version. This program is distributed in the hope that
+ *  it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
+ *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See 
+ *  the GNU General Public License for more details. You should have 
+ *  received a copy of the GNU General Public License along with this 
+ *  program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+/*
+ * Copyright 2020 Richard J. Cui. Adapted: Sat 02/01/2020  4:42:56.294 PM
+ * $Revision: 0.1 $  $Date: Sat 02/01/2020  4:42:56.294 PM $
+ * 1026 Rocky Creek Dr NE
+ * Rochester, MN 55906, USA
+ *
+ * Email: richard.cui@utoronto.ca
+ */
+
 #include <ctype.h>
 #include "mex.h"
 #include "meflib/meflib/meflib.h"
@@ -93,8 +109,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 	//
 	
 	bool range_type = RANGE_BY_SAMPLES;
-	si8 range_start = -1;
-	si8 range_end = -1;
+	si8 begin, range_start = -1;
+	si8 stop, range_end = -1;
 	
 	// check if a range=type input argument is given
     if (nrhs > 2) {
@@ -119,16 +135,22 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 			
 			// check if single numeric
 			if (!mxIsNumeric(prhs[3]) || mxGetNumberOfElements(prhs[3]) > 1) {
-				mexErrMsgIdAndTxt( "MATLAB:read_mef_session_metadata:invalidRangeStartArg", "range-start input argument invalid, should be a single value numeric (either -1 or >=0)");
+				mexErrMsgIdAndTxt( "MATLAB:read_mef_session_metadata:invalidRangeStartArg", "range-start input argument invalid, should be a single value numeric (either -1 or >= 1)");
 			}
 			
 			// set the range-start value
-			range_start = mxGetScalar(prhs[3]);
+			begin = mxGetScalar(prhs[3]);
             
             // check if -1 or positive value
-            if (range_start != -1 && range_start < 0) {
-				mexErrMsgIdAndTxt( "MATLAB:read_mef_session_metadata:invalidRangeStartArg", "range-start input argument invalid, should be a single value numeric (either -1 or >=0)");
+            if (begin != -1 && begin < 1) {
+				mexErrMsgIdAndTxt( "MATLAB:read_mef_session_metadata:invalidRangeStartArg", "range-start input argument invalid, should be a single value numeric (either -1 or >= 1)");
 			}
+            if (begin == -1) {
+                range_start = begin;
+            }
+            else {
+                range_start = begin - 1; // change to python convention
+            }
             
 		}
 		
@@ -137,18 +159,18 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 			
 			// check if single numeric
 			if (!mxIsNumeric(prhs[4]) || mxGetNumberOfElements(prhs[4]) > 1) {
-				mexErrMsgIdAndTxt( "MATLAB:read_mef_session_metadata:invalidRangeEndArg", "range-end input argument invalid, should be a single value numeric (either -1 or >=0)");
+				mexErrMsgIdAndTxt( "MATLAB:read_mef_session_metadata:invalidRangeEndArg", "range-end input argument invalid, should be a single value numeric (either -1 or >= 1)");
 			}
 			
 			// set the range-end value
-			range_end = mxGetScalar(prhs[4]);
+			stop = mxGetScalar(prhs[4]);
             
             // check if -1 or positive value
-            if (range_end != -1 && range_end < 0) {
-				mexErrMsgIdAndTxt( "MATLAB:read_mef_session_metadata:invalidRangeEndArg", "range-end input argument invalid, should be a single value numeric (either -1 or >=0)");
+            if (stop != -1 && stop < 1) {
+				mexErrMsgIdAndTxt( "MATLAB:read_mef_session_metadata:invalidRangeEndArg", "range-end input argument invalid, should be a single value numeric (either -1 or >= 1)");
 			}
-            
-		}
+            range_end = stop;
+        }
 		
 	}
 	
