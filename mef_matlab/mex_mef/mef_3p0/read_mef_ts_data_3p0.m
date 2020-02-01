@@ -1,5 +1,4 @@
-%	
-%   Read the MEF3 data from a time-series channel
+%	READ_MEF_TS_DATA_3P0 Read the MEF3 data from a time-series channel
 %	
 %   [data] = read_mef_ts_data(channel_path, password, range_type, range_start, range_end)
 %	
@@ -20,13 +19,27 @@
 %          In contrast, the 'time' rangeType will return the data with NaN values in place for the missing samples.
 %
 %
-%   Copyright 2020, Max van den Boom (Multimodal Neuroimaging Lab, Mayo Clinic, Rochester MN)
-%   Adapted from PyMef (by Jan Cimbalnik, Matt Stead, Ben Brinkmann, and Dan Crepeau)
 
-%   This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
-%   as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-%   This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
-%   warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-%   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
+%   Copyright 2020, Max van den Boom (Multimodal Neuroimaging Lab, Mayo
+%   Clinic, Rochester MN) Adapted from PyMef (by Jan Cimbalnik, Matt Stead,
+%   Ben Brinkmann, and Dan Crepeau)
 %
+%   This program is free software: you can redistribute it and/or modify it
+%   under the terms of the GNU General Public License as published by the
+%   Free Software Foundation, either version 3 of the License, or (at your
+%   option) any later version. This program is distributed in the hope that
+%   it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+%   warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+%   the GNU General Public License for more details. You should have
+%   received a copy of the GNU General Public License along with this
+%   program.  If not, see <https://www.gnu.org/licenses/>.
 
+% Copyright 2020 Richard J. Cui. Adapted: Fri 01/31/2020 11:59:20.073 PM
+% $Revision: 0.1 $  $Date: Fri 01/31/2020 11:59:20.073 PM $
+%
+% 1026 Rocky Creek Dr NE
+% Rochester, MN 55906, USA
+%
+% Email: richard.cui@utoronto.ca
+
+% [EOF]
