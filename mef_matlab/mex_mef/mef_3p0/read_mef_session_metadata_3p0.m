@@ -1,7 +1,6 @@
-%
-%   Retrieves the session metadata from a MEF3 file
+% READ_MEF_SESSION_METADATA_3P0 Retrieves the session metadata from a MEF 3.0 file
 %   
-%   [metadata] = read_mef_session_metadata(fileName, password)
+%   [metadata] = read_mef_session_metadata_3p0(fileName, password, mapIndices)
 %	
 %   sessionPath     = path (absolute or relative) to the MEF3 session folder
 %   password        = password to the MEF3 data; Pass empty string/variable if not encrypted
@@ -20,4 +19,13 @@
 %   warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 %   You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
 %
-function metadata = read_mef_session_metadata(sessionPath, password, mapIndices)
+
+% Copyright 2020 Richard J. Cui. Adapted: Sat 02/01/2020 10:30:50.708 PM
+% $Revision: 0.1 $  $Date: Sat 02/01/2020 10:30:50.708 PM $
+%
+% 1026 Rocky Creek Dr NE
+% Rochester, MN 55906, USA
+%
+% Email: richard.cui@utoronto.ca
+
+% [EOF]
