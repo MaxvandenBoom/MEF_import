@@ -1,3 +1,4 @@
+function data = read_mef_ts_data_3p0(channel_path, varargin)
 % READ_MEF_TS_DATA_3P0 Read the MEF 3.0 data from a time-series channel
 %	
 % Syntax:
@@ -9,8 +10,9 @@
 % Input(s):
 %   channel_path    - [char] path (absolute or relative) to the MEF3 
 %                     channel folder
-%   password        - [char] (opt) password to the MEF3 data; Pass empty 
-%                     string/variable if not encrypted (default = [])
+%   password        - [struct] (opt) password to the MEF 3.0 data; Pass 
+%                     empty struct if not encrypted (default = struct([]))
+%                     .
 %   range_type      - [char] (opt) modality that is used to define the 
 %                     data-range to read, either 'time' or 'samples'
 %                     (default = samples)
@@ -53,11 +55,38 @@
 %   program.  If not, see <https://www.gnu.org/licenses/>.
 
 % Copyright 2020 Richard J. Cui. Adapted: Fri 01/31/2020 11:59:20.073 PM
-% $Revision: 0.2 $  $Date: Sat 02/01/2020  4:42:56.294 PM $
+% $Revision: 0.2 $  $Date: Sun 02/02/2020 10:23:33.991 AM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
 %
 % Email: richard.cui@utoronto.ca
+
+% =========================================================================
+% parse inputs
+% =========================================================================
+q = parseInputs(channel_path, varargin{:});
+
+end
+
+% =========================================================================
+% subroutines
+% =========================================================================
+function q = parseInputs(varargin)
+
+% defaults
+default_pw = strut([]); % password
+default_rt = 'samples'; % range_type
+default_bg = -1; % begin
+default_sp = -1; % stop
+
+% parse rules
+p = inputParser;
+p.addRequired('channel_path', @isstr);
+p.addOptional('password', default_pw, @isstruct);
+
+% parse and return the results
+
+end % funciton
 
 % [EOF]

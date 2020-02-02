@@ -32,11 +32,11 @@ cd mef_3p0/ % assume 'mef_3p0' is the subdirectory
 fprintf('\n')
 fprintf('===== Processing MEF 3.0 format =====\n')
 fprintf('Building read_mef_session_metadata_3p0.mex*\n')
-mex -output read_mef_session_metadata_3p0 read_mef_session_metadata.c meflib/meflib/meflib.c meflib/meflib/mefrec.c matmef_mapping.c mex_datahelper.c
+mex -output read_mef_session_metadata read_mef_session_metadata.c meflib/meflib/meflib.c meflib/meflib/mefrec.c matmef_mapping.c mex_datahelper.c
 
 fprintf('\n')
 fprintf('Building read_mef_ts_data_3p0.mex*\n')
-mex -output read_mef_ts_data_3p0 read_mef_ts_data.c matmef_data.c meflib/meflib/meflib.c meflib/meflib/mefrec.c
+mex -output read_mef_ts_data read_mef_ts_data.c matmef_data.c meflib/meflib/meflib.c meflib/meflib/mefrec.c
 
 cd ..
 
