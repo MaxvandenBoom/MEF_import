@@ -1,4 +1,4 @@
-% READ_MEF_TS_DATA_3P0 Read the MEF3 data from a time-series channel
+% READ_MEF_TS_DATA_3P0 Read the MEF 3.0 data from a time-series channel
 %	
 % Syntax:
 %   data = read_mef_ts_data_3p0(channel_path)
