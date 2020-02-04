@@ -159,10 +159,10 @@ if isempty(q)
 else
     wholename = fullfile(q.filepath, q.filename);
     pw = q.password;
-    % update
+    % TODO: update
     this.FilePath = q.filepath;
     this.FileName = q.filename;
-    this.SubjectPassword = q.password;
+    this.SubjectPassword = q.password; % this is not correct
 end % if
 
 header = read_mef_header_2p1(wholename, pw);
