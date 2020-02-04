@@ -1,4 +1,4 @@
-// READ_MEF_HEADER_MEX_3P0 mex gatefun to read universal header of data series segment
+// READ_MEF_HEADER_MEX_3P0.C mex gatefun to read universal header of data series segment
 //
 // See read_mef_header_mex_3p0.m for details of usage.
 
