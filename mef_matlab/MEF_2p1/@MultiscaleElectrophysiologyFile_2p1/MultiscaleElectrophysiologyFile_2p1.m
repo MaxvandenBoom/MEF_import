@@ -1,5 +1,5 @@
-classdef MultiscaleElectrophysiologyFile_2p1 < handle
-    % Class MULTISCALEELECTROPHYSIOLOGYFILE_2P1 processes MEF 2.1 data
+classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
+    % Class MULTISCALEELECTROPHYSIOLOGYFILE_2P1 processes MEF 2.1 channel data
     %
     % Syntax:
     %   this = MultiscaleElectrophysiologyFile_2p1;
@@ -30,8 +30,8 @@ classdef MultiscaleElectrophysiologyFile_2p1 < handle
     %
     % See also this.readHeader.
     
-    % Copyright 2019 Richard J. Cui. Created: Mon 04/29/2019  8:11:02.485 PM
-    % $Revision: 0.8 $  $Date: Wed 01/08/2020 11:39:57.259 AM $
+    % Copyright 2019-2020 Richard J. Cui. Created: Mon 04/29/2019  8:11:02.485 PM
+    % $Revision: 0.9 $  $Date: Tue 02/04/2020 12:38:11.610 PM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -52,8 +52,6 @@ classdef MultiscaleElectrophysiologyFile_2p1 < handle
     % MEF file info
     % -------------
     properties (SetAccess = protected, Hidden = true)
-        FilePath        % [str] filepath of MEF file
-        FileName        % [str] filename of MEF file including ext (.mef)
         SubjectPassword % [str] subject password of MEF file
         SessionPassword % [str] session password of MEF file
         DataPassword    % [str] data password of MEF file
