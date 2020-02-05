@@ -22,12 +22,18 @@ classdef MultiscaleElectrophysiologyFile < handle
     % =====================================================================
     % properties
     % =====================================================================
-    % MEF file info
-    % -------------
+    % MEF information
+    % ---------------
+    properties (SetAccess = protected)
+        MEFVersion = [] % MEF version to serve; can be set only in constructor
+    end %  properties: protected
+    
+    % MEF channel info
+    % ----------------
     properties (SetAccess = protected, Hidden = true)
         FilePath        % [str] filepath of MEF channel file
         FileName        % [str] filename of MEF channel file including ext
-    end
+    end % properties: protected, hidden
 
     % =====================================================================
     % methods

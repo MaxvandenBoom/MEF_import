@@ -1,11 +1,11 @@
-function [header, channel_info] = readHeader(this, varargin)
+function [header, channel] = readHeader(this, varargin)
 % MULTISCALEELECTROPHYSIOLOGYFILE_3P0.READHEADER Read UNIVERSAL HEADER structure from MEF 3.0
 % 
 % Syntax:
-%   header = readHeader(this)
-%   header = readHeader(this, wholename)
-%   header = readHeader(this, wholename, password)
-%   header = readHeader(this, wholename, password, access_level)
+%   [header, channel] = readHeader(this)
+%   [header, channel] = readHeader(this, wholename)
+%   [header, channel] = readHeader(this, wholename, password)
+%   [header, channel] = readHeader(this, wholename, password, access_level)
 % 
 % Input(s):
 %   this            - [obj] MultiscaleElectrophysiologyFile_3p0 object
@@ -36,7 +36,7 @@ function [header, channel_info] = readHeader(this, varargin)
 %                     .level_2_password_validation_field
 %                     .protected_region
 %                     .discretionary_region
-%   channel_info    - [struct] CHAANEL info of MEF3.0 file
+%   channel         - [struct] CHAANEL info of MEF3.0 file
 %                     .channel_type
 %                     .metadata
 %                     .number_of_segments
@@ -59,7 +59,7 @@ function [header, channel_info] = readHeader(this, varargin)
 % See also read_mef_header_mex_3p0.m.
 
 % Copyright 2020 Richard J. Cui. Created: Tue 02/04/2020  3:33:28.609 PM
-% $Revision: 0.1 $  $Date: Tue 02/04/2020  3:33:28.609 PM $
+% $Revision: 0.2 $  $Date: Tue 02/04/2020  8:31:09.815 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -87,7 +87,7 @@ else
     this.AccessLevel = al;
 end % if
 
-[header, channel_info] = read_mef_header_mex_3p0(wholename, pw);
+[header, channel] = read_mef_header_mex_3p0(wholename, pw);
 
 end %function
 

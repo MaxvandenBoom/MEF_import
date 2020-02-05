@@ -19,7 +19,7 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1
     % See also get_sessinfo.
 
 	% Copyright 2019-2020 Richard J. Cui. Created: Mon 12/30/2019 10:52:49.006 PM
-	% $Revision: 0.8 $  $Date: Tue 01/21/2020  9:10:34.920 PM $
+	% $Revision: 0.9 $  $Date: Tue 02/04/2020  8:36:19.731 PM $
 	%
 	% 1026 Rocky Creek Dr NE
 	% Rochester, MN 55906, USA
@@ -81,6 +81,14 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1
             % ------------------------------
             this.SessionPath = q.sesspath; % set session path directory
             this.Password = q.password; % set password
+            
+            % set MEF version to serve
+            if isempty(this.MEFVersion) == true
+                this.MEFVersion = 2.1;
+            elseif this.MEFVersion ~= 2.1
+                error('MEFSession_2p1:invalidMEFVer',...
+                    'invalid MEF version; this function can serve only MEF 2.1')
+            end % if            
         end
     end % methods
     
