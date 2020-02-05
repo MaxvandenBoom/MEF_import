@@ -144,6 +144,7 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
     methods
         [header, channel] = readHeader(this, varargin) % read universal head and channel metadata of MEF 3.0
         bid = readBlockIndexData(this, varargin) % read block indices
+        seg_cont = analyzeContinuity(this, varargin) % analyze continuity of data sampling
     end % methods
 end
 
