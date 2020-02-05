@@ -31,7 +31,7 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
     % See also .
     
     % Copyright 2020 Richard J. Cui. Created: Tue 02/04/2020  2:21:31.965 PM
-    % $Revision: 0.1 $  $Date: Tue 02/04/2020  2:21:31.965 PM $
+    % $Revision: 0.2 $  $Date: Tue 02/04/2020  8:31:09.815 PM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -47,7 +47,7 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
         Level1Password  % [str] level 1 password
         Level2Password  % [str] level 2 password
         AccessLevel     % [num] access level of data
-        ChannelInfo     % [struct] channel information structure
+        Channel         % [struct] channel information structure
         Header          % [struct] Universal header of MEF 3.0 channels
     end
 
@@ -92,6 +92,15 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
             
             % operations during construction
             % ------------------------------
+            % set MEF version to serve
+            if isempty(this.MEFVersion) == true
+                this.MEFVersion = 3.0;
+            elseif this.MEFVersion ~= 3.0
+                error('MultiscaleElectrophysiologyFiel_3p0:invalidMEFVer',...
+                    'invalid MEF version; this function can serve only MEF 3.0')
+            end % if
+            
+            % set channel info
             if ~isempty(q)
                 this.FilePath = q.filepath;
                 this.FileName = q.filename;
@@ -106,15 +115,15 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
                     case 2
                         password = this.Level2Password;
                 end % switch
-                [this.Header, this.ChannelInfo] = this.readHeader(fullfile(this.FilePath,...
+                [this.Header, this.Channel] = this.readHeader(fullfile(this.FilePath,...
                     this.FileName), password, this.AccessLevel);
                 
                 % check version
                 mef_ver = sprintf('%d.%d', this.Header.mef_version_major,...
                     this.Header.mef_version_minor);
-                if strcmp(mef_ver, '3.0') == false
-                    warning('The MEF file is compressed with MEF format version %s, rather than 3.0. The results may be unpredictable',...
-                        mef_ver)
+                if str2double(mef_ver) ~= this.MEFVersion
+                    warning('The MEF file is compressed with MEF format version %s, rather than %0.1f. The results may be unpredictable',...
+                        mef_ver, this.MEFVersion)
                     warning('test %s', mef_ver)
                 end % if
             end % if

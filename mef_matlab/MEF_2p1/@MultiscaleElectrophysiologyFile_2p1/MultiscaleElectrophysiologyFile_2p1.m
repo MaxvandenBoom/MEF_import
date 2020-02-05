@@ -101,6 +101,16 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
             
             % operations during construction
             % ------------------------------
+            % ------------------------------
+            % set MEF version to serve
+            if isempty(this.MEFVersion) == true
+                this.MEFVersion = 2.1;
+            elseif this.MEFVersion ~= 2.1
+                error('MultiscaleElectrophysiologyFiel_2p1:invalidMEFVer',...
+                    'invalid MEF version; this function can serve only MEF 2.1')
+            end % if
+            
+            % set channel info
             if ~isempty(q)
                 this.FilePath = q.filepath;
                 this.FileName = q.filename;
@@ -115,9 +125,9 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
                 % check version
                 mef_ver = sprintf('%d.%d', this.Header.header_version_major,...
                     this.Header.header_version_minor);
-                if strcmp(mef_ver, '2.1') == false
-                    warning('The MEF file is compressed with MEF format version %s, rather than 2.1. The results may be unpredictable',...
-                        mef_ver)
+                if str2double(mef_ver) ~= this.MEFVersion
+                    warning('The MEF file is compressed with MEF format version %s, rather than %0.1f. The results may be unpredictable',...
+                        mef_ver, this.MEFVersion)
                 end % if
                 
                 % refresh session password from header
