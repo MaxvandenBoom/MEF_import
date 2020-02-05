@@ -31,7 +31,7 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
     % See also this.readHeader.
     
     % Copyright 2019-2020 Richard J. Cui. Created: Mon 04/29/2019  8:11:02.485 PM
-    % $Revision: 0.9 $  $Date: Tue 02/04/2020 12:38:11.610 PM $
+    % $Revision: 1.0 $  $Date: Wed 02/05/2020  9:58:04.511 AM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -55,9 +55,6 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
         SubjectPassword % [str] subject password of MEF file
         SessionPassword % [str] session password of MEF file
         DataPassword    % [str] data password of MEF file
-        Header          % [struct] header information of MEF file
-        BlockIndexData  % [table] data of block indices
-        Continuity      % [table] data segments of conituous sampling
     end % properties
     
     % =====================================================================
@@ -100,7 +97,6 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
             end % if
             
             % operations during construction
-            % ------------------------------
             % ------------------------------
             % set MEF version to serve
             if isempty(this.MEFVersion) == true

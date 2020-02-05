@@ -31,7 +31,7 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
     % See also .
     
     % Copyright 2020 Richard J. Cui. Created: Tue 02/04/2020  2:21:31.965 PM
-    % $Revision: 0.2 $  $Date: Tue 02/04/2020  8:31:09.815 PM $
+    % $Revision: 0.3 $  $Date: Wed 02/05/2020 10:11:03.486 AM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -48,7 +48,6 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
         Level2Password  % [str] level 2 password
         AccessLevel     % [num] access level of data
         Channel         % [struct] channel information structure
-        Header          % [struct] Universal header of MEF 3.0 channels
     end
 
     % =====================================================================
@@ -92,7 +91,7 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
             
             % operations during construction
             % ------------------------------
-            % set MEF version to serve
+            % (1) set MEF version to serve
             if isempty(this.MEFVersion) == true
                 this.MEFVersion = 3.0;
             elseif this.MEFVersion ~= 3.0
@@ -100,7 +99,7 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
                     'invalid MEF version; this function can serve only MEF 3.0')
             end % if
             
-            % set channel info
+            % (2) set channel info
             if ~isempty(q)
                 this.FilePath = q.filepath;
                 this.FileName = q.filename;
@@ -115,8 +114,14 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
                     case 2
                         password = this.Level2Password;
                 end % switch
-                [this.Header, this.Channel] = this.readHeader(fullfile(this.FilePath,...
-                    this.FileName), password, this.AccessLevel);
+                wholename = fullfile(this.FilePath, this.FileName);
+                if exist(wholename, 'file') ~= 7
+                    error('MultiscaleElectrophysiology_3p0:invalidChannel',...
+                        'cannot find channel %s', wholename)
+                end % if
+                [header, channel] = this.readHeader(wholename, password, this.AccessLevel);
+                this.Header = header;
+                this.Channel = channel;
                 
                 % check version
                 mef_ver = sprintf('%d.%d', this.Header.mef_version_major,...
@@ -127,6 +132,10 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
                     warning('test %s', mef_ver)
                 end % if
             end % if
+            
+            % (3) set sampling information
+            this.ChanSamplingFreq = channel.metadata.section_2.sampling_frequency;
+            this.getSampleTimeInterval;
         end % function
     end
     
@@ -134,6 +143,7 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
     % -------------
     methods
         [header, channel] = readHeader(this, varargin) % read universal head and channel metadata of MEF 3.0
+        bid = readBlockIndexData(this, varargin) % read block indices
     end % methods
 end
 

@@ -1,5 +1,5 @@
 function seg_cont = analyzeContinuity(this, varargin)
-% ANALYZECONTINUITY Analyze continuity of sampling in the data file
+% MULTISCALEELECTROPHYSIOLOGYFILE_2P1.ANALYZECONTINUITY Analyze continuity of sampling in MEF 2.1 data
 % 
 % Syntax:
 %   seg_cont = analyzeContinuity(this)
