@@ -61,6 +61,7 @@ classdef MEFSession < handle
     % -------------
     methods
         varargout = get_sessinfo(this) % get sess info from data
+        [X, t] = importSession(this, varargin) % import a session
     end % methods
 end
 

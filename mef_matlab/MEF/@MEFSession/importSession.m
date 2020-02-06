@@ -1,5 +1,5 @@
 function [X, t] = importSession(this, varargin)
-% MEFSESSION_2P1.importSession import MEF session data
+% MEFSESSION.importSession import MEF session data
 % 
 % Syntax:
 %   [X, t] = importSession(this)
@@ -83,17 +83,7 @@ end % if
 % =========================================================================
 % input session
 % =========================================================================
-num_chan = numel(sel_chan); % number of selected channels
-X = [];
-for k = 1:num_chan
-    fn_k = convertStringsToChars(sel_chan(k) + ".mef"); % filename of channel k
-    [x_k, t] = this.importSignal(begin_stop, bs_unit, sess_path, fn_k,...
-        'SubjectPassword', pw.Subject, 'SessionPassword', pw.Session,...
-        'DataPassword', pw.Data);
-    x_k = x_k(:).'; % make sure it is a horizontal vector
-    
-    X = cat(1, X, x_k);
-end % for
+[X, t] = this.import_sess(begin_stop, bs_unit, sel_chan, pw);
 
 end % function
 

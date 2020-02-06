@@ -9,10 +9,9 @@ function [X, t] = import_sess(this, varargin)
 %   this            - [obj] MEFSession_2p1 object
 %   begin_stop      - [num] 1 x 2 array of begin and stop points of
 %                     importing the session
-%   bs_unit         - [str] unit of begin_stop: 'uUTC'
-%   sel_chan        - [str array] the names of the selected channels
 %   bs_unit         - [str] unit of begin_stop: 'uUTC','Index', 'Second', 
 %                     'Minute', 'Hour', and 'Day'.
+%   sel_chan        - [str array] the names of the selected channels
 %   pw              - [struct] (para) password structure
 %                     .Session      : session password
 %                     .Subject      : subject password
@@ -39,11 +38,55 @@ function [X, t] = import_sess(this, varargin)
 % =========================================================================
 % parse inputs
 % =========================================================================
+q = parseInputs(this, varargin{:});
+begin_stop = q.begin_stop;
+bs_unit = q.bs_unit;
+sel_chan = q.sel_chan;
+pw = q.pw;
+
+if isempty(pw)
+    pw = this.Password;
+end % if
+
+sess_path = this.SessionPath;
+
+% =========================================================================
+% main
+% =========================================================================
+num_chan = numel(sel_chan); % number of selected channels
+X = [];
+for k = 1:num_chan
+    fn_k = convertStringsToChars(sel_chan(k) + ".mef"); % filename of channel k
+    [x_k, t] = this.importSignal(begin_stop, bs_unit, sess_path, fn_k,...
+        'SubjectPassword', pw.Subject, 'SessionPassword', pw.Session,...
+        'DataPassword', pw.Data);
+    x_k = x_k(:).'; % make sure it is a horizontal vector
+    
+    X = cat(1, X, x_k);
+end % for
 
 end
 
 % =========================================================================
 % subroutines
 % =========================================================================
+function q = parseInputs(this, varargin)
+
+% defaults
+default_pw = struct([]); % password
+
+% parse rules
+p = inputParser;
+p.addRequired('this', @isobject);
+p.addRequired('begin_stop', @(x) isnumeric(x) & numel(x) == 2 & x(1) <= x(2));
+p.addRequired('bs_unit', @isstr);
+p.addRequired('sel_chan', @isstring) % must be string array
+p.addOptional('pw', default_pw, @isstruct);
+
+% parse and return the results
+p.parse(this, varargin{:});
+q = p.Results;
+
+end % function
 
 % [EOF]
