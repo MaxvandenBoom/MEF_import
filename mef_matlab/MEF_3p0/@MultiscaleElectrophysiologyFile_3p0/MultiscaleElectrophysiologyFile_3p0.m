@@ -31,7 +31,7 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
     % See also .
     
     % Copyright 2020 Richard J. Cui. Created: Tue 02/04/2020  2:21:31.965 PM
-    % $Revision: 0.3 $  $Date: Wed 02/05/2020 10:11:03.486 AM $
+    % $Revision: 0.4 $  $Date: Thu 02/06/2020 12:10:38.542 PM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -99,8 +99,8 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
                     'invalid MEF version; this function can serve only MEF 3.0')
             end % if
             
-            % (2) set channel info
             if ~isempty(q)
+                % (2) set channel info
                 this.FilePath = q.filepath;
                 this.FileName = q.filename;
                 this.Level1Password = q.Level1Password;
@@ -131,11 +131,10 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
                         mef_ver, this.MEFVersion)
                     warning('test %s', mef_ver)
                 end % if
-            end % if
-            
-            % (3) set sampling information
-            this.ChanSamplingFreq = channel.metadata.section_2.sampling_frequency;
-            this.getSampleTimeInterval;
+                % (3) set sampling information
+                this.getSampleTimeInterval;
+                this.ChanSamplingFreq = channel.metadata.section_2.sampling_frequency;
+            end % if            
         end % function
     end
     

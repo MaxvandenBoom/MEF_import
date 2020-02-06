@@ -1,4 +1,4 @@
-classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1
+classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1 & MEFSession
 	% Class MEFSESSION_2P1 processes MEF 2.1 session
     % 
     % Syntax:
@@ -29,19 +29,9 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1
     % =====================================================================
     % properties
     % =====================================================================
-    % properties of importing session
-    % -------------------------------
-    properties
-        SelectedChannel     % channels selected
-        StartEnd            % start and end points to import the session
-        SEUnit              % unit of StartEnd
-    end % properties
-
     % properties of session information
     % ---------------------------------
     properties 
-        SessionPath         % session directory
-        Password            % password structure of the session
         ChannelName         % channel names
         SamplingFrequency   % in Hz
         Samples             % number of samples
