@@ -19,7 +19,7 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1 & MEFSession
     % See also get_sessinfo.
 
 	% Copyright 2019-2020 Richard J. Cui. Created: Mon 12/30/2019 10:52:49.006 PM
-	% $Revision: 0.9 $  $Date: Tue 02/04/2020  8:36:19.731 PM $
+	% $Revision: 1.0 $  $Date: Thu 02/06/2020 12:39:18.909 PM $
 	%
 	% 1026 Rocky Creek Dr NE
 	% Rochester, MN 55906, USA
@@ -32,18 +32,7 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1 & MEFSession
     % properties of session information
     % ---------------------------------
     properties 
-        ChannelName         % channel names
-        SamplingFrequency   % in Hz
-        Samples             % number of samples
-        DataBlocks          % number of data blocks
-        TimeGaps            % number of discountinuity time gaps
-        BeginStop           % Begin and stop indexes of entire signal
-        Unit                % unit of BeginStop
-        Institution         % name of the institute
-        SubjectID           % identification of the subject
-        AcquisitionSystem   % name of the system to record the session
-        CompressionAlgorithm % name of compression algorithm
-        SessionInformation  % table of session information (see get_sessinfo.m)
+
     end % properties
  
     % =====================================================================
@@ -91,13 +80,13 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1 & MEFSession
     % other methods
     % -------------
     methods
-        varargout = get_sessinfo(this) % get sess info from data
         valid_yn = checkSessValid(this, varargin) % check validity of session info
         [X, t] = importSession(this, varargin) % import a session
         record_offset = getRecordOffset(this, unit) % get offset time of recording in specified unit
         rel_time = abs2relativeTimePoint(this, abs_time, unit) % absolute to relative time points
         abs_time = relative2absTimePoint(this, rel_time, unit) % relative to absolute time points
         out_time = SessionUnitConvert(this, in_time, varargin) % convert units of relative time points
+        [sessionifo, unit] = get_info_data(this) % get session info from data
     end % methods
     
 end % classdef

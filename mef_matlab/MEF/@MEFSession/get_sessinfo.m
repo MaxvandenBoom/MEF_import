@@ -1,11 +1,11 @@
 function varargout = get_sessinfo(this)
-% MEFSESSION_2P1.get_SESSINFO Get session information from MEF 2.1 data
+% MEFSESSION.GET_SESSINFO Get session information from MEF data
 %
 % Syntax:
 %   [channame, start_end, unit, sess_info] = get_sessinfo(this)
 % 
 % Input(s):
-%   this            - [obj] MEFSession_2p1 object
+%   this            - [obj] MEFSession object
 % 
 % Output(s):
 %   channame        - [str/cell str] the name(s) of the data channel in the
@@ -33,10 +33,10 @@ function varargout = get_sessinfo(this)
 %
 % References:
 %
-% See also MEFSession_2p1.
+% See also MEFSession_2p1, get_info_data.
 
 % Copyright 2020 Richard J. Cui. Created: Fri 01/03/2020  4:19:10.683 PM
-% $ Revision: 0.3 $  $ Date: Thu 01/16/2020 10:50:40.905 PM $
+% $ Revision: 0.4 $  $ Date: Thu 02/06/2020  1:20:08.343 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -48,7 +48,7 @@ function varargout = get_sessinfo(this)
 % =========================================================================
 % table of channel info
 % ---------------------
-[sess_info, unit] = get_info(this);
+[sess_info, unit] = this.get_info_data;
 
 if isempty(sess_info)
     channame = '';
@@ -78,7 +78,7 @@ else
         acq_sys = unique(sess_info.AcquisitionSystem);
         comp_alg = unique(sess_info.CompressionAlgorithm);
     else
-        warning('MEFSession_2p1:get_sessinfo',...
+        warning('MEFSession_3p0:get_sessinfo',...
             'The session is either empty or the data are not consistent. Please check messages')
         sess_info = table;
         channame = '';
@@ -95,8 +95,8 @@ else
     end % if
 end % if
 
-% update paras of MEFSession_2p1
-% ------------------------------
+% update paras of MEFSession
+% --------------------------
 this.ChannelName = channame;
 this.SamplingFrequency = fs;
 this.Samples = samples;
@@ -113,16 +113,16 @@ this.SessionInformation = sess_info;
 % =========================================================================
 % Output
 % =========================================================================
-if nargout > 1
+if nargout > 0
     varargout{1} = channame;
 end % if
-if nargout > 2
+if nargout > 1
     varargout{2} = begin_stop;
 end % if
-if nargout > 3
+if nargout > 2
     varargout{3} = unit;
 end % if
-if nargout > 4
+if nargout > 3
     varargout{4} = sess_info;
 end % if
 
@@ -131,54 +131,6 @@ end % function MEF_sessinfo
 % =========================================================================
 % Subroutines
 % =========================================================================
-function [sessinfo, unit] = get_info(this)
-% get session information from data
 
-sess_path = this.SessionPath;
-pw = this.Password;
-var_names = {'ChannelName', 'SamplingFreq', 'Begin', 'Stop', 'Samples',...
-    'IndexEntry', 'DiscountinuityEntry', 'SubjectEncryption',...
-    'SessionEncryption', 'DataEncryption', 'Version', 'Institution',...
-    'SubjectID', 'AcquisitionSystem', 'CompressionAlgorithm'};
-var_types = {'string', 'double', 'double', 'double', 'double', 'double',...
-    'double', 'logical', 'logical', 'logical', 'string', 'string', 'string',...
-    'string', 'string'};
-
-chan_list = dir(fullfile(sess_path, '*.mef')); % assume all channel data in one dir
-if isempty(chan_list)
-    sessinfo = table;
-    unit = '';
-else % if
-    unit = 'uUTC';
-    num_chan = numel(chan_list); % number of channels
-    sz = [num_chan, numel(var_names)];
-    sessinfo = table('size', sz, 'VariableTypes', var_types,...
-        'VariableNames', var_names);
-    for k = 1:num_chan
-        fp_k = chan_list(k).folder;
-        fn_k = chan_list(k).name;
-        header_k = this.readHeader(fullfile(fp_k, fn_k), pw.Subject);
-        mef_ver = sprintf('%d.%d', header_k.header_version_major,...
-            header_k.header_version_minor);
-
-        sessinfo.ChannelName(k)  = header_k.channel_name;
-        sessinfo.SamplingFreq(k) = header_k.sampling_frequency;
-        sessinfo.Begin(k)        = header_k.recording_start_time;
-        sessinfo.Stop(k)         = header_k.recording_end_time;
-        sessinfo.Samples(k)      = header_k.number_of_samples;
-        sessinfo.IndexEntry(k)   = header_k.number_of_index_entries;
-        sessinfo.DiscountinuityEntry(k) = header_k.number_of_discontinuity_entries;
-        sessinfo.SubjectEncryption(k)   = header_k.subject_encryption_used;
-        sessinfo.SessionEncryption(k)   = header_k.session_encryption_used;
-        sessinfo.DataEncryption(k)      = header_k.data_encryption_used;
-        sessinfo.Version(k)      = mef_ver;
-        sessinfo.Institution(k)  = header_k.institution;
-        sessinfo.SubjectID(k)    = header_k.subject_id;
-        sessinfo.AcquisitionSystem(k) = header_k.acquisition_system;
-        sessinfo.CompressionAlgorithm(k) = header_k.compression_algorithm;
-    end % for
-end % if
-
-end % funciton
 
 % [EOF]

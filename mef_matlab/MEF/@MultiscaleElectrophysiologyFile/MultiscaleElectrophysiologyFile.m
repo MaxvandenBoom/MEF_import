@@ -29,10 +29,6 @@ classdef MultiscaleElectrophysiologyFile < handle
         MEFVersion = []     % MEF version to serve; can be set only in 
                             % constructor
         MPS = 1e6           % microseconds per seconds
-        ChanSamplingFreq    % sampling frequency of channel (Hz)
-        SampleTimeInterval  % sample time interval = [lower, upper] (uUTC),
-                            % indicating the lower and upper bound of the
-                            % time interval between two successive samples
     end %  properties: protected
     
     % MEF channel info
@@ -45,6 +41,10 @@ classdef MultiscaleElectrophysiologyFile < handle
                             % readBlockIndexData.m for the detail)
         Continuity          % [table] data segments of conituous sampling (see 
                             % analyzeContinuity.m for the detail)
+        ChanSamplingFreq    % sampling frequency of channel (Hz)
+        SampleTimeInterval  % sample time interval = [lower, upper] (uUTC),
+                            % indicating the lower and upper bound of the
+                            % time interval between two successive samples
     end % properties: protected, hidden
 
     % =====================================================================

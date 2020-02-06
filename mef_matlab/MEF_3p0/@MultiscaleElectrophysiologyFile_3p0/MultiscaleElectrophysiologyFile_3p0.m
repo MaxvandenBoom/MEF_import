@@ -31,7 +31,7 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
     % See also .
     
     % Copyright 2020 Richard J. Cui. Created: Tue 02/04/2020  2:21:31.965 PM
-    % $Revision: 0.4 $  $Date: Thu 02/06/2020 12:10:38.542 PM $
+    % $Revision: 0.5 $  $Date: Thu 02/06/2020  2:44:09.445 PM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -132,8 +132,8 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
                     warning('test %s', mef_ver)
                 end % if
                 % (3) set sampling information
-                this.getSampleTimeInterval;
                 this.ChanSamplingFreq = channel.metadata.section_2.sampling_frequency;
+                this.getSampleTimeInterval;
             end % if            
         end % function
     end

@@ -34,6 +34,18 @@ classdef MEFSession < handle
     properties        
         SessionPath         % session directory
         Password            % password structure of the session
+        ChannelName         % channel names
+        SamplingFrequency   % in Hz
+        Samples             % number of samples
+        DataBlocks          % number of data blocks
+        TimeGaps            % number of discountinuity time gaps
+        BeginStop           % Begin and stop indexes of entire signal
+        Unit                % unit of BeginStop
+        Institution         % name of the institute
+        SubjectID           % identification of the subject
+        AcquisitionSystem   % name of the system to record the session
+        CompressionAlgorithm % name of compression algorithm
+        SessionInformation  % table of session information (see get_sessinfo.m)
     end % properties
     
     % =====================================================================
@@ -48,7 +60,7 @@ classdef MEFSession < handle
     % other metheds
     % -------------
     methods
-        
+        varargout = get_sessinfo(this) % get sess info from data
     end % methods
 end
 
