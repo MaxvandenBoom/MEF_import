@@ -24,7 +24,7 @@ function [sample_time, sample_yn] = SampleIndex2Time(this, varargin)
 % See also SampleTime2Index.
 
 % Copyright 2019-2020 Richard J. Cui. Created: Mon 05/06/2019  9:29:08.940 PM
-% $Revision: 1.0 $  $Date: Thu 01/23/2020 10:20:26.476 PM $
+% $Revision: 1.1 $  $Date: Wed 02/05/2020  9:10:33.935 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -135,6 +135,7 @@ end % function
 function [s_time, s_yn] = inDiscontLoopDiscont(s_time, s_yn, discont_se,...
     cont, sorted_si)
 
+MPS = 1e6;
 num_seg = size(discont_se, 1); % number of segments
 for k = 1:num_seg
     start_k = discont_se(k, 1);

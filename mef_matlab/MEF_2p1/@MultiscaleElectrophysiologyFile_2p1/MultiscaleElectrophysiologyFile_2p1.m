@@ -145,7 +145,6 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
         bid = readBlockIndexData(this, varargin) % read block indices
         blk_header = readBlockHeader(this, BlockIndex) % read block header
         seg_cont = analyzeContinuity(this, varargin) % analyze continuity of data sampling
-        [sample_index, sample_yn] = SampleTime2Index(this, varargin) % time --> index
         [sample_time, sample_yn] = SampleIndex2Time(this, varargin) % index --> time
         [x, t] = importSignal(this, varargin) % import MEF signal into MATLAB
         this = setSubjectPassword(this, password) % set MEF subject password

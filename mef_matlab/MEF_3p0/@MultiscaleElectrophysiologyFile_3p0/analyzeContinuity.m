@@ -36,7 +36,7 @@ function seg_cont = analyzeContinuity(this, varargin)
 % See also readBlockIndexData.
 
 % Copyright 2020 Richard J. Cui. Created: Wed 02/05/2020 10:19:17.599 AM
-% $Revision: 0.1 $  $Date: Wed 02/05/2020 10:19:17.599 AM $
+% $Revision: 0.2 $  $Date: Wed 02/05/2020  8:02:18.664 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -48,8 +48,10 @@ function seg_cont = analyzeContinuity(this, varargin)
 % =========================================================================
 q = parseInputs(this, varargin{:});
 bid = q.bid;
-if isempty(bid)
-    bid = this.BlockIndexData;
+if isempty(bid) && isempty(this.BlockIndexData)
+    bid = this.readBlockIndexData;
+elseif isempty(bid) && ~isempty(this.BlockIndexData)
+    bid = this.readBlockIndexData;
 end % if
 
 % =========================================================================

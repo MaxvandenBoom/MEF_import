@@ -22,8 +22,8 @@ function [sample_index, sample_yn] = SampleTime2Index(this, varargin)
 % 
 % See also SampleIndex2Time.
 
-% Copyright 2019 Richard J. Cui. Created: Sun 05/05/2019 10:29:21.071 PM
-% $Revision: 0.6 $  $Date: Mon 06/03/2019  4:52:48.362 PM $
+% Copyright 2019-2020 Richard J. Cui. Created: Sun 05/05/2019 10:29:21.071 PM
+% $Revision: 0.7 $  $Date: Wed 02/05/2020  8:39:11.992 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -55,9 +55,11 @@ sample_yn = false(size(sample_time));
 [sorted_st, orig_index] = sort(sample_time);
 
 if isempty(this.Continuity)
-    this.analyzeContinuity;
+    cont = this.analyzeContinuity;
+else
+    cont = this.Continuity;
 end % if
-cont = this.Continuity;
+number_of_discontinuity_entries = height(cont);
 
 % within continuous segment
 % -------------------------
@@ -77,7 +79,7 @@ sel_cont_start_end = cont_start_end(sel_cont_ind, :);
 % ----------------------------
 % TODO: need to segment the data for very large chunck of times in the
 % discontinuity segments, similar with the case of continuity
-if this.Header.number_of_discontinuity_entries > 1 % if discont in recording
+if number_of_discontinuity_entries > 1 % if discont in recording
     a = cont_start_end.';
     b = cat(1, -inf, a(:), inf);
     discont_start_end = reshape(b, 2, numel(b)/2).';

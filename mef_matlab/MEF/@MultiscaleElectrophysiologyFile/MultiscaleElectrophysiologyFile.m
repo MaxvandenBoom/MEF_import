@@ -60,6 +60,7 @@ classdef MultiscaleElectrophysiologyFile < handle
     % -------------
     methods
         sti = getSampleTimeInterval(this, varargin) % boudn of sampling interval
+        [sample_index, sample_yn] = SampleTime2Index(this, varargin) % time --> index
     end % methods
 end
 
