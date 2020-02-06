@@ -26,6 +26,9 @@ classdef MultiscaleElectrophysiologyFile < handle
     % MEF information
     % ---------------
     properties (SetAccess = protected)
+<<<<<<< HEAD
+        MEFVersion = [] % MEF version to serve; can be set only in constructor
+=======
         MEFVersion = []     % MEF version to serve; can be set only in 
                             % constructor
         MPS = 1e6           % microseconds per seconds
@@ -33,11 +36,16 @@ classdef MultiscaleElectrophysiologyFile < handle
         SampleTimeInterval  % sample time interval = [lower, upper] (uUTC),
                             % indicating the lower and upper bound of the
                             % time interval between two successive samples
+>>>>>>> issue19
     end %  properties: protected
     
     % MEF channel info
     % ----------------
     properties (SetAccess = protected, Hidden = true)
+<<<<<<< HEAD
+        FilePath        % [str] filepath of MEF channel file
+        FileName        % [str] filename of MEF channel file including ext
+=======
         FilePath            % [str] filepath of MEF channel file
         FileName            % [str] filename of MEF channel file including ext
         Header              % [struct] header information of MEF file
@@ -45,6 +53,7 @@ classdef MultiscaleElectrophysiologyFile < handle
                             % readBlockIndexData.m for the detail)
         Continuity          % [table] data segments of conituous sampling (see 
                             % analyzeContinuity.m for the detail)
+>>>>>>> issue19
     end % properties: protected, hidden
 
     % =====================================================================

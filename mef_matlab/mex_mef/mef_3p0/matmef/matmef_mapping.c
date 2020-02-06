@@ -13,6 +13,17 @@
  *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  *  You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+/*
+ % Copyright 2020 Richard J. Cui. Modified: Tue 02/04/2020 10:53:10.951 PM
+ % $Revision: 0.1 $  $Date: Tue 02/04/2020 10:53:10.951 PM $
+ %
+ % 1026 Rocky Creek Dr NE
+ % Rochester, MN 55906, USA
+ %
+ % Email: richard.cui@utoronto.ca
+ */
+
 #include "matmef_mapping.h"
 #include "mex.h"
 #include "meflib/meflib/meflib.h"
@@ -721,8 +732,8 @@ mxArray *map_mef3_ti(TIME_SERIES_INDEX *ti, si8 number_of_entries) {
 		mxSetField(mat_ti, i, "block_bytes", 				mxUInt32ByValue(cur_ti->block_bytes));
 		mxSetField(mat_ti, i, "maximum_sample_value", 		mxInt32ByValue(cur_ti->maximum_sample_value));
 		mxSetField(mat_ti, i, "minimum_sample_value", 		mxInt32ByValue(cur_ti->minimum_sample_value));
-		//mxSetField(mat_ti, i, "RED_block_flags", 			mxUInt8ByValue(cur_ti->RED_block_flags));	// TODO: check with value
-
+		// mxSetField(mat_ti, i, "RED_block_flags", 			mxUInt8ByValue(cur_ti->RED_block_flags));	// TODO: check with value
+        mxSetField(mat_ti, i, "RED_block_flags", 			mxInt8ByValue(cur_ti->RED_block_flags));	// rjc
 	}	
 	
 	// return the struct

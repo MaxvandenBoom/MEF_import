@@ -98,6 +98,10 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
             
             % operations during construction
             % ------------------------------
+<<<<<<< HEAD
+            % ------------------------------
+=======
+>>>>>>> issue19
             % set MEF version to serve
             if isempty(this.MEFVersion) == true
                 this.MEFVersion = 2.1;
