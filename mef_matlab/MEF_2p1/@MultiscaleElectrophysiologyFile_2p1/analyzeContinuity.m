@@ -123,7 +123,7 @@ for k = 1:num_seg_cont
     % segment length
     seg_cont.SegmentLength(k) = seg_cont.SampleIndexEnd(k)-seg_cont.SampleIndexStart(k)+1;
 end % for
-fprintf('Done\n')
+fprintf('Done!\n')
 close(wh)
 
 this.Continuity = seg_cont;

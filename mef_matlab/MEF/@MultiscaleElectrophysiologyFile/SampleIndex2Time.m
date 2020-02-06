@@ -1,5 +1,5 @@
 function [sample_time, sample_yn] = SampleIndex2Time(this, varargin)
-% SampleIndex2Time Convert sample index to sample time
+% MULTISCALEELECTROPHYSIOLOGYFILE.SAMPLEINDEX2TIME Convert sample index to sample time
 % 
 % Syntax
 %   [sample_time, sample_yn] = SampleIndex2Time(this, sample_index)
@@ -47,6 +47,7 @@ if isempty(this.Continuity)
     this.analyzeContinuity;
 end % if
 cont = this.Continuity;
+number_of_discontinuity_entries = height(cont);
 
 % within continuous segment
 % -------------------------
@@ -64,7 +65,7 @@ sel_cont_start_end = cont_start_end(sel_cont_ind, :);
 
 % within discontinous segment
 % ----------------------------
-if this.Header.number_of_discontinuity_entries > 1 % if discont in recording
+if number_of_discontinuity_entries > 1 % if discont in recording
     a = cont_start_end.';
     b = cat(1, -inf, a(:), inf);
     discont_start_end = reshape(b, 2, numel(b)/2).';

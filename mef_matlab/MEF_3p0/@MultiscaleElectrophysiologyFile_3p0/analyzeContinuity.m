@@ -109,7 +109,7 @@ seg_cont = array2table(chunk_cont, 'VariableNames', var_names);
 % -------
 this.Continuity = seg_cont;
 
-fprintf('Done\n')
+fprintf('Done!\n')
 end
 
 % =========================================================================

@@ -1,5 +1,5 @@
 function [sample_index, sample_yn] = SampleTime2Index(this, varargin)
-% SAMPLETIME2INDEX Convert sample time to sample index
+% MULTISCALEELECTROPHYSIOLOGYFILE.SAMPLETIME2INDEX Convert sample time to sample index
 % 
 % Syntax:
 %   [sample_index, sample_yn] = SampleTime2Index(this, sample_time)
