@@ -1,5 +1,5 @@
 function [x, t] = importSignal(this, varargin)
-% MULTISCALEELECTROPHYSIOLOGYFILE_2P1.IMPORTMEF Import MEF channel into MATLAB
+% MULTISCALEELECTROPHYSIOLOGYFILE_3P0.IMPORTMEF Import MEF 3.0 channel into MATLAB
 % 
 % Syntax:
 %   [x, t] = importSignal(this)
@@ -7,9 +7,9 @@ function [x, t] = importSignal(this, varargin)
 %   [x, t] = importSignal(__, start_end, st_unit)
 %   [x, t] = importSignal(__, start_end, st_unit, filepath) 
 %   [x, t] = importSignal(__, start_end, st_unit, filepath, filename)
-%   [x, t] = importSignal(__, 'SubjectPassword', subj_pw)
-%   [x, t] = importSignal(__, 'SessionPassword', sess_pw)
-%   [x, t] = importSignal(__, 'DataPassword', data_pw)
+%   [x, t] = importSignal(__, 'Level1Password', level_1_pw)
+%   [x, t] = importSignal(__, 'Level2Password', level_2_pw)
+%   [x, t] = importSignal(__, 'AccessLevel', access_level)
 % 
 % Imput(s):
 %   this            - [obj] MultiscaleElectrophysiologyFile object
@@ -20,21 +20,22 @@ function [x, t] = importSignal(this, varargin)
 %                     'Second', 'Minute', 'Hour', and 'Day'
 %   filepath        - [str] (opt) directory of the session
 %   filename        = [str] (opt) filename of the channel
-%   subj_pw         - [str] (para) subject password
-%   sess_pw         - [str] (para) session password
-%   data_pw         - [str] (para) data password
+%   level_1_pw      - [str] (para) password of level 1 (default = '')
+%   level_2_pw      - [str] (para) password of level 2 (default = '')
+%   access_level    - [str] (para) data decode level to be used
+%                     (default = 1)
 % 
 % Output(s):
 %   x               - [num array] extracted signal
 %   t               - [num array] time indices of the signal in the file
 % 
 % Note:
-%   Import data from one channel.
+%   Import data from one channel of MEF 3.0 file into MatLab.
 % 
 % See also .
 
-% Copyright 2019-2020 Richard J. Cui. Created: Mon 04/29/2019 10:33:58.517 PM
-% $Revision: 0.9 $  $Date: Thu 01/09/2020  4:11:13.040 PM $
+% Copyright 2020 Richard J. Cui. Created: Wed 02/05/2020 10:24:56.722 PM
+% $Revision: 0.1 $  $Date: Wed 02/05/2020 10:24:56.722 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -66,34 +67,6 @@ else
     this.FileName = filename;
 end % if
 
-subj_pw = q.SubjectPassword;
-if isempty(subj_pw) == false
-    this.SubjectPassword = subj_pw;
-end % if
-
-sess_pw = q.SessionPassword;
-if isempty(sess_pw) == false
-    this.SessionPassword = sess_pw;
-end % if
-
-data_pw = q.DataPassword;
-if isempty(data_pw) == false
-    this.DataPassword = data_pw;
-end % if
-
-% check
-if se_index(1) < 1
-    se_index(1) = 1; 
-    warning('MultiscaleElectrophysiologyFile_2p1:ImportSignal',...
-        'Reqested data samples before the recording are discarded')
-end % if
-if se_index(2) > this.Header.number_of_samples
-    se_index(2) = this.Header.number_of_samples; 
-    warning('MultiscaleElectrophysiologyFile_2p1:ImportSignal',...
-        'Reqested data samples after the recording are discarded')
-end % if
-wholename = fullfile(filepath, filename);
-
 % verbose
 num_samples = diff(start_end)+1;
 if num_samples > 2^20
@@ -102,12 +75,50 @@ else
     verbo = false;
 end % if
 
+wholename = fullfile(filepath, filename);
+
+% password
+l1_pw = q.Level1Password;
+if isempty(l1_pw)
+    l1_pw = this.Level1Password;
+else
+    this.Level1Password = l1_pw;
+end % if
+
+l2_pw = q.Level2Password;
+if isempty(l2_pw)
+    l2_pw = this.Level2Password;
+else
+    this.Level2Password = l2_pw;
+end % if
+
+al = q.AccessLevel;
+if isempty(al)
+    al = this.AccessLevel;
+else
+    this.AccessLevel = al;
+end % if
+
+% check
+if se_index(1) < 1
+    se_index(1) = 1; 
+    warning('MultiscaleElectrophysiologyFile_3p0:ImportSignal:discardSample',...
+        'Reqested data samples before the recording are discarded')
+end % if
+if se_index(2) > this.Channel.metadata.section_2.number_of_samples
+    se_index(2) = this.Channel.metadata.section_2.number_of_samples; 
+    warning('MultiscaleElectrophysiologyFile_3p0:ImportSignal:discardSample',...
+        'Reqested data samples after the recording are discarded')
+end % if
+
 % =========================================================================
 % load the data
 % =========================================================================
-pw = this.SessionPassword;
+pw = this.processPassword('Level1Password', l1_pw,...
+                          'Level2Password', l2_pw,...
+                          'AccessLevel', al);
 if verbo, fprintf('-->Loading...'), end % if
-x = decompress_mef_2p1(wholename, se_index(1), se_index(2), pw);
+x = this.read_mef_ts_data_3p0(wholename, pw, 'samples', se_index(1), se_index(2));
 x = double(x(:)).'; % change to row vector
 % find the indices corresponding to physically collected data
 if nargout == 2
@@ -123,16 +134,16 @@ end
 function q = parseInputs(this, varargin)
 
 % defaults
-start_ind = this.SampleTime2Index(this.Header.recording_start_time);
-end_ind = this.SampleTime2Index(this.Header.recording_end_time);
+start_ind = this.SampleTime2Index(this.Channel.earliest_start_time);
+end_ind = this.SampleTime2Index(this.Channel.latest_end_time);
 defaultSE = [start_ind, end_ind];
 defaultSTUnit = 'index';
 expectedSTUnit = {'index', 'uutc', 'second', 'minute', 'hour', 'day'};
 default_fp = '';
 default_fn = '';
-default_subjpw = '';
-default_sesspw = '';
-default_datapw = '';
+default_l1pw = '';
+default_l2pw = '';
+default_al = []; % access level
 
 % parse rules
 p = inputParser;
@@ -143,9 +154,9 @@ p.addOptional('st_unit', defaultSTUnit,...
     @(x) any(validatestring(x, expectedSTUnit)));
 p.addOptional('filepath', default_fp, @isstr);
 p.addOptional('filename', default_fn, @isstr);
-p.addParameter('SubjectPassword', default_subjpw, @isstr);
-p.addParameter('SessionPassword', default_sesspw, @isstr);
-p.addParameter('DataPassword', default_datapw, @isstr);
+p.addParameter('Level1Password', default_l1pw, @isstr);
+p.addParameter('Level2Password', default_l2pw, @isstr);
+p.addParameter('AccessLevel', default_al, @isnumeric);
 
 % parse and return the results
 p.parse(this, varargin{:});

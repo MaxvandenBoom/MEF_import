@@ -1,17 +1,18 @@
-function data = read_mef_ts_data_3p0(channel_path, varargin)
-% READ_MEF_TS_DATA_3P0 Read the MEF 3.0 data from a time-series channel
+function data = read_mef_ts_data_3p0(this, channel_path, varargin)
+% MultiscaleElectrophysiologyFile_3p0.READ_MEF_TS_DATA_3P0 Read the MEF 3.0 data from a time-series channel
 %	
 % Syntax:
-%   data = read_mef_ts_data_3p0(channel_path)
+%   data = read_mef_ts_data_3p0(this, channel_path)
 %   data = read_mef_ts_data_3p0(__, password)
 %   data = read_mef_ts_data_3p0(__, password, range_type)
 %   data = read_mef_ts_data_3p0(__, password, range_type, begin, stop)
 % 
 % Input(s):
-%   channel_path    - [char] path (absolute or relative) to the MEF3 
+%   this            - [obj] MultiscaleElectrophysiologyFile_3p0 object
+%   channel_path    - [char] (opt) path (absolute or relative) to the MEF3 
 %                     channel folder
-%   password        - [struct] (opt) password to the MEF 3.0 data; Pass 
-%                     empty struct if not encrypted (default = struct([]))
+%   password        - [str] (opt) password to the MEF 3.0 data; Pass 
+%                     empty string if not encrypted (default = '')
 %                     .
 %   range_type      - [char] (opt) modality that is used to define the 
 %                     data-range to read, either 'time' or 'samples'
@@ -55,7 +56,7 @@ function data = read_mef_ts_data_3p0(channel_path, varargin)
 %   program.  If not, see <https://www.gnu.org/licenses/>.
 
 % Copyright 2020 Richard J. Cui. Adapted: Fri 01/31/2020 11:59:20.073 PM
-% $Revision: 0.2 $  $Date: Sun 02/02/2020 10:23:33.991 AM $
+% $Revision: 0.3 $  $Date: Wed 02/05/2020 11:36:04.992 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -65,7 +66,29 @@ function data = read_mef_ts_data_3p0(channel_path, varargin)
 % =========================================================================
 % parse inputs
 % =========================================================================
-q = parseInputs(channel_path, varargin{:});
+q = parseInputs(this, channel_path, varargin{:});
+ch_path = q.channel_path;
+pw = q.password;
+rtype = q.range_type;
+begin = q.begin;
+stop = q.stop;
+
+if isempty(ch_path)
+    ch_path = fullfile(this.FilePath, this.FileName);
+end % if
+
+if isempty(pw)
+    pw = this.processPassword;
+end % if
+
+if strcmpi(rtype, 'samples') == true && begin ~= -1
+    begin = begin-1; % change to python convention
+end % if
+
+% =========================================================================
+% main
+% =========================================================================
+data = read_mef_ts_data(ch_path, pw, rtype, begin, stop);
 
 end
 
@@ -75,17 +98,26 @@ end
 function q = parseInputs(varargin)
 
 % defaults
-default_pw = strut([]); % password
+default_cp = '';
+default_pw = ''; % password
 default_rt = 'samples'; % range_type
 default_bg = -1; % begin
 default_sp = -1; % stop
 
+expected_type = {'samples', 'time'};
+
 % parse rules
 p = inputParser;
-p.addRequired('channel_path', @isstr);
-p.addOptional('password', default_pw, @isstruct);
+p.addRequired('this', @isobject);
+p.addOptional('channel_path', default_cp, @isstr);
+p.addOptional('password', default_pw, @isstr);
+p.addOptional('range_type', default_rt, @(x) any(validatestring(x, expected_type)));
+p.addOptional('begin', default_bg, @isnumeric);
+p.addOptional('stop', default_sp, @isnumeric);
 
 % parse and return the results
+p.parse(varargin{:});
+q = p.Results;
 
 end % funciton
 
