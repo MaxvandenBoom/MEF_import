@@ -1,5 +1,5 @@
 function out_time = SampleUnitConvert(this, in_time, varargin)
-% MULTISCALEELECTROPHYSIOLOGYFILE_2P1.SAMPLEUNITCONVERT convert units of time points
+% MULTISCALEELECTROPHYSIOLOGYFILE_3P0.SAMPLEUNITCONVERT convert units of time points
 % 
 % Syntax:
 %   out_time = SampleUnitConvert(this, in_time)

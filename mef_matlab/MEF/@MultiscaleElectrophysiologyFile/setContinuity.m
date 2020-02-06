@@ -1,5 +1,5 @@
 function this = setContinuity(this, cont_table)
-% SETCONTINUITY Set Continuity table
+% MULTISCALEELECTROPHYSIOLOGYFILE.SETCONTINUITY Set Continuity table
 % 
 % Syntax:
 %   cont_table = setContinuity(this, cont_table)

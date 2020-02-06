@@ -31,7 +31,7 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
     % See also this.readHeader.
     
     % Copyright 2019-2020 Richard J. Cui. Created: Mon 04/29/2019  8:11:02.485 PM
-    % $Revision: 1.0 $  $Date: Wed 02/05/2020  9:58:04.511 AM $
+    % $Revision: 1.1 $  $Date: Thu 02/06/2020  9:38:02.009 AM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -149,9 +149,7 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
         this = setSubjectPassword(this, password) % set MEF subject password
         this = setSessionPassword(this, password) % set MEF session password
         this = setDataPassword(this, password) % set MEF data password
-        this = setContinuity(this, cont_table) % set Continuity table
         event_table = getMAFEvent(this, maf_file) % get event table from MAF
-        out_time = SampleUnitConvert(this, in_time, varargin) % convert units of time points
     end % methods
 end % classdef
 

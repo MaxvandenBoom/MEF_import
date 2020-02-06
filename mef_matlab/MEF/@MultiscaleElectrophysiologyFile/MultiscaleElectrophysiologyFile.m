@@ -1,5 +1,5 @@
 classdef MultiscaleElectrophysiologyFile < handle
-    % Class MultiscaleElectrophysiologyFile process MEF channel data
+    % Class MULTISCALEELECTROPHYSIOLOGYFILE process MEF channel data
     % 
     % Syntax:
     %   this = MultiscaleElectrophysiologyFile;
@@ -13,7 +13,7 @@ classdef MultiscaleElectrophysiologyFile < handle
     % See also .
     
     % Copyright 2020 Richard J. Cui. Created: Tue 02/04/2020  2:21:31.965 PM
-    % $Revision: 0.2 $  $Date: Wed 02/05/2020  9:58:04.511 AM $
+    % $Revision: 0.3 $  $Date: Thu 02/06/2020  9:38:02.009 AM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -62,6 +62,8 @@ classdef MultiscaleElectrophysiologyFile < handle
         sti = getSampleTimeInterval(this, varargin) % boudn of sampling interval
         [sample_index, sample_yn] = SampleTime2Index(this, varargin) % time --> index
         [sample_time, sample_yn] = SampleIndex2Time(this, varargin) % index --> time
+        this = setContinuity(this, cont_table) % set Continuity table
+        out_time = SampleUnitConvert(this, in_time, varargin) % convert units of time points
     end % methods
 end
 

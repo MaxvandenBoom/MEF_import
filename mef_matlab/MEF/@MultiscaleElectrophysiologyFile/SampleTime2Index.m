@@ -30,6 +30,7 @@ function [sample_index, sample_yn] = SampleTime2Index(this, varargin)
 %
 % Email: richard.cui@utoronto.ca
 
+% TODO: need more accurate estimate from uUTC to sample indexes
 % parse inputs
 % ------------
 q = parseInputs(this, varargin{:});
