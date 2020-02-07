@@ -58,7 +58,7 @@ end % if
 if isempty(sess_path)
     sess_path = this.SessionPath;
     if isempty(sess_path)
-        warning('MEFSession_2p1:importSession',...
+        warning('MEFSession:importSession:noSession',...
             'No session is selected')
         X = [];
         t = [];
@@ -69,7 +69,7 @@ end
 if isempty(sel_chan)
     sel_chan = this.ChannelName;
     if isempty(sel_chan)
-        warning('MEFSession_2p1:importSession',...
+        warning('MEFSession:importSession:emptySession',...
             'Either the session is empty or no channel has been selected')
         X = [];
         t = [];

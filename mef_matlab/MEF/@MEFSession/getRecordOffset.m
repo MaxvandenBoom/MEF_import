@@ -1,5 +1,5 @@
 function record_offset = getRecordOffset(this, unit)
-% MEFSESSION_2P1.GETRECORDOFFSET get offset time of recording in specified unit
+% MEFSESSION.GETRECORDOFFSET get offset time of recording in specified unit
 % 
 % Syntax:
 %   record_offset = getRecordOffset(this, unit)
@@ -16,7 +16,7 @@ function record_offset = getRecordOffset(this, unit)
 % Seaa slso .
 
 % Copyright 2020 Richard J. Cui. Created: Mon 01/20/2020  4:30:22.035 PM
-% $Revision: 0.1 $  $Date: Mon 01/20/2020  4:30:22.035 PM $
+% $Revision: 0.2 $  $Date: Thu 02/06/2020  9:23:51.173 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA

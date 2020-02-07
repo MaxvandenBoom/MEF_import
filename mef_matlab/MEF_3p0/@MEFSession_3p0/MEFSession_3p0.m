@@ -66,6 +66,7 @@ classdef MEFSession_3p0 < MEFSession & MultiscaleElectrophysiologyFile_3p0
             this.SessionPath = q.sesspath; % set session path directory
             this.Password = q.password; % set password
             this.MetaData = this.read_mef_session_metadata_3p0;
+            this.get_sessinfo;
             
             % set MEF version to serve
             if isempty(this.MEFVersion) == true
@@ -88,6 +89,7 @@ classdef MEFSession_3p0 < MEFSession & MultiscaleElectrophysiologyFile_3p0
     methods
         metadata = read_mef_session_metadata_3p0(this, varargin) % get session metadata of MEF 3.0
         valid_yn = checkSessValid(this, varargin) % check validity of session info
+        [X, t] = import_sess(this, varargin) % import session of MEF 3.0 data
     end % methods
 end % classdef
 
