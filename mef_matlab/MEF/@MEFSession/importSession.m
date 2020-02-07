@@ -3,16 +3,17 @@ function [X, t] = importSession(this, varargin)
 % 
 % Syntax:
 %   [X, t] = importSession(this)
-%   [X, t] = importSession(__, begin_stop)
-%   [X, t] = importSession(__, begin_stop, bs_unit)
-%   [X, t] = importSession(__, begin_stop, bs_unit, sess_path)
+%   [X, t] = importSession(__, start_end)
+%   [X, t] = importSession(__, start_end, se_unit)
+%   [X, t] = importSession(__, start_end, se_unit, sess_path)
 %   [X, t] = importSession(__, 'SelectedChannel', sel_chan, 'Password', pw)
 % 
 % Imput(s):
 %   this            - [obj] MEFSession_2p1 object
-%   begin_stop      - [num] (opt) 1 x 2 array of begin and stop points of
-%                     importing the session (default: the entire session)
-%   bs_unit         - [str] (opt) unit of begin_stop: 'uUTC' (default),
+%   start_end       - [num] (opt) 1 x 2 array of begin and stop points of
+%                     importing the session, relative time points (default:
+%                     the entire session)
+%   se_unit         - [str] (opt) unit of start_end: 'uUTC' (default),
 %                     'Index', 'Second', 'Minute', 'Hour', and 'Day'.
 %   sess_path       - [str] (opt) session path (default: this.SessionPath)
 %   sel_chan        - [str array] (para) the names of the selected channels
@@ -44,14 +45,14 @@ function [X, t] = importSession(this, varargin)
 % parse inputs
 % =========================================================================
 q = parseInputs(this, varargin{:});
-begin_stop = q.begin_stop;
-bs_unit = q.bs_unit;
+start_end = q.start_end;
+se_unit = q.se_unit;
 sess_path = q.sess_path;
 sel_chan = q.SelectedChannel;
 pw = q.Password;
 
-if isempty(begin_stop)
-    begin_stop = this.BeginStop;
+if isempty(start_end)
+    start_end = this.BeginStop;
 end % if
 
 if isempty(sess_path)
@@ -83,7 +84,8 @@ end % if
 % =========================================================================
 % input session
 % =========================================================================
-[X, t] = this.import_sess(begin_stop, bs_unit, sel_chan, pw);
+begin_stop = this.relative2absTimePoint(start_end, se_unit); % to absolute time points
+[X, t] = this.import_sess(begin_stop, se_unit, sel_chan, pw);
 
 end % function
 
@@ -93,7 +95,7 @@ end % function
 function q = parseInputs(this, varargin)
 
 % defaults
-default_bs = []; % begin_stop
+default_bs = []; % start_end
 default_ut = 'uutc'; % unit
 expected_ut = {'index', 'uutc', 'msec', 'second', 'minute', 'hour', 'day'};
 default_sp = ''; % session path
@@ -103,9 +105,9 @@ default_pw = struct([]); % password
 % parse rules
 p = inputParser;
 p.addRequired('this', @isobject);
-p.addOptional('begin_stop', default_bs,...
+p.addOptional('start_end', default_bs,...
     @(x) isnumeric(x) & numel(x) == 2 & x(1) <= x(2));
-p.addOptional('bs_unit', default_ut, @(x) any(validatestring(x, expected_ut)));
+p.addOptional('se_unit', default_ut, @(x) any(validatestring(x, expected_ut)));
 p.addOptional('sess_path', default_sp, @isstr);
 p.addParameter('SelectedChannel', default_sc, @isstring) % must be string array
 p.addParameter('Password', default_pw, @isstruct);

@@ -43,7 +43,7 @@ function OUTEEG = mefimport(this, INEEG, varargin)
 % See also eeglab, eeg_checkset, pop_mefimport. 
 
 % Copyright 2019-2020 Richard J. Cui. Created: Wed 05/08/2019  3:19:29.986 PM
-% $Revision: 1.7 $  $Date: Thu 01/23/2020  9:20:56.571 PM $
+% $Revision: 1.8 $  $Date: Thu 02/06/2020  7:02:58.225 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -160,8 +160,7 @@ OUTEEG.srate = this.SamplingFrequency; % in Hz
 
 % data
 % ----
-begin_stop = this.relative2absTimePoint(start_end, se_unit);
-[data, t_index] = this.importSession(begin_stop, se_unit, sess_path,...
+[data, t_index] = this.importSession(start_end, se_unit, sess_path,...
     'SelectedChannel', sel_chan, 'Password', pw);
 OUTEEG.data = data;
 
