@@ -10,13 +10,13 @@ function [sess_info, unit] = get_info_data(this)
 % Output(s):
 %   unit            - [str] unit of begin_stop: 'Index' (default), 'uUTC',
 %                     'Second', 'Minute', 'Hour', and 'Day'
-%   sess_info       - [table] N x 13 tabel: 'ChannelName', 'SamplingFreq',
+%   sess_info       - [table] N x 14 tabel: 'ChannelName', 'SamplingFreq',
 %                     'Begin', 'Stop', 'Samples' 'IndexEntry',
 %                     'DiscountinuityEntry', 'SubjectEncryption',
 %                     'SessionEncryption', 'DataEncryption', 'Version',
 %                     'Institution', 'SubjectID', 'AcquistitionSystem',
-%                     'CompressionAlgorithm', where N is the number of
-%                     channels.
+%                     'CompressionAlgorithm', 'Continuity', where N is the
+%                     number of channels.
 %
 % Example:
 %
@@ -29,15 +29,26 @@ function [sess_info, unit] = get_info_data(this)
 %
 % See also MEFSession_2p1.
 
+% Copyright 2020 Richard J. Cui. Created: Fri 01/03/2020  4:19:10.683 PM
+% $ Revision: 0.2 $  $ Date: Fri 02/07/2020 11:34:16.078 PM $
+%
+% 1026 Rocky Creek Dr NE
+% Rochester, MN 55906, USA
+%
+% Email: richard.cui@utoronto.ca
+
+% =========================================================================
+% main
+% =========================================================================
 sess_path = this.SessionPath;
 pw = this.Password;
 var_names = {'ChannelName', 'SamplingFreq', 'Begin', 'Stop', 'Samples',...
     'IndexEntry', 'DiscountinuityEntry', 'SubjectEncryption',...
     'SessionEncryption', 'DataEncryption', 'Version', 'Institution',...
-    'SubjectID', 'AcquisitionSystem', 'CompressionAlgorithm'};
+    'SubjectID', 'AcquisitionSystem', 'CompressionAlgorithm', 'Continuity'};
 var_types = {'string', 'double', 'double', 'double', 'double', 'double',...
     'double', 'logical', 'logical', 'logical', 'string', 'string', 'string',...
-    'string', 'string'};
+    'string', 'string', 'cell'};
 
 chan_list = dir(fullfile(sess_path, '*.mef')); % assume all channel data in one dir
 if isempty(chan_list)
@@ -55,6 +66,11 @@ else % if
         header_k = this.readHeader(fullfile(fp_k, fn_k), pw.Subject);
         mef_ver = sprintf('%d.%d', header_k.header_version_major,...
             header_k.header_version_minor);
+        ch2_k = MultiscaleElectrophysiologyFile_2p1(fp_k, fn_k,...
+            'SubjectPassword', pw.Subject,...
+            'SessionPassword', pw.Session,...
+            'DataPassword', pw.Data);
+        seg_cont_k = ch2_k.analyzeContinuity;
         
         sess_info.ChannelName(k)  = header_k.channel_name;
         sess_info.SamplingFreq(k) = header_k.sampling_frequency;
@@ -71,6 +87,7 @@ else % if
         sess_info.SubjectID(k)    = header_k.subject_id;
         sess_info.AcquisitionSystem(k) = header_k.acquisition_system;
         sess_info.CompressionAlgorithm(k) = header_k.compression_algorithm;
+        sess_info.Continuity{k} = seg_cont_k;
     end % for
 end % if
 

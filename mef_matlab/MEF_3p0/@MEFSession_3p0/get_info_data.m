@@ -10,13 +10,13 @@ function [sess_info, unit] = get_info_data(this)
 % Output(s):
 %   unit            - [str] unit of begin_stop: 'Index' (default), 'uUTC',
 %                     'Second', 'Minute', 'Hour', and 'Day'
-%   sess_info       - [table] N x 13 tabel: 'ChannelName', 'SamplingFreq',
+%   sess_info       - [table] N x 14 tabel: 'ChannelName', 'SamplingFreq',
 %                     'Begin', 'Stop', 'Samples' 'IndexEntry',
 %                     'DiscountinuityEntry', 'SubjectEncryption',
 %                     'SessionEncryption', 'DataEncryption', 'Version',
 %                     'Institution', 'SubjectID', 'AcquistitionSystem',
-%                     'CompressionAlgorithm', where N is the number of
-%                     channels.
+%                     'CompressionAlgorithm', 'Continuity', where N is the
+%                     number of channels.
 %
 % Example:
 %
@@ -29,20 +29,24 @@ function [sess_info, unit] = get_info_data(this)
 %
 % See also MEFSession_3p0, get_sessinfo.
 
+% Copyright 2020 Richard J. Cui. Created: Fri 01/03/2020  4:19:10.683 PM
+% $ Revision: 0.2 $  $ Date: Fri 02/07/2020 11:34:16.078 PM $
+%
+% 1026 Rocky Creek Dr NE
+% Rochester, MN 55906, USA
+%
+% Email: richard.cui@utoronto.ca
+
 % =========================================================================
 % main
 % =========================================================================
-% sess_path = this.SessionPath;
-% pw = this.Password;
 var_names = {'ChannelName', 'SamplingFreq', 'Begin', 'Stop', 'Samples',...
     'IndexEntry', 'DiscountinuityEntry', 'SubjectEncryption',...
     'SessionEncryption', 'DataEncryption', 'Version', 'Institution',...
-    'SubjectID', 'AcquisitionSystem', 'CompressionAlgorithm'};
+    'SubjectID', 'AcquisitionSystem', 'CompressionAlgorithm', 'Continuity'};
 var_types = {'string', 'double', 'double', 'double', 'double', 'double',...
     'double', 'logical', 'logical', 'logical', 'string', 'string', 'string',...
-    'string', 'string'};
-
-% chan_list = dir(fullfile(sess_path, '*.mef')); % assume all channel data in one dir
+    'string', 'string', 'cell'};
 
 % get the metadata
 metadata = this.MetaData;
@@ -71,12 +75,11 @@ else % if
         mef_ver = sprintf('%d.%d', header_k.mef_version_major,...
             header_k.mef_version_minor);
         % analysis discountinuity
-        mef3 = MultiscaleElectrophysiologyFile_3p0(fp, fn_k,...
+        ch3_k = MultiscaleElectrophysiologyFile_3p0(fp, fn_k,...
             'Level1Password', this.Password.Level1Password,...
             'Level2Password', this.Password.Level2Password,...
             'AccessLevel', this.Password.AccessLevel);
-        seg_cont_k = mef3.analyzeContinuity;
-        
+        seg_cont_k = ch3_k.analyzeContinuity;
         
         sess_info.ChannelName(k)  = tsc_k.name;
         sess_info.SamplingFreq(k) = tsc_k.metadata.section_2.sampling_frequency;
@@ -97,9 +100,12 @@ else % if
         sess_info.Institution(k)  = tsc_k.metadata.section_3.recording_location;
         sess_info.SubjectID(k)    = tsc_k.metadata.section_3.subject_ID;
         
-        % TODA: NA in MEF 3.0
+        % TODO: NA in MEF 3.0
         sess_info.AcquisitionSystem(k) = 'not available';
         sess_info.CompressionAlgorithm(k) = 'not available';
+
+        % continuity table
+        sess_info.Continuity{k} = seg_cont_k;
     end % for
 end % if
 

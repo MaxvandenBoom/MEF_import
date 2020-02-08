@@ -39,13 +39,16 @@ classdef MultiscaleElectrophysiologyFile < handle
         Header              % [struct] header information of MEF file
         BlockIndexData      % [table] data of block indices (see 
                             % readBlockIndexData.m for the detail)
-        Continuity          % [table] data segments of conituous sampling (see 
-                            % analyzeContinuity.m for the detail)
         ChanSamplingFreq    % sampling frequency of channel (Hz)
         SampleTimeInterval  % sample time interval = [lower, upper] (uUTC),
                             % indicating the lower and upper bound of the
                             % time interval between two successive samples
     end % properties: protected, hidden
+    
+    properties
+        Continuity          % [table] data segments of conituous sampling (see
+                            % analyzeContinuity.m for the detail)
+    end % properties
 
     % =====================================================================
     % methods

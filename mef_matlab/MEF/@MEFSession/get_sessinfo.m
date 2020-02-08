@@ -62,6 +62,7 @@ if isempty(sess_info)
     subj_id = '';
     acq_sys = '';
     comp_alg = '';
+    cont = table([]);
     warning('MEFSession_2p1:get_sessinfo',...
         'The session is likely empty.')
 else
@@ -77,6 +78,7 @@ else
         subj_id = unique(sess_info.SubjectID);
         acq_sys = unique(sess_info.AcquisitionSystem);
         comp_alg = unique(sess_info.CompressionAlgorithm);
+        cont = sess_info.Continuity{1}; % TODO
     else
         warning('MEFSession_3p0:get_sessinfo',...
             'The session is either empty or the data are not consistent. Please check messages')
@@ -92,6 +94,7 @@ else
         subj_id = '';
         acq_sys = '';
         comp_alg = '';
+        cont = table([]);
     end % if
 end % if
 
@@ -109,6 +112,7 @@ this.SubjectID = subj_id;
 this.AcquisitionSystem = acq_sys;
 this.CompressionAlgorithm = comp_alg;
 this.SessionInformation = sess_info;
+this.Continuity = cont;
 
 % =========================================================================
 % Output
