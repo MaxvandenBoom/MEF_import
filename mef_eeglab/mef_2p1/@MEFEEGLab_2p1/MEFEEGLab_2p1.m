@@ -1,4 +1,4 @@
-classdef MEFEEGLab_2p1 < MEFSession_2p1
+classdef MEFEEGLab_2p1 < MEFSession_2p1 & MEFEEGLab
     % MEFEEGLAB_2P1 process MEF 2.1 in EEGLab
     %
     % Syntax:

@@ -1,4 +1,4 @@
-classdef MEFEEGLab_3p0 < MEFSession_3p0
+classdef MEFEEGLab_3p0 < MEFSession_3p0 & MEFEEGLab
     % MEFEEGLAB_3P0 process MEF 3.0 in EEGLab
     % 
     % Syntax:
