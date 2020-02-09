@@ -11,7 +11,7 @@ classdef MEFSession < handle
     % See also .
     
     % Copyright 2020 Richard J. Cui. Created: TThu 02/06/2020 10:07:26.965 AM
-    % $Revision: 0,1 $  $Date: Thu 02/06/2020 10:07:26.965 AM $
+    % $Revision: 0,2 $  $Date: Sat 02/08/2020 11:34:43.160 PM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -65,6 +65,7 @@ classdef MEFSession < handle
         varargout = get_sessinfo(this) % get sess info from data
         [X, t] = importSession(this, varargin) % import a session
         record_offset = getSessionRecordOffset(this, varargin) % get offset time of recording in specified unit
+        rel_time = abs2relativeTimePoint(this, abs_time, unit) % absolute to relative time points
     end % methods
 end
 

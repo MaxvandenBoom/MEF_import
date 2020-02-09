@@ -19,7 +19,7 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1 & MEFSession
     % See also get_sessinfo.
 
 	% Copyright 2019-2020 Richard J. Cui. Created: Mon 12/30/2019 10:52:49.006 PM
-	% $Revision: 1.0 $  $Date: Thu 02/06/2020 12:39:18.909 PM $
+	% $Revision: 1.2 $  $Date: Sat 02/08/2020 11:34:43.160 PM $
 	%
 	% 1026 Rocky Creek Dr NE
 	% Rochester, MN 55906, USA
@@ -81,7 +81,6 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1 & MEFSession
     % -------------
     methods
         valid_yn = checkSessValid(this, varargin) % check validity of session info
-        rel_time = abs2relativeTimePoint(this, abs_time, unit) % absolute to relative time points
         abs_time = relative2absTimePoint(this, rel_time, unit) % relative to absolute time points
         out_time = SessionUnitConvert(this, in_time, varargin) % convert units of relative time points
         [sessionifo, unit] = get_info_data(this) % get session info from data

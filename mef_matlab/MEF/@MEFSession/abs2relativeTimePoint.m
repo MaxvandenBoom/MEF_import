@@ -35,7 +35,7 @@ unit = q.unit;
 % =========================================================================
 % main
 % =========================================================================
-offset = this.getRecordOffset(unit);
+offset = this.getSessionRecordOffset(unit);
 rel_time = abs_time-offset;
 
 end
