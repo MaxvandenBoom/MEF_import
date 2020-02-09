@@ -21,7 +21,7 @@ function dc_event = findDiscontEvent(this, start_end, unit)
 % See also .
 
 % Copyright 2020 Richard J. Cui. Created: Sun 01/12/2020  2:35:48.393 PM
-% $Revision: 0.2 $  $Date: Mon 01/13/2020 11:48:37.703 PM $
+% $Revision: 0.3 $  $Date: Sun 02/09/2020  4:50:54.974 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -45,14 +45,15 @@ end % if
 % main process
 % =========================================================================
 % converte start_end to index if not
-if strcmpi(unit, 'index')
-    se_ind = start_end;
-else
-    se_ind = this.SampleTime2Index(start_end, unit);
-end % if
+% if strcmpi(unit, 'index')
+%     se_ind = start_end;
+% else
+%     se_ind = this.SampleTime2Index(start_end, unit);
+% end % if
+se_ind = this.SessionUnitCovert(start_end, unit, 'index');
 
 % find the continuity blocks
-seg_cont = this.Continuity;
+seg_cont = this.SessionContinuity;
 cont_ind = se_ind(1) <= seg_cont.SampleIndexEnd...
     & se_ind(2) >= seg_cont.SampleIndexStart;
 dc_start = seg_cont.SampleIndexStart(cont_ind); % discont start in index

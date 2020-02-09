@@ -39,6 +39,7 @@ classdef MEFEEGLab < handle
     % -------------
     methods
         OUTEEG = mefimport(this, INEEG, varargin) % import session to EEGLab
+        dc_event = findDiscontEvent(this, start_end, unit) % process discontinuity events
     end % methods
 end % classdef
 

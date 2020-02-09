@@ -81,7 +81,7 @@ classdef MEFEEGLab_2p1 < MEFSession_2p1 & MEFEEGLab
     % other metheds
     % -------------
     methods
-        dc_event = findDiscontEvent(this, start_end, unit) % process discontinuity events
+
     end % methods
 end
 
