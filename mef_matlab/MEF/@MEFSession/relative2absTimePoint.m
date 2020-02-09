@@ -1,5 +1,5 @@
 function abs_time = relative2absTimePoint(this, rel_time, unit)
-% MEFSESSION_2P1.RELATIVE2ABSTIMEPOINT convert relative time point to absolute one
+% MEFSESSION.RELATIVE2ABSTIMEPOINT convert relative time point to absolute one
 % 
 % Syntax:
 %   abs_time = abs2relativeTimePoint(this, rel_time, unit)
@@ -18,7 +18,7 @@ function abs_time = relative2absTimePoint(this, rel_time, unit)
 % Seaa slso .
 
 % Copyright 2020 Richard J. Cui. Created: Mon 01/20/2020  4:30:22.035 PM
-% $Revision: 0.1 $  $Date: Mon 01/20/2020  4:30:22.035 PM $
+% $Revision: 0.2 $  $Date: Sat 02/08/2020 11:40:56.279 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -35,7 +35,7 @@ unit = q.unit;
 % =========================================================================
 % main
 % =========================================================================
-offset = this.getRecordOffset(unit);
+offset = this.getSessionRecordOffset(unit);
 abs_time = rel_time+offset;
 
 end

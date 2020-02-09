@@ -81,7 +81,6 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1 & MEFSession
     % -------------
     methods
         valid_yn = checkSessValid(this, varargin) % check validity of session info
-        abs_time = relative2absTimePoint(this, rel_time, unit) % relative to absolute time points
         out_time = SessionUnitConvert(this, in_time, varargin) % convert units of relative time points
         [sessionifo, unit] = get_info_data(this) % get session info from data
         [X, t] = import_sess(this, varargin) % import session of MEF 2.1 data

@@ -1,5 +1,5 @@
 function rel_time = abs2relativeTimePoint(this, abs_time, unit)
-% MEFSESSION_2P1.ABS2RELATIVETIMEPOINT convert absolute time point to relative one
+% MEFSESSION.ABS2RELATIVETIMEPOINT convert absolute time point to relative one
 % 
 % Syntax:
 %   rel_time = abs2relativeTimePoint(this, abs_time, unit)
