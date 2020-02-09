@@ -35,13 +35,16 @@ function seg_cont = analyzeContinuity(this, varargin)
 % See also .
 
 % Copyright 2019-2020 Richard J. Cui. Created: Sat 05/04/2019 10:35:40.540 PM
-% $Revision: 0.3 $  $Date: Wed 02/05/2020  3:19:33.974 PM $
+% $Revision: 0.4 $  $Date: Sun 02/09/2020 10:40:13.746 AM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
 %
 % Email: richard.cui@utoronto.ca
 
+% =========================================================================
+% parse inputs
+% =========================================================================
 q = parseInputs(this, varargin{:});
 
 if isempty(q)
