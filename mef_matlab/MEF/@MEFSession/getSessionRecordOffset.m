@@ -1,4 +1,4 @@
-function record_offset = getSessionRecordOffset(this, unit)
+function record_offset = getSessionRecordOffset(this, varargin)
 % MEFSESSION.GETSESSIONRECORDOFFSET get offset time of recording in specified unit
 % 
 % Syntax:
@@ -6,7 +6,8 @@ function record_offset = getSessionRecordOffset(this, unit)
 % 
 % Input(s):
 %   this            - [obj] MEFSession_2p1 object
-%   unit            - [char] unit of the output offset
+%   unit            - [str] (opt) unit of the output offset (default =
+%                     uUTC)
 % 
 % Output(s):
 %   record_offset   - [num] recording offset of time
@@ -26,7 +27,7 @@ function record_offset = getSessionRecordOffset(this, unit)
 % =========================================================================
 % parse inputs
 % =========================================================================
-q = parseInputs(this, unit);
+q = parseInputs(this, varargin{:});
 unit = q.unit;
 
 % =========================================================================
@@ -43,12 +44,13 @@ end % funciton
 function q = parseInputs(varargin)
 
 % default
+default_ut = 'uutc';
 expected_ut = {'index', 'uutc', 'msec', 'second', 'minute', 'hour', 'day'};
 
 % parse rules
 p = inputParser;
 p.addRequired('this', @isobject);
-p.addRequired('unit',  @(x) any(validatestring(x, expected_ut)));
+p.addOptional('unit', default_ut, @(x) any(validatestring(x, expected_ut)));
 
 % parse and return the results
 p.parse(varargin{:});

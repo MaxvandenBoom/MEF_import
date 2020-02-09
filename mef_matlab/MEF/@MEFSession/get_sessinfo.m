@@ -51,17 +51,17 @@ function varargout = get_sessinfo(this)
 [sess_info, unit] = this.get_info_data;
 
 if isempty(sess_info)
-    si_value = get_sess_info_value(sess_info, true);
+    si_value = get_sess_info_value(sess_info, unit, true);
     warning('MEFSession:get_sessinfo:emptySession',...
         'The session is likely empty.')
 else
     this.SessionInformation = sess_info;
     if this.checkSessValid == true
-        si_value = get_sess_info_value(sess_info, false);
+        si_value = get_sess_info_value(sess_info, unit, false);
     else
         warning('MEFSession:get_sessinfo:emptySession',...
             'The session is either empty or the data are not consistent. Please check messages')
-        si_value = get_sess_info_value(sess_info, true);
+        si_value = get_sess_info_value(sess_info, unit, true);
     end % if
 end % if
 
@@ -102,7 +102,7 @@ end % function MEF_sessinfo
 % =========================================================================
 % Subroutines
 % =========================================================================
-function si_value = get_sess_info_value(sess_info, set_empty)
+function si_value = get_sess_info_value(sess_info, unit, set_empty)
 
 if set_empty == true
     si_value = struct('channame', '',...
@@ -124,6 +124,7 @@ else
     si_value.num_data_block = unique(sess_info.IndexEntry);
     si_value.num_time_gap = unique(sess_info.DiscountinuityEntry)-1;
     si_value.begin_stop = [unique(sess_info.Begin), unique(sess_info.Stop)];
+    si_value.unit = unit;
     si_value.institution = unique(sess_info.Institution);
     si_value.subj_id = unique(sess_info.SubjectID);
     si_value.acq_sys = unique(sess_info.AcquisitionSystem);

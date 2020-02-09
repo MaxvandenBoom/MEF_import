@@ -64,7 +64,7 @@ classdef MEFSession < handle
     methods
         varargout = get_sessinfo(this) % get sess info from data
         [X, t] = importSession(this, varargin) % import a session
-        record_offset = getSessionRecordOffset(this, unit) % get offset time of recording in specified unit
+        record_offset = getSessionRecordOffset(this, varargin) % get offset time of recording in specified unit
     end % methods
 end
 
