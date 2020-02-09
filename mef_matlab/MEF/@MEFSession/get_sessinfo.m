@@ -36,7 +36,7 @@ function varargout = get_sessinfo(this)
 % See also MEFSession_2p1, get_info_data.
 
 % Copyright 2020 Richard J. Cui. Created: Fri 01/03/2020  4:19:10.683 PM
-% $ Revision: 0.4 $  $ Date: Thu 02/06/2020  1:20:08.343 PM $
+% $ Revision: 0.5 $  $ Date: Sat 02/08/2020 10:11:35.784 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -51,68 +51,35 @@ function varargout = get_sessinfo(this)
 [sess_info, unit] = this.get_info_data;
 
 if isempty(sess_info)
-    channame = '';
-    fs = NaN;
-    samples = NaN;
-    num_data_block = [];
-    num_time_gap = [];
-    begin_stop = [];
-    unit = '';
-    institution = '';
-    subj_id = '';
-    acq_sys = '';
-    comp_alg = '';
-    cont = table([]);
-    warning('MEFSession_2p1:get_sessinfo',...
+    si_value = get_sess_info_value(sess_info, true);
+    warning('MEFSession:get_sessinfo:emptySession',...
         'The session is likely empty.')
 else
     this.SessionInformation = sess_info;
     if this.checkSessValid == true
-        channame = sess_info.ChannelName';
-        fs = unique(sess_info.SamplingFreq);
-        samples = unique(sess_info.Samples);
-        num_data_block = unique(sess_info.IndexEntry);
-        num_time_gap = unique(sess_info.DiscountinuityEntry)-1;
-        begin_stop = [unique(sess_info.Begin), unique(sess_info.Stop)];
-        institution = unique(sess_info.Institution);
-        subj_id = unique(sess_info.SubjectID);
-        acq_sys = unique(sess_info.AcquisitionSystem);
-        comp_alg = unique(sess_info.CompressionAlgorithm);
-        cont = sess_info.Continuity{1}; % TODO
+        si_value = get_sess_info_value(sess_info, false);
     else
-        warning('MEFSession_3p0:get_sessinfo',...
+        warning('MEFSession:get_sessinfo:emptySession',...
             'The session is either empty or the data are not consistent. Please check messages')
-        sess_info = table;
-        channame = '';
-        fs = NaN;
-        samples = NaN;
-        num_data_block = [];
-        num_time_gap = [];
-        begin_stop = [];
-        unit = '';
-        institution = '';
-        subj_id = '';
-        acq_sys = '';
-        comp_alg = '';
-        cont = table([]);
+        si_value = get_sess_info_value(sess_info, true);
     end % if
 end % if
 
 % update paras of MEFSession
 % --------------------------
-this.ChannelName = channame;
-this.SamplingFrequency = fs;
-this.Samples = samples;
-this.DataBlocks = num_data_block;
-this.TimeGaps = num_time_gap;
-this.BeginStop = begin_stop;
-this.Unit = unit;
-this.Institution = institution;
-this.SubjectID = subj_id;
-this.AcquisitionSystem = acq_sys;
-this.CompressionAlgorithm = comp_alg;
-this.SessionInformation = sess_info;
-this.Continuity = cont;
+this.ChannelName = si_value.channame;
+this.SamplingFrequency = si_value.fs;
+this.Samples = si_value.samples;
+this.DataBlocks = si_value.num_data_block;
+this.TimeGaps = si_value.num_time_gap;
+this.BeginStop = si_value.begin_stop;
+this.Unit = si_value.unit;
+this.Institution = si_value.institution;
+this.SubjectID = si_value.subj_id;
+this.AcquisitionSystem = si_value.acq_sys;
+this.CompressionAlgorithm = si_value.comp_alg;
+this.SessionInformation = si_value.sess_info;
+this.SessionContinuity = si_value.cont;
 
 % =========================================================================
 % Output
@@ -135,6 +102,35 @@ end % function MEF_sessinfo
 % =========================================================================
 % Subroutines
 % =========================================================================
+function si_value = get_sess_info_value(sess_info, set_empty)
 
+if set_empty == true
+    si_value = struct('channame', '',...
+        'fs', NaN,...
+        'samples', NaN,...
+        'num_data_block', [],...
+        'begin_stop', [],...
+        'unit', '',...
+        'institution', '',...
+        'subj_id', '',...
+        'acq_sys', '',...
+        'comp_alg', '',...
+        'sess_info', strct([]),...
+        'cont', table([]));
+else
+    si_value.channame = sess_info.ChannelName';
+    si_value.fs = unique(sess_info.SamplingFreq);
+    si_value.samples = unique(sess_info.Samples);
+    si_value.num_data_block = unique(sess_info.IndexEntry);
+    si_value.num_time_gap = unique(sess_info.DiscountinuityEntry)-1;
+    si_value.begin_stop = [unique(sess_info.Begin), unique(sess_info.Stop)];
+    si_value.institution = unique(sess_info.Institution);
+    si_value.subj_id = unique(sess_info.SubjectID);
+    si_value.acq_sys = unique(sess_info.AcquisitionSystem);
+    si_value.comp_alg = unique(sess_info.CompressionAlgorithm);
+    si_value.sess_info = sess_info;
+    si_value.cont = sess_info.Continuity{1}; % use the one from 1st channel
+end % if
 
+end % function
 % [EOF]

@@ -39,6 +39,8 @@ classdef MultiscaleElectrophysiologyFile < handle
         Header              % [struct] header information of MEF file
         BlockIndexData      % [table] data of block indices (see 
                             % readBlockIndexData.m for the detail)
+        Continuity          % [table] data segments of conituous sampling (see
+                            % analyzeContinuity.m for the detail)
         ChanSamplingFreq    % sampling frequency of channel (Hz)
         SampleTimeInterval  % sample time interval = [lower, upper] (uUTC),
                             % indicating the lower and upper bound of the
@@ -46,8 +48,6 @@ classdef MultiscaleElectrophysiologyFile < handle
     end % properties: protected, hidden
     
     properties
-        Continuity          % [table] data segments of conituous sampling (see
-                            % analyzeContinuity.m for the detail)
     end % properties
 
     % =====================================================================
@@ -67,6 +67,7 @@ classdef MultiscaleElectrophysiologyFile < handle
         [sample_time, sample_yn] = SampleIndex2Time(this, varargin) % index --> time
         this = setContinuity(this, cont_table) % set Continuity table
         out_time = SampleUnitConvert(this, in_time, varargin) % convert units of time points
+        record_offset = getRecordOffset(this, unit) % get offset time of recording in specified unit
     end % methods
 end
 

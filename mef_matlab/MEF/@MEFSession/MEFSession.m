@@ -46,6 +46,8 @@ classdef MEFSession < handle
         AcquisitionSystem   % name of the system to record the session
         CompressionAlgorithm % name of compression algorithm
         SessionInformation  % table of session information (see get_sessinfo.m)
+        SessionContinuity   % [table] data segments of conituous sampling (see
+                            % analyzeContinuity.m for the detail)
     end % properties
     
     % =====================================================================
@@ -62,7 +64,7 @@ classdef MEFSession < handle
     methods
         varargout = get_sessinfo(this) % get sess info from data
         [X, t] = importSession(this, varargin) % import a session
-        record_offset = getRecordOffset(this, unit) % get offset time of recording in specified unit
+        record_offset = getSessionRecordOffset(this, unit) % get offset time of recording in specified unit
     end % methods
 end
 

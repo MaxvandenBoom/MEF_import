@@ -1,8 +1,8 @@
-function record_offset = getRecordOffset(this, unit)
-% MEFSESSION.GETRECORDOFFSET get offset time of recording in specified unit
+function record_offset = getSessionRecordOffset(this, unit)
+% MEFSESSION.GETSESSIONRECORDOFFSET get offset time of recording in specified unit
 % 
 % Syntax:
-%   record_offset = getRecordOffset(this, unit)
+%   record_offset = getSessionRecordOffset(this, unit)
 % 
 % Input(s):
 %   this            - [obj] MEFSession_2p1 object
@@ -15,8 +15,8 @@ function record_offset = getRecordOffset(this, unit)
 % 
 % Seaa slso .
 
-% Copyright 2020 Richard J. Cui. Created: Mon 01/20/2020  4:30:22.035 PM
-% $Revision: 0.2 $  $Date: Thu 02/06/2020  9:23:51.173 PM $
+% Copyright 2020 Richard J. Cui. Created:Sat 02/08/2020 10:24:41.396 PM
+% $Revision: 0.1 $  $Date: Sat 02/08/2020 10:24:41.396 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -32,13 +32,10 @@ unit = q.unit;
 % =========================================================================
 % main
 % =========================================================================
-if strcmpi(unit, 'index') % get recoridng start time in unit
-    record_offset = 0;
-else
-    record_offset = this.SampleIndex2Time(1, unit);
-end % if
+this.setContinuity(this.SessionContinuity);
+record_offset = this.getRecordOffset(unit); % this function needs Continuity
 
-end
+end % funciton
 
 % =========================================================================
 % subroutines
