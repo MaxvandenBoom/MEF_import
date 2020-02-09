@@ -67,6 +67,7 @@ classdef MEFSession < handle
         record_offset = getSessionRecordOffset(this, varargin) % get offset time of recording in specified unit
         rel_time = abs2relativeTimePoint(this, abs_time, unit) % absolute to relative time points
         abs_time = relative2absTimePoint(this, rel_time, unit) % relative to absolute time points
+        out_time = SessionUnitConvert(this, in_time, varargin) % convert units of relative time points
     end % methods
 end
 
