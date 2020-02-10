@@ -52,7 +52,7 @@ addpath(genpath(fpath)) % add all subdirectories into matlab paths
 menu_import_mef = findobj(fig, 'tag', 'import data');
 
 % menu callback
-mef_imp_2p1 = [try_strings.no_check, 'EEG = pop_mefimport_2p1(EEG);',...
+mef_imp_2p1 = [try_strings.no_check, 'EEG = pop_mefimport(EEG);',...
     catch_strings.new_and_hist];
 
 % create menus in EEGLab

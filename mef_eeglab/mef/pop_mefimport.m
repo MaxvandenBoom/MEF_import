@@ -1,5 +1,5 @@
-function [EEG, com] = pop_mefimport_2p1(EEG, varargin)
-% POP_MEFIMPORT_2P1 Import MEF 2.1 data into EEGLab with/out GUI
+function [EEG, com] = pop_mefimport(EEG, varargin)
+% POP_MEFIMPORT Import MEF data into EEGLab with/out GUI
 %
 % Syntax:
 %   [EEG, com] = pop_mefimport_2p1(EEG)
@@ -8,6 +8,7 @@ function [EEG, com] = pop_mefimport_2p1(EEG, varargin)
 %   [EEG, com] = pop_mefimport_2p1(__, sess_path, sel_chan, start_end)
 %   [EEG, com] = pop_mefimport_2p1(__, sess_path, sel_chan, start_end, unit)
 %   [EEG, com] = pop_mefimport_2p1(__, pw)
+%   [EEG, com] = __(__, 'MEFVersion', mef_ver)
 %
 % Input(s):
 %   EEG             - [strcut] EEGLab dataset structure. See Note for
@@ -22,6 +23,7 @@ function [EEG, com] = pop_mefimport_2p1(EEG, varargin)
 %   unit            - [str] (optional) unit of start_end: 'uUTC' (default), 'Index',
 %                     'Second', 'Minute', 'Hour', and 'Day'
 %   pw              - [strct] (opt) password
+%   mef_ver         - [num] (para) MEF version of the data to be imported
 % 
 % Outputs:
 %   EEG             - [struct] EEGLab dataset structure. See Note for
@@ -46,7 +48,7 @@ function [EEG, com] = pop_mefimport_2p1(EEG, varargin)
 % See also EEGLAB, mefimport.
 
 % Copyright 2019-2020 Richard J. Cui. Created: Tue 05/07/2019 10:33:48.169 PM
-% $Revision: 1.4 $  $Date: Wed 01/22/2020 10:02:38.457 PM $
+% $Revision: 1.5 $  $Date: Sun 02/09/2020  7:10:31.928 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -72,6 +74,16 @@ start_end = q.start_end;
 unit = q.unit;
 pw = q.pw;
 
+mef_ver = q.MEFVersion;
+switch mef_ver
+    case 2.1
+        mef_eeglab = @MEFEEGLab_2p1;
+    case 3.0
+        mef_eeglab = @MEFEEGLab_3p0;
+    otherwise
+        error('pop_mefimport:invalidMEFVersion', 'MEF version is invalid')
+end % switch
+
 % =========================================================================
 % main
 % =========================================================================
@@ -93,7 +105,7 @@ if isempty(sess_path)
         end % if
     end % if
 else
-    this = MEFEEGLab_2p1(sess_path, pw);
+    this = mef_eeglab(sess_path, pw);
     if isempty(sel_chan)
         sel_chan = this.ChannelName;
     end % if
@@ -140,6 +152,7 @@ defaultSE = [];
 defaultUnit = 'uutc';
 expectedUnit = {'index', 'uutc', 'second', 'minute', 'hour', 'day'};
 default_pw = struct([]);
+default_mv = 2.1; % mef version
 
 valid_se = @(x) (isnumeric(x) && numel(x) == 2 && x(1) <= x(2));
 
@@ -152,6 +165,7 @@ p.addOptional('start_end', defaultSE, valid_se);
 p.addOptional('unit', defaultUnit,...
     @(x) any(validatestring(x, expectedUnit)));
 p.addOptional('pw', default_pw, @isstruct);
+p.addParameter('MEFVersion', default_mv, @(x) any([2.1, 3.0] == x));
 
 % parse and return the results
 p.parse(EEG, varargin{:});
