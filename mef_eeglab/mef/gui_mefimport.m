@@ -44,6 +44,18 @@ end
 % End initialization code - DO NOT EDIT
 
 function gui_mefimport_OpeningFcn(hObject, eventdata, handles, varargin)
+
+% parse inputs
+% -------------
+if isempty(varargin)
+    mef_ver = 2.1;
+else
+    mef_ver = varargin{1};
+    if ~any([2.1, 3.0] == mef_ver)
+        error('gui_mefimport:invalidMEFVersion', 'the version of MEF is invalid')
+    end % if
+end % if
+
 % initialization
 % --------------
 set(handles.checkbox_segment, 'Value', 0)
@@ -56,6 +68,7 @@ set(handles.edit_end, 'Enable', 'Off')
 set(handles.uitable_channel, 'Enable' , 'Off')
 set(handles.checkbox_segment, 'Enable', 'Off')
 
+handles.mef_ver = mef_ver;
 handles.old_unit = 'uUTC';
 
 handles.subject_pw = '';

@@ -90,7 +90,7 @@ end % switch
 % --------------
 if isempty(sess_path)
     % use GUI to get the necessary information
-    this = gui_mefimport; % this - MEFEEGLab_2p1 object
+    this = gui_mefimport(mef_ver); % this - MEFEEGLab_2p1 object
     if isempty(this)
         EEG = [];
         return
