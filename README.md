@@ -39,7 +39,7 @@ Input MEF data
 
 Input MAF data
 --------------
-From EEGLAB GUI, select File > Import event info > From Mayo Clinic .maf file
+From EEGLAB GUI, select File > Import event info > From Mayo Clinic .maf > MEF 2.1
 
 Currently, the importer can only recognize events of seizure onset and seizure offset.
 
