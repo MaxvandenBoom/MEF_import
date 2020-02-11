@@ -31,7 +31,7 @@ Two data samples are included as subdirectories: 'mef_2p1' and 'mef_3p0'.
 
 Input MEF data
 --------------
-*To input using GUI
+*To input using GUI*
 
 1. From EEGLAB GUI, select File > Import Data > Using EEGLAB functions and plugins > From Mayo Clinic .mef. 
 Then choose 'MEF 2.1' to import MEF 2.1 format data, or choose 'MEF 3.0' to import MEF 3.0 data.
@@ -40,7 +40,7 @@ Then choose 'MEF 2.1' to import MEF 2.1 format data, or choose 'MEF 3.0' to impo
 1. Choose part of the signal to import if needed.
 1. Discontinuity of recording is marked as event 'Discont'.
 
-*To input using MATLAB commandline
+*To input using MATLAB commandline*
 
 
 Input MAF data
