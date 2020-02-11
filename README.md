@@ -27,7 +27,7 @@ Data samples
 1. A data sample, 'sample_mef' folder, is included in the package (/root/directory/of/eeglab/plugins/MEF_import1.14/sample_mef).
 Two data samples are included as subdirectories: 'mef_2p1' and 'mef_3p0'.
 1. The directory 'mef_2p1' includes the session of MEF 2.1 signal (passwords: 'erlichda' for Subject password; 'sieve' for Session password; no password required for Data password).
-1. The directory 'mef_3p0' includes the session of MEF 3.0 signal (level 1 password: password1; level 2 passowrd: password2; access level 2).
+1. The directory 'mef_3p0' includes the session of MEF 3.0 signal (level 1 password: password1; level 2 passowrd: password2; access level: 2).
 
 Input MEF data
 --------------
@@ -35,13 +35,19 @@ Input MEF data
 
 1. From EEGLAB GUI, select File > Import Data > Using EEGLAB functions and plugins > From Mayo Clinic .mef. 
 Then choose 'MEF 2.1' to import MEF 2.1 format data, or choose 'MEF 3.0' to import MEF 3.0 data.
-1. If passwords are required, push "Set Passwords" to input the passwords.
+1. If passwords are required, click "Set Passwords" to input the passwords.
 1. Select the folder of the dataset.  A list of available channel is shown in the table below.
 1. Choose part of the signal to import if needed.
 1. Discontinuity of recording is marked as event 'Discont'.
 
 *To input using MATLAB commandline*
 
+The following code is an example to import a segment of MEF 3.0 signal into MATLAB and plot it:
+
+```matlab
+sess_path = '/root/directory/of/eeglab/plugins/MEF_import1.14/sample_mef/mef_3p0';
+sel_chan = ["left_central-ref", "Left_Occipital-Ref", "Left-Right_Central", "left-right_occipital"];
+```
 
 Input MAF data
 --------------
