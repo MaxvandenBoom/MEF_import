@@ -12,7 +12,8 @@ Installation
 1. Download, decompress and copy the directory into the directory of plugins of EEGLAB (/root/directory/of/eeglab/plugins)
 1. Rename the directory of the plugin to MEF_import1.14
 1. Launch EEGLAB in MATLAB, for example,
-        ```MATLAB
+
+        ```matlab
         >> eeglab
         ```
 1. Follow the instructions on the screen
