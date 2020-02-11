@@ -31,7 +31,8 @@ Two data samples are included as subdirectories: 'mef_2p1' and 'mef_3p0'.
 
 Input MEF data
 --------------
-1. From EEGLAB GUI, select File > Import Data > Using EEGLAB functions and plugins > From Mayo Clinic .mef file
+1. From EEGLAB GUI, select File > Import Data > Using EEGLAB functions and plugins > From Mayo Clinic .mef. 
+Then choose 'MEF 2.1' to import MEF 2.1 format data, or choose 'MEF 3.0' to import MEF 3.0 data.
 1. If passwords are required, push "Set Passwords" to input the passwords.
 1. Select the folder of the dataset.  A list of available channel is shown in the table below.
 1. Choose part of the signal to import if needed.
