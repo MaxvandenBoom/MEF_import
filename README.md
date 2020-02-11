@@ -31,7 +31,7 @@ Two data samples are included as subdirectories: 'mef_2p1' and 'mef_3p0'.
 
 Input MEF data
 --------------
-*To input using GUI*
+*Input signal using GUI*
 
 1. From EEGLAB GUI, select File > Import Data > Using EEGLAB functions and plugins > From Mayo Clinic .mef. 
 Then choose 'MEF 2.1' to import MEF 2.1 format data, or choose 'MEF 3.0' to import MEF 3.0 data.
@@ -40,7 +40,7 @@ Then choose 'MEF 2.1' to import MEF 2.1 format data, or choose 'MEF 3.0' to impo
 1. Choose part of the signal to import if needed.
 1. Discontinuity of recording is marked as event 'Discont'.
 
-*To input using MATLAB commandline*
+*Input signal using MATLAB commandline*
 
 The following code is an example to import a segment of MEF 3.0 signal into MATLAB and plot it:
 
@@ -60,12 +60,15 @@ From EEGLAB GUI, select File > Import event info > From Mayo Clinic .maf > MEF 2
 
 Currently, the importer can only recognize events of seizure onset and seizure offset.
 
-MEF format
-----------
+Credit
+------
 Multiscale Electrophysiology Format (MEF) is a novel electrophysiology file format designed for large-scale storage of electrophysiological recordings.
 MEF can achieve significant data size reduction when compared to existing techniques with stat-of-the-art lossless data compression.
 It satisfies the Health Insurance Portability and Accountability Act (HIPAA) to encrypt any patient protected health information transmitted over a public network.
 The details of MEF file can be found at https://www.mayo.edu/research/labs/epilepsy-neurophysiology/mef-example-source-code from [Mayo Systems Electrophysiology Lab](http://msel.mayo.edu/) and on [International Epilepsy Portal](https://main.ieeg.org): https://main.ieeg.org/?q=node/28. 
+
+The mex-c code to read MEF 2.1 data is mainly developed from the work done by Ben Brinkmann, Matt Stead, and Dan Crepeau from Mayo Systems Electrophysiology Lab,  Mayo Clinic, Rochester MN (https://github.com/benbrinkmann/mef_lib_2_1).
+The mex-c code for MEF 3.0 is mainly adapted from the work by Max van den Boom and Dora Hermes Miller at Multimodal Neuroimaging Lab, Mayo Clinic, Rochester MN (https://github.com/MaxvandenBoom/matmef).
 
 License
 -------
