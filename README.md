@@ -45,12 +45,13 @@ Then choose 'MEF 2.1' to import MEF 2.1 format data, or choose 'MEF 3.0' to impo
 The following code is an example to import a segment of MEF 3.0 signal into MATLAB and plot it:
 
 ```matlab
+mer_ver = 3.0; % MEF version
 sess_path = '/root/directory/of/eeglab/plugins/MEF_import1.14/sample_mef/mef_3p0'; % MEF 3.0 session path
 sel_chan = ["left_central-ref", "Left_Occipital-Ref", "Left-Right_Central", "left-right_occipital"]; % selected channels
 start_end = [0, 10]; % start and end time point of signal segment
 unit = 'second'; % time point unit
 password = struct('Level1Password', 'password1', 'Level2Password', 'password2', 'AccessLevel', 2); % password structure for MEF 3.0 sample data
-EEG = pop_mefimport(EEG, sess_path, sel_chan, start_end, unit, password); % import the signal into EEGLAB
+EEG = pop_mefimport(EEG, mer_ver, sess_path, sel_chan, start_end, unit, password); % import the signal into EEGLAB
 pop_eegplot_w(EEG); % plot the signal
 ```
 
