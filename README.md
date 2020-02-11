@@ -1,17 +1,20 @@
-Import MEF data into EEGLAB (Version 1.11)
+Import MEF data into EEGLAB (Version 1.14)
 =========================================
 
 **MEF_import** is an EEGLAB plugin that imports data compressed in Multiscale Electrophysiology Format (or Mayo EEG File, MEF, see below) and Multiscale Annotation File (MAF) data into [EEGLAB](https://sccn.ucsd.edu/eeglab/index.php).
-Current version can import [MEF/MAF Version 2.1](https://github.com/benbrinkmann/mef_lib_2_1) files.
+Current version can import [MEF/MAF Version 2.1](https://github.com/benbrinkmann/mef_lib_2_1) and [MEF 3.0](https://msel.mayo.edu/codes.html) files.
 Moreover, the functions provided in the folder "mef_matlab" can be used as a general tool to import MEF data into MATLAB.
 
 The code repository for **MEF_import** is hosted on GitHub at https://github.com/jiecui/MEF_import.
 
 Installation
 ------------
-1. Download, decompress and copy the directory into the directory of plugins of EEGLAB
-1. Rename the directory of the plugin to MEF_import1.11
-1. Launch EEGLAB in MATLAB, e.g. >> eeglab
+1. Download, decompress and copy the directory into the directory of plugins of EEGLAB (/root/directory/of/eeglab/plugins)
+1. Rename the directory of the plugin to MEF_import1.14
+1. Launch EEGLAB in MATLAB, for example,
+        ```MATLAB
+        >> eeglab
+        ```
 1. Follow the instructions on the screen
 
 Mex file
