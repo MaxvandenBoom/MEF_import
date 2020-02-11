@@ -1,5 +1,5 @@
-Import MEF data into EEGLAB (Version 1.14)
-=========================================
+Import MEF 2.1 & 3.0 data into EEGLAB (Version 1.14)
+====================================================
 
 **MEF_import** is an EEGLAB plugin that imports data compressed in Multiscale Electrophysiology Format (or Mayo EEG File, MEF, see below) and Multiscale Annotation File (MAF) data into [EEGLAB](https://sccn.ucsd.edu/eeglab/index.php).
 Current version can import [MEF/MAF Version 2.1](https://github.com/benbrinkmann/mef_lib_2_1) and [MEF 3.0](https://msel.mayo.edu/codes.html) files.
@@ -18,12 +18,16 @@ Installation
 
 Mex file
 --------
-Two mex files are required to read MEF data. Run 'make_mex_mef.m' in the folder of 'mef_matlab/mex_mef' to build the mex files for different operating systems.
+Several mex files are required to read MEF data.
+After laungch EEGLAB, run 'make_mex_mef.m' to build the mex files for different operating systems.
  
-Data preparation
-----------------
+Data samples
+------------
 1. Put all the MEF files for different channels/electrodes of a single recording session into a single directory. 
-1. A data sample, 'sample_mef' folder, is included in the package (passwords: 'erlichda' for Subject password; 'sieve' for Session password; no password required for Data password).
+1. A data sample, 'sample_mef' folder, is included in the package (/root/directory/of/eeglab/plugins/MEF_import1.14/sample_mef).
+Two data samples are included as subdirectories: 'mef_2p1' and 'mef_3p0'.
+1. The directory 'mef_2p1' includes the session of MEF 2.1 signal (passwords: 'erlichda' for Subject password; 'sieve' for Session password; no password required for Data password).
+1. The directory 'mef_3p0' includes the session of MEF 3.0 signal (level 1 password: password1; level 2 passowrd: password2; access level 2).
 
 Input MEF data
 --------------
