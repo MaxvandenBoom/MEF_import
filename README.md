@@ -20,6 +20,7 @@ Mex file
 --------
 Several mex files are required to read MEF data.
 After launch EEGLAB, run 'make_mex_mef.m' to build the mex files for different operating systems.
+The binary files for Mac-64bits are provided with the release.
  
 Data samples
 ------------
