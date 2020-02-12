@@ -69,6 +69,8 @@ unit = 'second';
 password = struct('Level1Password', 'password1', 'Level2Password', 'password2', 'AccessLevel', 2); 
 
 % import the signal into EEGLAB
+% the variable 'EEG' is set by EEGLAB
+% or you may create an empty one by using command 'EEG = eeg_empty();'
 EEG = pop_mefimport(EEG, mef_ver, sess_path, sel_chan, start_end, unit, password); 
 
 % plot the signal
