@@ -68,8 +68,8 @@ MEF can achieve significant data size reduction when compared to existing techni
 It satisfies the Health Insurance Portability and Accountability Act (HIPAA) to encrypt any patient protected health information transmitted over a public network.
 The details of MEF file can be found at https://www.mayo.edu/research/labs/epilepsy-neurophysiology/mef-example-source-code from [Mayo Systems Electrophysiology Lab](http://msel.mayo.edu/) and on [International Epilepsy Portal](https://main.ieeg.org): https://main.ieeg.org/?q=node/28. 
 
-The mex-c code to read MEF 2.1 data is mainly developed from the work done by Ben Brinkmann, Matt Stead, and Dan Crepeau from [Mayo Systems Electrophysiology Lab](https://msel.mayo.edu/codes.html),  Mayo Clinic, Rochester MN (https://github.com/benbrinkmann/mef_lib_2_1).
-The mex-c code for MEF 3.0 is mainly adapted from the work by Max van den Boom and Dora Hermes Miller at Multimodal Neuroimaging Lab, Mayo Clinic, Rochester MN (https://github.com/MaxvandenBoom/matmef).
+The c-mex code to read MEF 2.1 data is mainly developed from the work done by Ben Brinkmann, Matt Stead, and Dan Crepeau from [Mayo Systems Electrophysiology Lab](https://msel.mayo.edu/codes.html),  Mayo Clinic, Rochester MN (https://github.com/benbrinkmann/mef_lib_2_1).
+The c-mex code for MEF 3.0 is mainly adapted from the work by Max van den Boom and Dora Hermes Miller at Multimodal Neuroimaging Lab, Mayo Clinic, Rochester MN (https://github.com/MaxvandenBoom/matmef).
 
 License
 -------
