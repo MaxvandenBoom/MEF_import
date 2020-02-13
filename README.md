@@ -1,4 +1,4 @@
-MEF 2.1 And 3.0 EEGLAB Plugin MEF_import (Ver 1.14)
+MEF 2.1 And 3.0 EEGLAB Plugin MEF_import (Ver 1.15)
 ===================================================
 
 _Caution: this version is under development, which may not be stable_
@@ -28,8 +28,8 @@ The binary files for Mac-64bits are provided with the release, compiled by using
  
 Data samples
 ------------
-1. Put all the MEF files for different channels/electrodes of a single recording session into a single directory. 
-1. A data sample, 'sample_mef' folder, is included in the package (/root/directory/of/eeglab/plugins/MEF_import1.14/sample_mef).
+1. Two small sample datasets, of MEF 2.1 and MEF 3.0, respectively, are provided to test the code.
+1. The folder of the sample datasets is 'sample_mef' (/root/directory/of/eeglab/plugins/MEF_import1.14/sample_mef).
 Two data samples are included as subdirectories: 'mef_2p1' and 'mef_3p0'.
 1. The directory 'mef_2p1' includes the session of MEF 2.1 signal (passwords: 'erlichda' for Subject password; 'sieve' for Session password; no password required for Data password).
 1. The directory 'mef_3p0' includes the session of MEF 3.0 signal (level 1 password: password1; level 2 passowrd: password2; access level: 2).
