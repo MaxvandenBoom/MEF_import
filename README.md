@@ -22,7 +22,7 @@ Mex file
 --------
 Several mex files are required to read MEF data.
 After launch EEGLAB, run 'make_mex_mef.m' to build the mex files for different operating systems.
-The binary files for Mac-64bits are provided with the release, compiled by using Xcode with Clang.
+The binary files for MacOS-64-bit are provided with the release, compiled by using Xcode with Clang.
  
 Data samples
 ------------
