@@ -87,6 +87,8 @@ EEG = pop_mefimport(EEG, mef_ver, sess_path, sel_chan, start_end, unit, password
 pop_eegplot_w(EEG, 1, 0, 1); 
 ```
 You may repeat the result by running the included script *example_import_mef_3p0.m*.
+You can import the data encoded with MEF 2.1 format, an older version of MEF, similarly. 
+An example to import MEF 2.1 data using commandline, *example_import_mef_2p1.m*, is also included.
 
 Input MAF data
 --------------
@@ -100,12 +102,12 @@ Multiscale Electrophysiology Format (MEF) is a novel electrophysiology file form
 MEF can achieve significant data size reduction when compared to existing techniques with stat-of-the-art lossless data compression.
 It satisfies the Health Insurance Portability and Accountability Act (HIPAA) to encrypt any patient protected health information transmitted over a public network.
 
-The details of MEF file can be found at https://www.mayo.edu/research/labs/epilepsy-neurophysiology/mef-example-source-code from [Mayo Systems Electrophysiology Lab](http://msel.mayo.edu/) and on [International Epilepsy Portal](https://main.ieeg.org): https://main.ieeg.org/?q=node/28. 
+The details of MEF file can be found at [here](https://www.mayo.edu/research/labs/epilepsy-neurophysiology/mef-example-source-code) from [Mayo Systems Electrophysiology Lab](http://msel.mayo.edu/) and [here](https://main.ieeg.org/?q=node/28) on [International Epilepsy Portal](https://main.ieeg.org). 
 
-The c-mex code to read MEF 2.1 data is mainly developed from the work done by Ben Brinkmann, Matt Stead, and Dan Crepeau from [Mayo Systems Electrophysiology Lab](https://msel.mayo.edu/codes.html),  Mayo Clinic, Rochester MN (https://github.com/benbrinkmann/mef_lib_2_1).
+The c-mex code to read MEF 2.1 data is mainly developed from the work done by [Ben Brinkmann](https://github.com/benbrinkmann/mef_lib_2_1), Matt Stead, and Dan Crepeau from [Mayo Systems Electrophysiology Lab](https://msel.mayo.edu/codes.html),  Mayo Clinic, Rochester MN.
 
-The c-mex code for MEF 3.0 is mainly adapted from the work by Max van den Boom and Dora Hermes Miller at Multimodal Neuroimaging Lab, Mayo Clinic, Rochester MN (https://github.com/MaxvandenBoom/matmef).
+The c-mex code for MEF 3.0 is mainly adapted from the work by [Max van den Boom](https://github.com/MaxvandenBoom/matmef) and Dora Hermes Miller at Multimodal Neuroimaging Lab, Mayo Clinic, Rochester MN.
 
 License
 -------
-**MEF_import** is protected by the GPL v3 Open Source License.
+**MEF_import** is distributed with the GPL v3 Open Source License.
