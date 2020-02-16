@@ -1,5 +1,7 @@
-MEF 2.1 And 3.0 EEGLAB Plugin MEF_import (Ver 1.15)
+MEF 2.1 And 3.0 EEGLAB Plugin MEF_import (Ver 1.16)
 ===================================================
+
+_Caution: this version is under development, which may not be stable_
 
 Introduction
 ------------
@@ -12,7 +14,7 @@ The code repository for **MEF_import** is hosted on GitHub at https://github.com
 Installation
 ------------
 1. Download, decompress and copy the directory into the directory of plugins of EEGLAB (/root/directory/of/eeglab/plugins)
-1. Rename the folder name of MEF_import plugin to MEF_import1.15
+1. Rename the folder name of MEF_import plugin to MEF_import1.16
 1. Launch EEGLAB in MATLAB, e.g. ```>> eeglab```
 1. Follow the instructions on the screen
 
