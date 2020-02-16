@@ -1,8 +1,6 @@
 MEF 2.1 And 3.0 EEGLAB Plugin MEF_import (Ver 1.15)
 ===================================================
 
-_Caution: this version is under development, which may not be stable_
-
 Introduction
 ------------
 **MEF_import** is an EEGLAB plugin that imports data compressed in Multiscale Electrophysiology Format (or Mayo EEG File, MEF, see below) and Multiscale Annotation File (MAF) data into [EEGLAB](https://sccn.ucsd.edu/eeglab/index.php).
