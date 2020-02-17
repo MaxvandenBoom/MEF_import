@@ -3,19 +3,33 @@
  * 	MEF 3.0 Library Matlab Wrapper
  * 	Functions to load data from MEF3 datafiles
  *	
- *  Copyright 2020, Max van den Boom (Multimodal Neuroimaging Lab, Mayo Clinic, Rochester MN)
- *	Adapted from PyMef (by Jan Cimbalnik, Matt Stead, Ben Brinkmann, and Dan Crepeau)
+ *  Copyright 2020, Max van den Boom (Multimodal Neuroimaging Lab, Mayo 
+ *  Clinic, Rochester MN) Adapted from PyMef (by Jan Cimbalnik, Matt Stead,
+ *  Ben Brinkmann, and Dan Crepeau)
  *  
  *	
- *  This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *  You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ *  This program is free software: you can redistribute it and/or modify it
+ *  under the terms of the GNU General Public License as published by the
+ *  Free Software Foundation, either version 3 of the License, or (at your 
+ *  option) any later version. This program is distributed in the hope that
+ *  it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
+ *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See 
+ *  the GNU General Public License for more details. You should have 
+ *  received a copy of the GNU General Public License along with this 
+ *  program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+// Copyright 2020 Richard J. Cui. Created: Sun 02/16/2020 10:34:49.777 PM
+// $Revision: 0.1 $  $Date: Sun 02/16/2020 10:34:49.777 PM $
+//
+// 1026 Rocky Creek Dr NE
+// Rochester, MN 55906, USA
+//
+// Email: richard.cui@utoronto.ca
+
 #include "matmef_data.h"
 #include "mex.h"
-#include "meflib/meflib/meflib.h"
+#include "meflib.h"
 
 
 /**

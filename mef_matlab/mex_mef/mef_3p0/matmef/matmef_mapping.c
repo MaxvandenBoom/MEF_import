@@ -16,7 +16,7 @@
 
 /*
  % Copyright 2020 Richard J. Cui. Modified: Tue 02/04/2020 10:53:10.951 PM
- % $Revision: 0.1 $  $Date: Tue 02/04/2020 10:53:10.951 PM $
+ % $Revision: 0.2 $  $Date: Sun 02/16/2020 10:34:49.777 PM $
  %
  % 1026 Rocky Creek Dr NE
  % Rochester, MN 55906, USA
@@ -26,7 +26,7 @@
 
 #include "matmef_mapping.h"
 #include "mex.h"
-#include "meflib/meflib/meflib.h"
+#include "meflib.h"
 #include "mex_datahelper.h"
 
 

@@ -3,7 +3,7 @@
 // See read_mef_header_mex_3p0.m for details of usage.
 
 // Copyright 2020 Richard J. Cui. Created: Sun 02/02/2020  5:18:29.851 PM
-// $Revision: 0.2 $  $Date: Tue 02/04/2020 11:40:53.847 AM' $
+// $Revision: 0.3 $  $Date: Sun 02/16/2020 10:34:49.777 PM $
 //
 // 1026 Rocky Creek Dr NE
 // Rochester, MN 55906, USA
@@ -12,7 +12,7 @@
 
 #include <ctype.h>
 #include "mex.h"
-#include "matmef/meflib/meflib/meflib.h"
+#include "matmef/meflib.h"
 #include "matmef/matmef_mapping.h"
 #include "matmef/mex_datahelper.h"
 
