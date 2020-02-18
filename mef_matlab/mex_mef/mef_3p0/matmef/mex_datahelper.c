@@ -13,7 +13,7 @@
  */
 
 // Copyright 2020 Richard J. Cui. Created: Sun 02/16/2020 10:34:49.777 PM
-// $Revision: 0.2 $  $Date: Mon 02/17/2020  8:15:44.891 PM $
+// $Revision: 0.3 $  $Date: Tue 02/18/2020 12:27:52.665 PM $
 //
 // 1026 Rocky Creek Dr NE
 // Rochester, MN 55906, USA
@@ -66,7 +66,7 @@ mxArray *mxDoubleByValue(sf8 value) {
  * @param value		The value to store in the matlab variable
  * @return			The mxArray containing the value
  */
-mxArray *mxUInt32ByValue(ui4 value) {
+mxArray *mxUint32ByValue(ui4 value) {
 	
 	// create the matlab variable (1x1 real uint32 matrix)
 	mxArray *retArr = mxCreateNumericMatrix(1, 1, mxUINT32_CLASS, mxREAL);
@@ -81,6 +81,24 @@ mxArray *mxUInt32ByValue(ui4 value) {
 	return retArr;
 	
 }
+
+// 1x1 real Unsigned Int8 matrix
+mxArray *mxUint8ByValue(ui1 value) {
+	
+	// create the matlab variable (1x1 real uint8 matrix)
+	mxArray *retArr = mxCreateNumericMatrix(1, 1, mxUINT8_CLASS, mxREAL);
+	
+	// retrieve the pointer to the memory allocated by matlab
+	mxUint8 *data = mxGetData(retArr);
+	
+	// transfer the value to the matlab (allocated memory)
+	data[0] = (mxUint8)value;
+	
+	// return the matlab variable
+	return retArr;
+	
+}
+
 
 
 /**
@@ -127,6 +145,24 @@ mxArray *mxInt32ByValue(si4 value) {
 	return retArr;
 	
 }
+
+// 1x1 real Unsigned Int64 matrix
+mxArray *mxUint64ByValue(ui8 value) {
+	
+	// create the matlab variable (1x1 real int64 matrix)
+	mxArray *retArr = mxCreateNumericMatrix(1, 1, mxUINT64_CLASS, mxREAL);
+	
+	// retrieve the pointer to the memory allocated by matlab
+	mxUint64 *data = mxGetData(retArr);
+	
+	// transfer the value to the matlab (allocated memory)
+	data[0] = (mxUint64)value;
+	
+	// return the matlab variable
+	return retArr;
+	
+}
+
 
 /**
  * Create a (1x1 real) Int64 matrix based on a MEF si8 (signed 8 byte int) variable

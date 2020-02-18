@@ -16,7 +16,7 @@
 
 /*
  % Copyright 2020 Richard J. Cui. Modified: Tue 02/04/2020 10:53:10.951 PM
- % $Revision: 0.2 $  $Date: Sun 02/16/2020 10:34:49.777 PM $
+ % $Revision: 0.3 $  $Date: Tue 02/18/2020  1:05:07.866 PM $
  %
  % 1026 Rocky Creek Dr NE
  % Rochester, MN 55906, USA
@@ -757,8 +757,8 @@ mxArray *map_mef3_tmd2(TIME_SERIES_METADATA_SECTION_2 *tmd2) {
 	mxSetField(mat_md, 0, "number_of_samples", 				mxInt64ByValue(tmd2->number_of_samples));
 	mxSetField(mat_md, 0, "number_of_blocks", 				mxInt64ByValue(tmd2->number_of_blocks));
 	mxSetField(mat_md, 0, "maximum_block_bytes", 			mxInt64ByValue(tmd2->maximum_block_bytes));
-	mxSetField(mat_md, 0, "maximum_block_samples", 			mxUInt32ByValue(tmd2->maximum_block_samples));
-	mxSetField(mat_md, 0, "maximum_difference_bytes", 		mxUInt32ByValue(tmd2->maximum_difference_bytes));	
+	mxSetField(mat_md, 0, "maximum_block_samples", 			mxUint32ByValue(tmd2->maximum_block_samples));
+	mxSetField(mat_md, 0, "maximum_difference_bytes", 		mxUint32ByValue(tmd2->maximum_difference_bytes));	
 	mxSetField(mat_md, 0, "block_interval", 				mxInt64ByValue(tmd2->block_interval));
 	mxSetField(mat_md, 0, "number_of_discontinuities", 		mxInt64ByValue(tmd2->number_of_discontinuities));
 	mxSetField(mat_md, 0, "maximum_contiguous_blocks", 		mxInt64ByValue(tmd2->maximum_contiguous_blocks));
@@ -783,7 +783,7 @@ mxArray *map_mef3_vmd2(VIDEO_METADATA_SECTION_2 *vmd2) {
 	mxSetField(mat_md, 0, "number_of_clips", 				mxInt64ByValue(vmd2->number_of_clips));
 	mxSetField(mat_md, 0, "maximum_clip_bytes", 			mxInt64ByValue(vmd2->maximum_clip_bytes));
 	mxSetField(mat_md, 0, "video_format", 					mxCreateString(vmd2->video_format));
-	//mxSetField(mat_md, 0, "video_file_CRC", 				mxUInt32ByValue(vmd2->video_file_CRC));			// TODO: check with valid value, leave empty for now
+	//mxSetField(mat_md, 0, "video_file_CRC", 				mxUint32ByValue(vmd2->video_file_CRC));			// TODO: check with valid value, leave empty for now
 	
 	// return the struct
 	return mat_md;
@@ -820,8 +820,8 @@ mxArray *map_mef3_ti(TIME_SERIES_INDEX *ti, si8 number_of_entries) {
 		mxSetField(mat_ti, i, "file_offset", 				mxInt64ByValue(cur_ti->file_offset));
 		mxSetField(mat_ti, i, "start_time", 				mxInt64ByValue(cur_ti->start_time));
 		mxSetField(mat_ti, i, "start_sample", 				mxInt64ByValue(cur_ti->start_sample));
-		mxSetField(mat_ti, i, "number_of_samples", 			mxUInt32ByValue(cur_ti->number_of_samples));
-		mxSetField(mat_ti, i, "block_bytes", 				mxUInt32ByValue(cur_ti->block_bytes));
+		mxSetField(mat_ti, i, "number_of_samples", 			mxUint32ByValue(cur_ti->number_of_samples));
+		mxSetField(mat_ti, i, "block_bytes", 				mxUint32ByValue(cur_ti->block_bytes));
 		mxSetField(mat_ti, i, "maximum_sample_value", 		mxInt32ByValue(cur_ti->maximum_sample_value));
 		mxSetField(mat_ti, i, "minimum_sample_value", 		mxInt32ByValue(cur_ti->minimum_sample_value));
 		// mxSetField(mat_ti, i, "RED_block_flags", 			mxUInt8ByValue(cur_ti->RED_block_flags));	// TODO: check with value
@@ -845,8 +845,8 @@ mxArray *map_mef3_vi(VIDEO_INDEX *vi, si8 number_of_entries) {
 		
 		mxSetField(mat_vi, i, "start_time", 				mxInt64ByValue(cur_vi->start_time));
 		mxSetField(mat_vi, i, "end_time", 					mxInt64ByValue(cur_vi->end_time));
-		mxSetField(mat_vi, i, "start_frame", 				mxUInt32ByValue(cur_vi->start_frame));
-		mxSetField(mat_vi, i, "end_frame", 					mxUInt32ByValue(cur_vi->end_frame));
+		mxSetField(mat_vi, i, "start_frame", 				mxUint32ByValue(cur_vi->start_frame));
+		mxSetField(mat_vi, i, "end_frame", 					mxUint32ByValue(cur_vi->end_frame));
 		mxSetField(mat_vi, i, "file_offset", 				mxInt64ByValue(cur_vi->file_offset));
 		mxSetField(mat_vi, i, "clip_bytes", 				mxInt64ByValue(cur_vi->clip_bytes));
 		
