@@ -299,6 +299,98 @@ const char *FILE_PROCESSING_FIELDNAMES[]	= {
 // Functions to map c-objects to matlab-structs
 ///
 
+// map Universal_header c-structure to MatLab structure
+void map_mef3_segment_universal_header_tostruct(
+        UNIVERSAL_HEADER *universal_header, // universal header of 1st segment
+        mxArray *mat_universal_header,
+        int mat_index // index of structure matrix
+        ) {
+    
+    mxArray *fout;
+    
+    // 1
+    fout = mxInt64ByValue(universal_header->header_CRC);
+    mxSetField(mat_universal_header, mat_index, "header_CRC", fout);
+    // 2
+    fout = mxInt64ByValue(universal_header->body_CRC);
+    mxSetField(mat_universal_header, mat_index, "body_CRC", fout);
+    // 3
+    fout = mxCreateString(universal_header->file_type_string);
+    mxSetField(mat_universal_header, mat_index, "file_type_string", fout);
+    // 4
+    fout = mxInt8ByValue(universal_header->mef_version_major);
+    mxSetField(mat_universal_header, mat_index, "mef_version_major", fout);
+    // 5
+    fout = mxInt8ByValue(universal_header->mef_version_minor);
+    mxSetField(mat_universal_header, mat_index, "mef_version_minor", fout);
+    // 6
+    fout = mxInt8ByValue(universal_header->byte_order_code);
+    mxSetField(mat_universal_header, mat_index, "byte_order_code", fout);
+    // 7
+    fout = mxInt64ByValue(universal_header->start_time);
+    mxSetField(mat_universal_header, mat_index, "start_time", fout);
+    // 8
+    fout = mxInt64ByValue(universal_header->end_time);
+    mxSetField(mat_universal_header, mat_index, "end_time", fout);  
+    // 9
+    fout = mxInt64ByValue(universal_header->number_of_entries);
+    mxSetField(mat_universal_header, mat_index, "number_of_entries", fout);  
+    // 10
+    fout = mxInt64ByValue(universal_header->maximum_entry_size);
+    mxSetField(mat_universal_header, mat_index, "maximum_entry_size", fout);  
+    // 11
+    fout = mxInt32ByValue(universal_header->segment_number);
+    mxSetField(mat_universal_header, mat_index, "segment_number", fout);  
+    // 12
+    fout = mxCreateString(universal_header->channel_name);
+    mxSetField(mat_universal_header, mat_index, "channel_name", fout);  
+    // 13
+    fout = mxCreateString(universal_header->session_name);
+    mxSetField(mat_universal_header, mat_index, "session_name", fout);  
+    // 14
+    fout = mxCreateString(universal_header->anonymized_name);
+    mxSetField(mat_universal_header, mat_index, "anonymized_name", fout);  
+    // 15
+    fout = mxFillNumericArray(universal_header->level_UUID, UUID_BYTES);
+    mxSetField(mat_universal_header, mat_index, "level_UUID", fout);
+    // 16
+    fout = mxFillNumericArray(universal_header->file_UUID, UUID_BYTES);
+    mxSetField(mat_universal_header, mat_index, "file_UUID", fout);
+    // 17
+    fout = mxFillNumericArray(universal_header->provenance_UUID, UUID_BYTES);
+    mxSetField(mat_universal_header, mat_index, "provenance_UUID", fout);
+    // 18
+    fout = mxFillNumericArray(universal_header->level_1_password_validation_field, 
+            PASSWORD_VALIDATION_FIELD_BYTES);
+    mxSetField(mat_universal_header, mat_index, "level_1_password_validation_field", fout);
+    // 19
+    fout = mxFillNumericArray(universal_header->level_2_password_validation_field, 
+            PASSWORD_VALIDATION_FIELD_BYTES);
+    mxSetField(mat_universal_header, mat_index, "level_2_password_validation_field", fout);
+    // 20
+    fout = mxFillNumericArray(universal_header->protected_region, 
+            UNIVERSAL_HEADER_PROTECTED_REGION_BYTES);
+    mxSetField(mat_universal_header, mat_index, "protected_region", fout);
+    // 21
+    fout = mxFillNumericArray(universal_header->discretionary_region,
+            UNIVERSAL_HEADER_DISCRETIONARY_REGION_BYTES);    
+    mxSetField(mat_universal_header, mat_index, "discretionary_region", fout);
+    
+    return;
+}
+
+mxArray *map_mef3_segment_universal_header(UNIVERSAL_HEADER *universal_header) {
+    
+    mxArray *mat_universal_header;
+    int mat_index = 0;
+    
+    mat_universal_header = mxCreateStructMatrix(1, 1,
+            UNIVERSAL_HEADER_NUMFIELDS, UNIVERSAL_HEADER_FIELDNAMES);
+    map_mef3_segment_universal_header_tostruct(universal_header,
+            mat_universal_header, mat_index);
+    
+    return mat_universal_header;
+}
 
 
 /**

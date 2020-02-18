@@ -17,7 +17,7 @@
  */
 
 // Copyright 2020 Richard J. Cui. Created: Sun 02/16/2020 10:34:49.777 PM
-// $Revision: 0.1 $  $Date: Sun 02/16/2020 10:34:49.777 PM $
+// $Revision: 0.2 $  $Date: Mon 02/17/2020  7:38:26.233 PM $
 //
 // 1026 Rocky Creek Dr NE
 // Rochester, MN 55906, USA
@@ -27,7 +27,15 @@
 #include "mex.h"
 #include "meflib.h"
 
+// structures
 
+// function declaration
+void map_mef3_segment_universal_header_tostruct(
+        UNIVERSAL_HEADER *universal_header, // universal header of 1st segment
+        mxArray *mat_universal_header,
+        int mat_index // index of structure matrix
+        );
+mxArray *map_mef3_segment_universal_header(UNIVERSAL_HEADER *universal_header);
 void map_mef3_segment_tostruct(SEGMENT *segment, si1 map_indices_flag, mxArray *mat_segment, int mat_index);
 mxArray *map_mef3_segment(SEGMENT *segment, si1 map_indices_flag);
 void map_mef3_channel_tostruct(CHANNEL *channel, si1 map_indices_flag, mxArray *mat_channel, int mat_index);

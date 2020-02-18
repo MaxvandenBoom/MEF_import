@@ -13,7 +13,7 @@
  */
 
 // Copyright 2020 Richard J. Cui. Created: Sun 02/16/2020 10:34:49.777 PM
-// $Revision: 0.1 $  $Date: Sun 02/16/2020 10:34:49.777 PM $
+// $Revision: 0.2 $  $Date: Mon 02/17/2020  8:15:44.891 PM $
 //
 // 1026 Rocky Creek Dr NE
 // Rochester, MN 55906, USA
@@ -25,6 +25,18 @@
 #include "meflib.h"
 
 
+// fill a numeric array in mex c
+mxArray *mxFillNumericArray(ui1 *array, int num_bytes) {
+    int i;
+    unsigned char *ucp;
+    mxArray *fout;
+    
+    fout = mxCreateNumericMatrix(1, num_bytes, mxUINT8_CLASS, mxREAL);
+    ucp = (unsigned char *)mxGetData(fout);
+    for (i = 0; i < num_bytes; i++) ucp[i] = array[i];
+    
+    return fout;
+}
 
 /**
  * Create a (1x1 real) double matrix based on a MEF sf8 (signed 8 byte float) variable

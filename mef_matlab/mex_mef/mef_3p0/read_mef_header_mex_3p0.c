@@ -3,7 +3,7 @@
 // See read_mef_header_mex_3p0.m for details of usage.
 
 // Copyright 2020 Richard J. Cui. Created: Sun 02/02/2020  5:18:29.851 PM
-// $Revision: 0.3 $  $Date: Sun 02/16/2020 10:34:49.777 PM $
+// $Revision: 0.4 $  $Date: Mon 02/17/2020  8:15:44.891 PM $
 //
 // 1026 Rocky Creek Dr NE
 // Rochester, MN 55906, USA
@@ -16,140 +16,9 @@
 #include "matmef/matmef_mapping.h"
 #include "matmef/mex_datahelper.h"
 
-// Universal Header Structures
-const int SEG_UNIVERSAL_HEADER_NUMFIELDS		= 21;
-const char *SEG_UNIVERSAL_HEADER_FIELDNAMES[] 	= {
-    "header_CRC",
-    "body_CRC",
-    "file_type_string",
-    "mef_version_major",
-    "mef_version_minor",
-    "byte_order_code",
-    "start_time",
-    "end_time",
-    "number_of_entries",
-    "maximum_entry_size",
-    "segment_number",
-    "channel_name",					// utf8[63], base name only, no extension
-    "session_name",					// utf8[63], base name only, no extension
-    "anonymized_name",				// utf8[63]
-    "level_UUID",
-    "file_UUID",
-    "provenance_UUID",
-    "level_1_password_validation_field",
-    "level_2_password_validation_field",
-    "protected_region",
-    "discretionary_region"
-};
-
 /**************************************************************************
  * subroutines
  *************************************************************************/
-// fill a numeric array in mex c
-mxArray *mxFillNumericArray(ui1 *array, int num_bytes) {
-    int i;
-    unsigned char *ucp;
-    mxArray *fout;
-    
-    fout = mxCreateNumericMatrix(1, num_bytes, mxUINT8_CLASS, mxREAL);
-    ucp = (unsigned char *)mxGetData(fout);
-    for (i = 0; i < num_bytes; i++) ucp[i] = array[i];
-    
-    return fout;
-}
-
-// map Universal_header c-structure to MatLab structure
-void map_mef3_segment_universal_header_tostruct(
-        UNIVERSAL_HEADER *universal_header, // universal header of 1st segment
-        mxArray *mat_universal_header,
-        int mat_index // index of structure matrix
-        ) {
-    
-    mxArray *fout;
-    
-    // 1
-    fout = mxInt64ByValue(universal_header->header_CRC);
-    mxSetField(mat_universal_header, mat_index, "header_CRC", fout);
-    // 2
-    fout = mxInt64ByValue(universal_header->body_CRC);
-    mxSetField(mat_universal_header, mat_index, "body_CRC", fout);
-    // 3
-    fout = mxCreateString(universal_header->file_type_string);
-    mxSetField(mat_universal_header, mat_index, "file_type_string", fout);
-    // 4
-    fout = mxInt8ByValue(universal_header->mef_version_major);
-    mxSetField(mat_universal_header, mat_index, "mef_version_major", fout);
-    // 5
-    fout = mxInt8ByValue(universal_header->mef_version_minor);
-    mxSetField(mat_universal_header, mat_index, "mef_version_minor", fout);
-    // 6
-    fout = mxInt8ByValue(universal_header->byte_order_code);
-    mxSetField(mat_universal_header, mat_index, "byte_order_code", fout);
-    // 7
-    fout = mxInt64ByValue(universal_header->start_time);
-    mxSetField(mat_universal_header, mat_index, "start_time", fout);
-    // 8
-    fout = mxInt64ByValue(universal_header->end_time);
-    mxSetField(mat_universal_header, mat_index, "end_time", fout);  
-    // 9
-    fout = mxInt64ByValue(universal_header->number_of_entries);
-    mxSetField(mat_universal_header, mat_index, "number_of_entries", fout);  
-    // 10
-    fout = mxInt64ByValue(universal_header->maximum_entry_size);
-    mxSetField(mat_universal_header, mat_index, "maximum_entry_size", fout);  
-    // 11
-    fout = mxInt32ByValue(universal_header->segment_number);
-    mxSetField(mat_universal_header, mat_index, "segment_number", fout);  
-    // 12
-    fout = mxCreateString(universal_header->channel_name);
-    mxSetField(mat_universal_header, mat_index, "channel_name", fout);  
-    // 13
-    fout = mxCreateString(universal_header->session_name);
-    mxSetField(mat_universal_header, mat_index, "session_name", fout);  
-    // 14
-    fout = mxCreateString(universal_header->anonymized_name);
-    mxSetField(mat_universal_header, mat_index, "anonymized_name", fout);  
-    // 15
-    fout = mxFillNumericArray(universal_header->level_UUID, UUID_BYTES);
-    mxSetField(mat_universal_header, mat_index, "level_UUID", fout);
-    // 16
-    fout = mxFillNumericArray(universal_header->file_UUID, UUID_BYTES);
-    mxSetField(mat_universal_header, mat_index, "file_UUID", fout);
-    // 17
-    fout = mxFillNumericArray(universal_header->provenance_UUID, UUID_BYTES);
-    mxSetField(mat_universal_header, mat_index, "provenance_UUID", fout);
-    // 18
-    fout = mxFillNumericArray(universal_header->level_1_password_validation_field, 
-            PASSWORD_VALIDATION_FIELD_BYTES);
-    mxSetField(mat_universal_header, mat_index, "level_1_password_validation_field", fout);
-    // 19
-    fout = mxFillNumericArray(universal_header->level_2_password_validation_field, 
-            PASSWORD_VALIDATION_FIELD_BYTES);
-    mxSetField(mat_universal_header, mat_index, "level_2_password_validation_field", fout);
-    // 20
-    fout = mxFillNumericArray(universal_header->protected_region, 
-            UNIVERSAL_HEADER_PROTECTED_REGION_BYTES);
-    mxSetField(mat_universal_header, mat_index, "protected_region", fout);
-    // 21
-    fout = mxFillNumericArray(universal_header->discretionary_region,
-            UNIVERSAL_HEADER_DISCRETIONARY_REGION_BYTES);    
-    mxSetField(mat_universal_header, mat_index, "discretionary_region", fout);
-    
-    return;
-}
-
-mxArray *map_mef3_segment_universal_header(UNIVERSAL_HEADER *universal_header) {
-    
-    mxArray *mat_universal_header;
-    int mat_index = 0;
-    
-    mat_universal_header = mxCreateStructMatrix(1, 1,
-            SEG_UNIVERSAL_HEADER_NUMFIELDS, SEG_UNIVERSAL_HEADER_FIELDNAMES);
-    map_mef3_segment_universal_header_tostruct(universal_header,
-            mat_universal_header, mat_index);
-    
-    return mat_universal_header;
-}
 
 /**************************************************************************
  * main entrence
