@@ -1,16 +1,17 @@
 function vers = eegplugin_mefimport(fig, try_strings, catch_strings)
-% EEGPLUGIN_MEFIMPORT EEGLAB plugin for importing MSEL-UP .MEF file
+% EEGPLUGIN_MEFIMPORT EEGLAB plugin for importing Mayo Clinic MEF file
 % 
 % Syntax:
 %   vers = eegplugin_mefimport(fig, try_strings, catch_strings)
 %
 % Input(s):
-%   fig            - [num]  handle to EEGLAB figure
-%   try_strings    - [struct] "try" strings for menu callbacks.
-%   catch_strings  - [struct] "catch" strings for menu callbacks. 
+%   fig             - [num]  handle to EEGLAB figure
+%   try_strings     - [struct] "try" strings for menu callbacks.
+%   catch_strings   - [struct] "catch" strings for menu callbacks. 
 %
 % Output(s):
-%
+%   vers            - [str] version information
+% 
 % Example:
 %
 % Note:
@@ -23,7 +24,7 @@ function vers = eegplugin_mefimport(fig, try_strings, catch_strings)
 % See also .
 
 % Copyright 2019-2020 Richard J. Cui. Created: Sun 04/28/2019  9:51:01.691 PM
-% $Revision: 1.7 $  $Date: Sat 02/15/2020  9:04:57.429 PM $
+% $Revision: 1.8 $  $Date: Tue 02/18/2020 10:39:50.006 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
