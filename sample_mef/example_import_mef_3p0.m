@@ -20,7 +20,7 @@ mef_ver = 3.0;
 % Set the session path
 % --------------------
 sample_data_folder = fileparts(mfilename("fullpath"));
-sess_path = fullfile(sample_data_folder, 'mef_3p0');
+sess_path = fullfile(sample_data_folder, 'mef_3p0.mefd');
 
 % select channels
 % ---------------

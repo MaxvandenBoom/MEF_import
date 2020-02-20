@@ -48,7 +48,7 @@ function [EEG, com] = pop_mefimport(EEG, varargin)
 % See also EEGLAB, mefimport.
 
 % Copyright 2019-2020 Richard J. Cui. Created: Tue 05/07/2019 10:33:48.169 PM
-% $Revision: 1.6 $  $Date: Mon 02/10/2020  9:48:02.611 PM $
+% $Revision: 1.7 $  $Date: Wed 02/19/2020 11:14:56.759 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -154,7 +154,7 @@ defaultUnit = 'uutc';
 expectedUnit = {'index', 'uutc', 'second', 'minute', 'hour', 'day'};
 default_pw = struct([]);
 
-valid_se = @(x) (isnumeric(x) && numel(x) == 2 && x(1) <= x(2));
+valid_se = @(x) isempty(x) || (isnumeric(x) && numel(x) == 2 && x(1) <= x(2));
 
 % parse rules
 p = inputParser;
