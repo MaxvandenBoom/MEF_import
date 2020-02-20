@@ -1,0 +1,17 @@
+{
+  "InstitutionAddress": "Address",
+  "InstitutionName": "University",
+  "InstitutionalDepartmentName": "Department",
+  "PowerLineFrequency": 50,
+  "ManufacturersModelName": "Model",
+  "TaskName": "Example",
+  "SamplingFrequency": 255.997,
+  "EEGChannelCount": 4,
+  "EOGChannelCount": 0,
+  "ECGChannelCount": 0,
+  "EMGChannelCount": 0,
+  "EEGReference": "N/A",
+  "Manufacturer": "BIOSEMI",
+  "RecordingType": "continuous",
+  "RecordingDuration": 2721
+}
