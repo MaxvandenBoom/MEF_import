@@ -25,8 +25,9 @@ sess_path = fullfile(sample_data_folder, 'mef_3p0.mefd');
 % select channels
 % ---------------
 % the type of the variable of the selected channels is string array
-sel_chan = ["left_central-ref", "Left_Occipital-Ref",...
-    "Left-Right_Central", "left-right_occipital"]; 
+% sel_chan = ["left_central-ref", "Left_Occipital-Ref",...
+%     "Left-Right_Central", "left-right_occipital"]; 
+sel_chan = [];
 
 % set the start and end time point of signal segment
 % --------------------------------------------------

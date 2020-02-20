@@ -11,7 +11,7 @@ classdef MEFSession < handle
     % See also .
     
     % Copyright 2020 Richard J. Cui. Created: TThu 02/06/2020 10:07:26.965 AM
-    % $Revision: 0,2 $  $Date: Sat 02/08/2020 11:34:43.160 PM $
+    % $Revision: 0,3 $  $Date: Thu 02/20/2020 10:42:18.299 AM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -33,6 +33,9 @@ classdef MEFSession < handle
     % ---------------------------------
     properties        
         SessionPath         % session directory
+        PathToSession       % not include session name and extension
+        SessionName         % not include extension
+        SessionExt          % session extension (includes the '.')
         Password            % password structure of the session
         ChannelName         % channel names
         SamplingFrequency   % in Hz
@@ -68,6 +71,7 @@ classdef MEFSession < handle
         rel_time = abs2relativeTimePoint(this, abs_time, unit) % absolute to relative time points
         abs_time = relative2absTimePoint(this, rel_time, unit) % relative to absolute time points
         out_time = SessionUnitConvert(this, in_time, varargin) % convert units of relative time points
+        [path_to_sess, sess_name, sess_ext] = get_sess_parts(this, varargin) % get the parts of session path
     end % methods
 end
 

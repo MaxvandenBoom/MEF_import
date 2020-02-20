@@ -19,7 +19,7 @@ classdef MEFSession_3p0 < MEFSession & MultiscaleElectrophysiologyFile_3p0
     % See also get_sessinfo.
 
 	% Copyright 2020 Richard J. Cui. Created: Thu 02/06/2020 10:07:26.965 AM
-	% $Revision: 0.1 $  $Date: Thu 02/06/2020 10:07:26.965 AM $
+	% $Revision: 0.2 $  $Date: TThu 02/20/2020 10:42:18.299 AM $
 	%
 	% 1026 Rocky Creek Dr NE
 	% Rochester, MN 55906, USA
@@ -62,10 +62,13 @@ classdef MEFSession_3p0 < MEFSession & MultiscaleElectrophysiologyFile_3p0
             
             % operations during construction
             % ------------------------------
+            % initialize super classes
+            
             % set session info
             this.SessionPath = q.sesspath; % set session path directory
             this.Password = q.password; % set password
             this.MetaData = this.read_mef_session_metadata_3p0;
+            this.get_sess_parts;
             this.get_sessinfo;
             
             % set MEF version to serve

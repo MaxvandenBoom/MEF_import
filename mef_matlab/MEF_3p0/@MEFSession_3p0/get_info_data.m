@@ -30,7 +30,7 @@ function [sess_info, unit] = get_info_data(this)
 % See also MEFSession_3p0, get_sessinfo.
 
 % Copyright 2020 Richard J. Cui. Created: Fri 01/03/2020  4:19:10.683 PM
-% $ Revision: 0.2 $  $ Date: Fri 02/07/2020 11:34:16.078 PM $
+% $ Revision: 0.3 $  $ Date: Thu 02/20/2020 11:49:42.626 AM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -62,7 +62,7 @@ if num_chan < 1 % no time series channel
 else % if
     unit = 'uUTC';
     sz = [num_chan, numel(var_names)];
-    fp = fullfile(metadata.path, metadata.name); % session path of channels
+    fp = this.SessionPath; % session path of channels
     ts_channel = metadata.time_series_channels; % structure of time-series channel
     pw = this.processPassword(this.Password); % password
     sess_info = table('size', sz, 'VariableTypes', var_types,...

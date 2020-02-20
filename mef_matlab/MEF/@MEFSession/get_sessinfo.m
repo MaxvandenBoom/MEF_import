@@ -29,14 +29,14 @@ function varargout = get_sessinfo(this)
 % Note:
 %   This function obtains information about the session from the data
 %   directly.  Other information, such as session directory and password,
-%   should be provided via MEFSession_2p1 object.
+%   should be provided via MEFSession_2p1/3p0 object.
 %
 % References:
 %
 % See also MEFSession_2p1, get_info_data.
 
 % Copyright 2020 Richard J. Cui. Created: Fri 01/03/2020  4:19:10.683 PM
-% $ Revision: 0.6 $  $ Date: Tue 02/11/2020  1:02:34.224 AM $
+% $ Revision: 0.7 $  $ Date: Thu 02/20/2020 10:42:18.299 AM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -59,6 +59,7 @@ else
     if this.checkSessValid == true
         si_value = get_sess_info_value(sess_info, unit, false);
     else
+        warning('on'); warning('off','backtrace')
         warning('MEFSession:get_sessinfo:emptySession',...
             'The session is either empty or the data are not consistent. Please check messages')
         si_value = get_sess_info_value(sess_info, unit, true);

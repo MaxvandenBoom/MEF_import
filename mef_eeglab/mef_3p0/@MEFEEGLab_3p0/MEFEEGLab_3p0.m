@@ -20,7 +20,7 @@ classdef MEFEEGLab_3p0 < MEFSession_3p0 & MEFEEGLab
     % See also .
     
     % Copyright 2020 Richard J. Cui. Created: Sun 02/09/2020  3:45:09.696 PM
-    % $Revision: 0.1 $  $Date: Sun 02/09/2020  3:45:09.696 PM $
+    % $Revision: 0.2 $  $Date: Thu 02/20/2020 11:55:09.586 AM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -60,25 +60,6 @@ classdef MEFEEGLab_3p0 < MEFSession_3p0 & MEFEEGLab
             % ------------------------------
             % call super class
             this@MEFSession_3p0(q.sesspath, q.password);
-            % sesspath = q.sesspath;
-            % password = q.password;
-            % 
-            % if isempty(sesspath)
-            %     error('MEFEEGLab_3p0:noSessionPath',...
-            %         'Session path must be specified')
-            % else
-            %     this.SessionPath = sesspath;
-            % end % if
-            % this.Password = password;
-            % this.get_sessinfo; % check session information
-            
-            % % set MEF version to serve
-            % if isempty(this.MEFVersion) == true
-            %     this.MEFVersion = 3.0;
-            % elseif this.MEFVersion ~= 3.0
-            %     error('MEFEEGLab_3p0:invalidMEFVer',...
-            %         'invalid MEF version; this function can serve only MEF 3.0')
-            % end % if            
         end %function
     end % methods
     
