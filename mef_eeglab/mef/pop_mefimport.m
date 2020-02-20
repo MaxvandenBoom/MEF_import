@@ -48,7 +48,7 @@ function [EEG, com] = pop_mefimport(EEG, varargin)
 % See also EEGLAB, mefimport.
 
 % Copyright 2019-2020 Richard J. Cui. Created: Tue 05/07/2019 10:33:48.169 PM
-% $Revision: 1.7 $  $Date: Wed 02/19/2020 11:14:56.759 PM $
+% $Revision: 1.8 $  $Date: Thu 02/20/2020 12:11:06.383 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -110,10 +110,14 @@ else
         sel_chan = this.ChannelName;
     end % if
     this.SelectedChannel = sel_chan;
-    this.SEUnit = unit;
     if isempty(start_end)
+        % TODO: how to use proper unit
+        unit = this.Unit; % now just ignore uer's unit
         start_end = this.abs2relativeTimePoint(this.BeginStop, unit);
+        % start_end_sys = this.abs2relativeTimePoint(this.BeginStop, this.Unit);
+        % start_end = this.SessionUnitConvert(start_end_sys, this.Unit, unit);
     end % if
+    this.SEUnit = unit;
     this.StartEnd = start_end; % relative time points
 end % if
 EEG = this.mefimport(EEG);
@@ -161,7 +165,8 @@ p = inputParser;
 p.addRequired('EEG', @(x) isempty(x) || isstruct(x));
 p.addOptional('mef_ver', default_mv, @isnumeric);
 p.addOptional('sess_path', defaultFP, @ischar);
-p.addOptional('sel_chan', defaultFN, @(x) ischar(x) || iscellstr(x) || isstring(x));
+p.addOptional('sel_chan', defaultFN, @(x) isempty(x) || ischar(x)...
+    || iscellstr(x) || isstring(x));
 p.addOptional('start_end', defaultSE, valid_se);
 p.addOptional('unit', defaultUnit,...
     @(x) any(validatestring(x, expectedUnit)));

@@ -6,7 +6,7 @@
 % See also example_import_mef_2p1.
 
 % Copyright 2020 Richard J. Cui. Adapted: Wed 02/12/2020  3:31:26.134 PM
-% $Revision: 0.1 $  $Date: Wed 02/12/2020  3:31:26.134 PM $
+% $Revision: 0.2 $  $Date: Thu 02/20/2020 12:11:06.383 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -25,15 +25,16 @@ sess_path = fullfile(sample_data_folder, 'mef_3p0.mefd');
 % select channels
 % ---------------
 % the type of the variable of the selected channels is string array
+sel_chan = []; % all channels
 % sel_chan = ["left_central-ref", "Left_Occipital-Ref",...
 %     "Left-Right_Central", "left-right_occipital"]; 
-sel_chan = [];
 
 % set the start and end time point of signal segment
 % --------------------------------------------------
 % this is a relative time point. the time of signal starts at 0 and the 1st
 % sample index is 1.
-start_end = [0, 10]; 
+start_end = []; % all data
+% start_end = [0, 10]; 
 
 % set the unit of time point 
 % --------------------------
