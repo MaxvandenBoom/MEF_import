@@ -19,7 +19,7 @@ Installation
 
         git submodule add https://github.com/jiecui/MEF_import ./plugins/MEF_import
 
-        subsequently, change the folder name of the plugin 
+   subsequently, change the folder name of the plugin 
 
         git mv ./plugins/MEF_import ./plugins/MEF_import1.16.
 
