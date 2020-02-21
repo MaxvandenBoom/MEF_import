@@ -1,8 +1,6 @@
 MEF 2.1, 3.0 EEGLAB Plugin MEF_import (Ver 1.16)
 ===================================================
 
-_Caution: this version is under development, which may not be stable_
-
 Introduction
 ------------
 **MEF_import** is an EEGLAB plugin that imports data compressed in Multiscale Electrophysiology Format (or Mayo EEG File, MEF, see below) and Multiscale Annotation File (MAF) data into [EEGLAB](https://sccn.ucsd.edu/eeglab/index.php).
@@ -37,7 +35,7 @@ Data samples
 ------------
 1. Two small sample datasets, of MEF 2.1 and MEF 3.0, respectively, are provided to test the code.
 1. The folder of the sample datasets is 'sample_mef' (/root/directory/of/eeglab/plugins/MEF_import1.14/sample_mef).
-Two data samples are included as subdirectories: 'mef_2p1' and 'mef_3p0'.
+Two data samples are included as subdirectories: 'mef_2p1' and 'mef_3p0.mefd'.
 1. The directory 'mef_2p1' includes the session of MEF 2.1 signal (passwords: 'erlichda' for Subject password; 'sieve' for Session password; no password required for Data password).
 1. The directory 'mef_3p0' includes the session of MEF 3.0 signal (level 1 password: password1; level 2 passowrd: password2; access level: 2).
 
@@ -64,7 +62,7 @@ mef_ver = 3.0;
 % set the session path
 % --------------------
 % please replace the root directory of eeglab with the directory on your system
-sess_path = '/root/directory/of/eeglab/plugins/MEF_import1.14/sample_mef/mef_3p0';
+sess_path = '/root/directory/of/eeglab/plugins/MEF_import1.14/sample_mef/mef_3p0.mefd';
 
 % select channels
 % ---------------
