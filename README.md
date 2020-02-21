@@ -15,8 +15,12 @@ Installation
 ------------
 1. Download, decompress and copy the directory into the directory of plugins of EEGLAB (/root/directory/of/eeglab/plugins)
 1. Rename the folder name of MEF_import plugin to MEF_import1.16
-1. Alternatively, you may prefer to install the plugin as a Git submodule: go to the directory of eeglab, then run ```git submodule add https://github.com/jiecui/MEF_import ./plugins/MEF_import```;
-subsequently, change the folder name of the plugin ```git mv ./plugins/MEF_import ./plugins/MEF_import1.16```.
+1. Alternatively, you may prefer to install the plugin as a Git submodule: go to the directory of eeglab, then run 
+
+     git submodule add https://github.com/jiecui/MEF_import ./plugins/MEF_import
+subsequently, change the folder name of the plugin 
+
+     git mv ./plugins/MEF_import ./plugins/MEF_import1.16.
 On the other hand, if you have already installed it as a submodule, say MEF_import1.15, use ```git mv``` to rename it to MEF_import1.16 and then pull the changes from the remote.
 1. Launch EEGLAB in MATLAB, e.g. ```>> eeglab```
 1. Follow the instructions on the screen
@@ -109,7 +113,7 @@ The details of MEF file can be found at [here](https://www.mayo.edu/research/lab
 
 The c-mex code to read MEF 2.1 data is mainly developed from the work done by [Ben Brinkmann](https://github.com/benbrinkmann/mef_lib_2_1), Matt Stead, Dan Crepeau, and [Gregory Worrell](https://www.mayo.edu/research/faculty/worrell-gregory-a-m-d-ph-d/bio-00027235) from [Mayo Systems Electrophysiology Lab](https://msel.mayo.edu/codes.html),  Mayo Clinic, Rochester MN.
 
-The c-mex code for MEF 3.0 is mainly adapted from the work by [Max van den Boom](https://github.com/MaxvandenBoom/matmef) and Dora Hermes Miller at Multimodal Neuroimaging Lab, Mayo Clinic, Rochester MN.
+The c-mex code for MEF 3.0 is mainly adapted from the work by [Max van den Boom](https://github.com/MaxvandenBoom/matmef) and Dora Hermes Miller at [Multimodal Neuroimaging Lab](https://github.com/MultimodalNeuroimagingLab), Mayo Clinic, Rochester MN.
 
 License
 -------
