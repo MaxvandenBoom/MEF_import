@@ -1,7 +1,7 @@
 MEF 2.1, 3.0 EEGLAB Plugin MEF_import (Ver 1.17)
 ===================================================
 
-_Caution: This version is under development, which may be unstable_
+_Caution: This version is under development, which may be unstable._
 
 Introduction
 ------------
