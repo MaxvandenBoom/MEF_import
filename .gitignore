@@ -21,6 +21,9 @@
 # OSX / *nix default autosave extension
 *.m~
 
+# Compiled MEX binaries (all platforms)
+# *.mex*
+
 # Simulink Code Generation
 slprj/
 
@@ -29,4 +32,3 @@ octave-workspace
 
 # Simulink autosave extension
 .autosave
-

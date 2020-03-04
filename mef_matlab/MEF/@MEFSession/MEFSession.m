@@ -10,7 +10,7 @@ classdef MEFSession < handle
     %
     % See also .
     
-    % Copyright 2020 Richard J. Cui. Created: TThu 02/06/2020 10:07:26.965 AM
+    % Copyright 2020 Richard J. Cui. Created: Thu 02/06/2020 10:07:26.965 AM
     % $Revision: 0,3 $  $Date: Thu 02/20/2020 10:42:18.299 AM $
     %
     % 1026 Rocky Creek Dr NE
