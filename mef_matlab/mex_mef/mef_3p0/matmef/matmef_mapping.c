@@ -321,10 +321,10 @@ void map_mef3_segment_universal_header_tostruct(
     fout = mxUint8ByValue(universal_header->mef_version_major);
     mxSetField(mat_universal_header, mat_index, "mef_version_major", fout);
     // 5
-    fout = mxInt8ByValue(universal_header->mef_version_minor);
+    fout = mxUint8ByValue(universal_header->mef_version_minor);
     mxSetField(mat_universal_header, mat_index, "mef_version_minor", fout);
     // 6
-    fout = mxInt8ByValue(universal_header->byte_order_code);
+    fout = mxUint8ByValue(universal_header->byte_order_code);
     mxSetField(mat_universal_header, mat_index, "byte_order_code", fout);
     // 7
     fout = mxInt64ByValue(universal_header->start_time);
@@ -408,12 +408,18 @@ mxArray *map_mef3_segment_universal_header(UNIVERSAL_HEADER *universal_header) {
 void map_mef3_segment_tostruct(SEGMENT *segment, si1 map_indices_flag, mxArray *mat_segment, int mat_index) {
 
 	// set segment specific properties
-	mxSetField(mat_segment, mat_index, "channel_type", 				mxInt32ByValue(segment->channel_type));
-	mxSetField(mat_segment, mat_index, "name", 						mxCreateString(segment->name));
-	mxSetField(mat_segment, mat_index, "path", 						mxCreateString(segment->path));
-	mxSetField(mat_segment, mat_index, "channel_name", 				mxCreateString(segment->channel_name));
-	mxSetField(mat_segment, mat_index, "session_name", 				mxCreateString(segment->session_name));
-	//mxSetField(mat_segment, mat_index, "level_UUID", 				mxCreateString(segment->level_UUID));	// TODO: check with valid value
+	mxSetField(mat_segment, mat_index, "channel_type",
+            mxInt32ByValue(segment->channel_type));
+	mxSetField(mat_segment, mat_index, "name",
+            mxCreateString(segment->name));
+	mxSetField(mat_segment, mat_index, "path",
+            mxCreateString(segment->path));
+	mxSetField(mat_segment, mat_index, "channel_name",
+            mxCreateString(segment->channel_name));
+	mxSetField(mat_segment, mat_index, "session_name",
+            mxCreateString(segment->session_name));
+	mxSetField(mat_segment, mat_index, "level_UUID",
+            mxFillNumericArray((segment->level_UUID), UUID_BYTES));
 	
 	
 	//
@@ -525,7 +531,8 @@ void map_mef3_channel_tostruct(CHANNEL *channel, si1 map_indices_flag, mxArray *
 	mxSetField(mat_channel, mat_index, "name", 						mxCreateString(channel->name));
 	mxSetField(mat_channel, mat_index, "extension", 				mxCreateString(channel->extension));
 	mxSetField(mat_channel, mat_index, "session_name", 				mxCreateString(channel->session_name));
-	//mxSetField(mat_channel, mat_index, "level_UUID", 				mxCreateString(channel->level_UUID));	// TODO: check with valid value
+	mxSetField(mat_channel, mat_index, "level_UUID",
+            mxFillNumericArray((channel->level_UUID), UUID_BYTES));
 	mxSetField(mat_channel, mat_index, "anonymized_name", 			mxCreateString(channel->anonymized_name));
 	mxSetField(mat_channel, mat_index, "maximum_number_of_records", mxInt64ByValue(channel->maximum_number_of_records));
 	mxSetField(mat_channel, mat_index, "maximum_record_bytes", 		mxInt64ByValue(channel->maximum_record_bytes));
@@ -565,6 +572,9 @@ void map_mef3_channel_tostruct(CHANNEL *channel, si1 map_indices_flag, mxArray *
 	}  
 	mxSetField(channel_metadata_struct, 0, "section_3", map_mef3_md3(channel->metadata.section_3));
 	
+    //
+    // setment
+    //
 	// check if there are segments for this channel
 	if (channel->number_of_segments > 0) {
 		
@@ -620,7 +630,8 @@ mxArray *map_mef3_session(SESSION *session, si1 map_indices_flag) {
 	mxSetField(mat_session, 0, "name", 								mxCreateString(session->name));
 	mxSetField(mat_session, 0, "path", 								mxCreateString(session->path));
 	mxSetField(mat_session, 0, "anonymized_name", 					mxCreateString(session->anonymized_name));
-	//mxSetField(mat_session, 0, "level_UUID", 						mxCreateString(session->level_UUID));	// TODO: check with valid value
+	mxSetField(mat_session, 0, "level_UUID",
+            mxFillNumericArray(session->level_UUID, UUID_BYTES));
 
 	mxSetField(mat_session, 0, "maximum_number_of_records", 		mxInt64ByValue(session->maximum_number_of_records));
 	mxSetField(mat_session, 0, "maximum_record_bytes", 				mxInt64ByValue(session->maximum_record_bytes));
