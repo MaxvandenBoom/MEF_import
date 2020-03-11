@@ -309,16 +309,16 @@ void map_mef3_segment_universal_header_tostruct(
     mxArray *fout;
     
     // 1
-    fout = mxInt64ByValue(universal_header->header_CRC);
+    fout = mxUint64ByValue(universal_header->header_CRC);
     mxSetField(mat_universal_header, mat_index, "header_CRC", fout);
     // 2
-    fout = mxInt64ByValue(universal_header->body_CRC);
+    fout = mxUint64ByValue(universal_header->body_CRC);
     mxSetField(mat_universal_header, mat_index, "body_CRC", fout);
     // 3
     fout = mxCreateString(universal_header->file_type_string);
     mxSetField(mat_universal_header, mat_index, "file_type_string", fout);
     // 4
-    fout = mxInt8ByValue(universal_header->mef_version_major);
+    fout = mxUint8ByValue(universal_header->mef_version_major);
     mxSetField(mat_universal_header, mat_index, "mef_version_major", fout);
     // 5
     fout = mxInt8ByValue(universal_header->mef_version_minor);
@@ -824,8 +824,7 @@ mxArray *map_mef3_ti(TIME_SERIES_INDEX *ti, si8 number_of_entries) {
 		mxSetField(mat_ti, i, "block_bytes", 				mxUint32ByValue(cur_ti->block_bytes));
 		mxSetField(mat_ti, i, "maximum_sample_value", 		mxInt32ByValue(cur_ti->maximum_sample_value));
 		mxSetField(mat_ti, i, "minimum_sample_value", 		mxInt32ByValue(cur_ti->minimum_sample_value));
-		// mxSetField(mat_ti, i, "RED_block_flags", 			mxUInt8ByValue(cur_ti->RED_block_flags));	// TODO: check with value
-        mxSetField(mat_ti, i, "RED_block_flags", 			mxInt8ByValue(cur_ti->RED_block_flags));	// rjc
+		mxSetField(mat_ti, i, "RED_block_flags", 			mxUint8ByValue(cur_ti->RED_block_flags));
 	}	
 	
 	// return the struct

@@ -20,7 +20,7 @@
  */
 
 // Copyright 2020 Richard J. Cui. Created: Sun 02/16/2020 10:34:49.777 PM
-// $Revision: 0.1 $  $Date: Sun 02/16/2020 10:34:49.777 PM $
+// $Revision: 0.2 $  $Date: Tue 03/10/2020 10:40:35.408 PM $
 //
 // 1026 Rocky Creek Dr NE
 // Rochester, MN 55906, USA
@@ -120,10 +120,10 @@ mxArray *read_channel_data_from_object(CHANNEL *channel, bool range_type, si8 ra
 	}
 	
 	// set the default ranges for the samples and time to all
-	ui8 start_samp = 0;
-    ui8 start_time = channel->earliest_start_time;
-    ui8 end_samp = channel->metadata.time_series_section_2->number_of_samples;
-    ui8 end_time = channel->latest_end_time;
+	si8 start_samp = 0;
+    si8 start_time = channel->earliest_start_time;
+    si8 end_samp = channel->metadata.time_series_section_2->number_of_samples;
+    si8 end_time = channel->latest_end_time;
 	
 	// update the ranges if available (> -1)
 	if (range_start > -1)	start_samp 	= start_time 	= range_start;
@@ -276,7 +276,7 @@ mxArray *read_channel_data_from_object(CHANNEL *channel, bool range_type, si8 ra
     }
     
     // find total_samps and total_data_bytes, so we can allocate buffers
-    ui8 total_samps = 0;
+    si8 total_samps = 0;
     ui8 total_data_bytes = 0;
     
     // check if the data is in one segment or multiple
@@ -822,4 +822,4 @@ si4 check_block_crc(ui1 *block_hdr_ptr, ui4 max_samps, ui1 *total_data_ptr, ui8 
 	
 }
 
-
+// [EOF]
