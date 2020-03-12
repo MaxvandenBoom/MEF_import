@@ -10,7 +10,7 @@ function bid = readBlockIndexData(this, varargin)
 %   channel         - [struct] (opt) channel metadata structure
 % 
 % Output(s):
-%   bid             - [N x 7 table] N is the number of blocks indexed. Each
+%   bid             - [N x 8 table] N is the number of blocks indexed. Each
 %                     row has seven varialbes:
 %                     Segment       : [num] the INDEX of segment of the 
 %                                     recorded data block
@@ -28,6 +28,13 @@ function bid = readBlockIndexData(this, varargin)
 %                                     change to Matlab convention to start
 %                                     at one)
 %                     NumOfSamples  : [num] number of samples in the block
+%                     REDBlockFlags : [Uint8] RED Block flags
+%                                     Bit 0     - Discontinuity bit (1 dis.)
+%                                     Bit 1     - Level 1 encrypted block
+%                                                 bit
+%                                     Bit 2     - Level 2 encrypted block
+%                                                 bit
+%                                     Bits 3-7  - reserved for future use
 % 
 % Note:
 %   All indexes start at one (1), using matlab convention.
@@ -35,6 +42,14 @@ function bid = readBlockIndexData(this, varargin)
 %   See the details of MEF file at https://msel.mayo.edu/codes.html.
 % 
 % See also .
+
+% Copyright 2020 Richard J. Cui. Created: Wed 02/05/2020 10:19:17.599 AM
+% $Revision: 0.3 $  $Date: Wed 03/11/2020  4:41:01.147 PM $
+%
+% 1026 Rocky Creek Dr NE
+% Rochester, MN 55906, USA
+%
+% Email: richard.cui@utoronto.ca
 
 % =========================================================================
 % parse inputs
@@ -51,7 +66,7 @@ end % if
 fs = this.ChanSamplingFreq;
 MPS = this.MPS;
 var_names = {'Segment', 'Block', 'FileOffset', 'StartTime', 'EndTime',...
-    'StartSample', 'NumOfSamples'};
+    'StartSample', 'NumOfSamples', 'REDBlockFlags'};
 bid = read_mef_bid(channel, MPS, fs, var_names);
 
 % update
@@ -99,6 +114,8 @@ for j = 1:num_seg
         bid_mat(row_index, 6) = tsi_jk.start_sample+1; % change to matlab convention
         % number_of_samples
         bid_mat(row_index, 7) = num_samples_jk;
+        % RED_block_flags
+        bid_mat(row_index, 8) = tsi_jk.RED_block_flags;
     end % for
 end % for
 

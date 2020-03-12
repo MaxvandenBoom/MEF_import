@@ -36,7 +36,7 @@ function seg_cont = analyzeContinuity(this, varargin)
 % See also readBlockIndexData.
 
 % Copyright 2020 Richard J. Cui. Created: Wed 02/05/2020 10:19:17.599 AM
-% $Revision: 0.2 $  $Date: Wed 02/05/2020  8:02:18.664 PM $
+% $Revision: 0.3 $  $Date: Wed 03/11/2020  4:41:01.147 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -61,6 +61,9 @@ fprintf('Analyzing signal continuity...')
 
 % find out index of continous chunks
 % -----------------------------------
+flag_2nd_check = false;
+
+% (1) use time criterion
 num_blks = height(bid); % total number of blocks
 st = bid.StartTime(2:num_blks);
 et = bid.EndTime(1:num_blks-1);
@@ -71,6 +74,22 @@ else
     bg_ind = [1; x+1]; % begin index
     ed_ind = [x; num_blks]; % end index
     chunk_index = [bg_ind, ed_ind];
+end % if
+
+if flag_2nd_check == true
+    % (2) use RED_block_flags
+    rbf = bid.REDBlockFlags; % RED block flags
+    cont_ind = bitget(rbf, 1) == 1; % continuity index
+    bg_ind_rbf = find(cont_ind); % begin index
+    end_ind_rbf = find([cont_ind(2:end); true]); % end index
+    chunk_index_rbf = [bg_ind_rbf, end_ind_rbf];
+    
+    % check consistency
+    if sum(chunk_index-chunk_index_rbf) ~= 0
+        warning('off', 'backtrace')
+        warning('MultiscaleElectrophysiologyFile_3p0:analyzeContinuity:noConsistent',...
+            'Continuity blocks are not consistent in continuity checking')
+    end % if
 end % if
 
 % get the continuity table
