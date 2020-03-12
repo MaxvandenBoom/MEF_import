@@ -19,7 +19,7 @@ classdef MEFSession_3p0 < MEFSession & MultiscaleElectrophysiologyFile_3p0
     % See also get_sessinfo.
 
 	% Copyright 2020 Richard J. Cui. Created: Thu 02/06/2020 10:07:26.965 AM
-	% $Revision: 0.2 $  $Date: TThu 02/20/2020 10:42:18.299 AM $
+	% $Revision: 0.3 $  $Date: Wed 03/11/2020 11:01:21.803 PM $
 	%
 	% 1026 Rocky Creek Dr NE
 	% Rochester, MN 55906, USA
@@ -44,7 +44,7 @@ classdef MEFSession_3p0 < MEFSession & MultiscaleElectrophysiologyFile_3p0
     methods
         function this = MEFSession_3p0(varargin)
             % MEFSession_3p0 Construct an instance of this class
-            % --------------------------------------------------
+            % ==================================================
             % parse inputs
             % -------------
             default_sp = ''; % default session path
@@ -63,6 +63,8 @@ classdef MEFSession_3p0 < MEFSession & MultiscaleElectrophysiologyFile_3p0
             % operations during construction
             % ------------------------------
             % initialize super classes
+            this@MEFSession;
+            this@MultiscaleElectrophysiologyFile_3p0;
             
             % set session info
             this.SessionPath = q.sesspath; % set session path directory

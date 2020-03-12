@@ -32,7 +32,9 @@ classdef MEFEEGLab < handle
     % the constructor
     % ----------------
     methods
-
+        function this = MEFEEGLab()
+            
+        end % function
     end % methods
     
     % other methods

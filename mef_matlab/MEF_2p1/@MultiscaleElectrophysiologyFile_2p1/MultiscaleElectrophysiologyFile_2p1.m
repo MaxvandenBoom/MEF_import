@@ -31,7 +31,7 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
     % See also this.readHeader.
     
     % Copyright 2019-2020 Richard J. Cui. Created: Mon 04/29/2019  8:11:02.485 PM
-    % $Revision: 1.1 $  $Date: Thu 02/06/2020  9:38:02.009 AM $
+    % $Revision: 1.2 $  $Date: Wed 03/11/2020 11:01:21.803 PM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -65,7 +65,9 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
     methods
         function this = MultiscaleElectrophysiologyFile_2p1(varargin)
             % construct MultiscaleElectrophysiologyFile object
-            % ------------------------------------------------
+            % ================================================
+            % parse inputs
+            % ------------
             % defaults
             default_pw = '';
             
@@ -98,6 +100,9 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
             
             % operations during construction
             % ------------------------------
+            % initialize super classes
+            this@MultiscaleElectrophysiologyFile;
+            
             % set MEF version to serve
             if isempty(this.MEFVersion) == true
                 this.MEFVersion = 2.1;
@@ -122,6 +127,7 @@ classdef MultiscaleElectrophysiologyFile_2p1 < MultiscaleElectrophysiologyFile
                 mef_ver = sprintf('%d.%d', this.Header.header_version_major,...
                     this.Header.header_version_minor);
                 if str2double(mef_ver) ~= this.MEFVersion
+                    warning('off', 'backtrace')
                     warning('The MEF file is compressed with MEF format version %s, rather than %0.1f. The results may be unpredictable',...
                         mef_ver, this.MEFVersion)
                 end % if

@@ -58,7 +58,9 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
     methods
         function this = MultiscaleElectrophysiologyFile_3p0(varargin)
             % construct MultiscaleElectrophysiologyFile_3p0 object
-            % ----------------------------------------------------
+            % ====================================================
+            % parse inputs
+            % ------------
             % defaults
             default_pw = '';
             default_al = 1; % access level
@@ -91,7 +93,10 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
             
             % operations during construction
             % ------------------------------
-            % (1) set MEF version to serve
+            % (1) call superclass constructors
+            this@MultiscaleElectrophysiologyFile;
+            
+            % (2) set and check MEF version
             if isempty(this.MEFVersion) == true
                 this.MEFVersion = 3.0;
             elseif this.MEFVersion ~= 3.0
@@ -99,8 +104,8 @@ classdef MultiscaleElectrophysiologyFile_3p0 < MultiscaleElectrophysiologyFile
                     'invalid MEF version; this function can serve only MEF 3.0')
             end % if
             
+            % (3) set channel info
             if ~isempty(q)
-                % (2) set channel info
                 this.FilePath = q.filepath;
                 this.FileName = q.filename;
                 this.Level1Password = q.Level1Password;

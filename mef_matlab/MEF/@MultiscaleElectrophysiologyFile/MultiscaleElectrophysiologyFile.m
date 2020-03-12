@@ -13,7 +13,7 @@ classdef MultiscaleElectrophysiologyFile < handle
     % See also .
     
     % Copyright 2020 Richard J. Cui. Created: Tue 02/04/2020  2:21:31.965 PM
-    % $Revision: 0.3 $  $Date: Thu 02/06/2020  9:38:02.009 AM $
+    % $Revision: 0.4 $  $Date: Wed 03/11/2020 10:07:12.332 PM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -56,13 +56,15 @@ classdef MultiscaleElectrophysiologyFile < handle
     % the constructor
     % ----------------    
     methods
+        function this = MultiscaleElectrophysiologyFile()
         
+        end % function
     end
     
     % other metheds
     % -------------
     methods
-        sti = getSampleTimeInterval(this, varargin) % boudn of sampling interval
+        sti = getSampleTimeInterval(this, varargin) % bound of sampling interval
         [sample_index, sample_yn] = SampleTime2Index(this, varargin) % time --> index
         [sample_time, sample_yn] = SampleIndex2Time(this, varargin) % index --> time
         this = setContinuity(this, cont_table) % set Continuity table

@@ -19,7 +19,7 @@ classdef MEFEEGLab_2p1 < MEFSession_2p1 & MEFEEGLab
     % See also .
     
     % Copyright 2019-2020 Richard J. Cui. Created: Mon 12/30/2019 10:52:49.006 PM
-    % $Revision: 0.9 $  $Date: Tue 02/04/2020  8:36:19.731 PM $
+    % $Revision: 1.0 $  $Date: Wed 03/11/2020 11:29:42.597 PM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -56,6 +56,10 @@ classdef MEFEEGLab_2p1 < MEFSession_2p1 & MEFEEGLab
             
             % operations during construction
             % ------------------------------
+            % initialize super classes
+            this@MEFEEGLab;
+            
+            % set class information
             sesspath = q.sesspath;
             password = q.password;
             

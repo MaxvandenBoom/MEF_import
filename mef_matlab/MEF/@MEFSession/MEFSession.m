@@ -11,7 +11,7 @@ classdef MEFSession < handle
     % See also .
     
     % Copyright 2020 Richard J. Cui. Created: Thu 02/06/2020 10:07:26.965 AM
-    % $Revision: 0,3 $  $Date: Thu 02/20/2020 10:42:18.299 AM $
+    % $Revision: 0.4 $  $Date: Wed 03/11/2020 11:01:21.803 PM $
     %
     % 1026 Rocky Creek Dr NE
     % Rochester, MN 55906, USA
@@ -59,7 +59,9 @@ classdef MEFSession < handle
     % the constructor
     % ----------------    
     methods
-
+        function this = MEFSession()
+            
+        end % function
     end % methods
     
     % other metheds

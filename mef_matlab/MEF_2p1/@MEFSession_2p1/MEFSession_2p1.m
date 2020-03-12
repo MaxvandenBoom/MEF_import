@@ -19,7 +19,7 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1 & MEFSession
     % See also get_sessinfo.
 
 	% Copyright 2019-2020 Richard J. Cui. Created: Mon 12/30/2019 10:52:49.006 PM
-	% $Revision: 1.2 $  $Date: Sat 02/08/2020 11:34:43.160 PM $
+	% $Revision: 1.3 $  $Date: Wed 03/11/2020 11:01:21.803 PM $
 	%
 	% 1026 Rocky Creek Dr NE
 	% Rochester, MN 55906, USA
@@ -42,6 +42,8 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1 & MEFSession
     % ----------------
     methods 
         function this = MEFSession_2p1(varargin)
+            % MEFSession_2p1 contractor
+            % =========================
             % parse inputs
             % ------------
             % defaults
@@ -58,10 +60,14 @@ classdef MEFSession_2p1 < MultiscaleElectrophysiologyFile_2p1 & MEFSession
             
             % operations during construction
             % ------------------------------
+            % initialize super classes
+            this@MEFSession;
+            
+            % set session info
             this.SessionPath = q.sesspath; % set session path directory
             this.Password = q.password; % set password
             
-            % set MEF version to serve
+            % set and check MEF version
             if isempty(this.MEFVersion) == true
                 this.MEFVersion = 2.1;
             elseif this.MEFVersion ~= 2.1
