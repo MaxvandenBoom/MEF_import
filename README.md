@@ -105,8 +105,8 @@ From EEGLAB GUI, select File > Import event info > From Mayo Clinic .maf > MEF 2
 
 Currently, the importer can only recognize events of seizure onset and seizure offset.
 
-Credit
-------
+Acknowledgment
+--------------
 Multiscale Electrophysiology Format (MEF) is a novel electrophysiology file format designed for large-scale storage of electrophysiological recordings.
 MEF can achieve significant data size reduction when compared to existing techniques with stat-of-the-art lossless data compression.
 It satisfies the Health Insurance Portability and Accountability Act (HIPAA) to encrypt any patient protected health information transmitted over a public network.
@@ -115,7 +115,7 @@ The details of MEF file can be found at [here](https://www.mayo.edu/research/lab
 
 The c-mex code to read MEF 2.1 data is mainly developed from the work done by [Ben Brinkmann](https://github.com/benbrinkmann/mef_lib_2_1), Matt Stead, Dan Crepeau, and [Gregory Worrell](https://www.mayo.edu/research/faculty/worrell-gregory-a-m-d-ph-d/bio-00027235) from [Mayo Systems Electrophysiology Lab](https://msel.mayo.edu/codes.html),  Mayo Clinic, Rochester MN.
 
-The c-mex code for MEF 3.0 is mainly adapted from the work by [Max van den Boom](https://github.com/MaxvandenBoom/matmef) and Dora Hermes Miller at [Multimodal Neuroimaging Lab](https://github.com/MultimodalNeuroimagingLab), Mayo Clinic, Rochester MN.
+The c-mex code for MEF 3.0 is mainly adapted from the work by [Max van den Boom](https://github.com/MaxvandenBoom/matmef) and [Dora Hermes](https://www.mayo.edu/research/faculty/hermes-miller-dora-ph-d/bio-20471548) at [Multimodal Neuroimaging Lab](https://github.com/MultimodalNeuroimagingLab), Mayo Clinic, Rochester MN.
 
 License
 -------
