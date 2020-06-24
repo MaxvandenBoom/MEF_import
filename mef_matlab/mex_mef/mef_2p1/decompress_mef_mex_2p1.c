@@ -65,7 +65,7 @@ void decomp_mef(char *f_name, unsigned long long int start_idx, unsigned long lo
 	}
 	
 	/* read header */
-	fp = fopen(f_name, "r");
+	fp = fopen(f_name, "rb");
 	if (fp == NULL) { 
 		mexErrMsgIdAndTxt("decompress_mef_mex:decomp_mef",
                 "could not open the file \"%s\" => exiting\n",  f_name);
