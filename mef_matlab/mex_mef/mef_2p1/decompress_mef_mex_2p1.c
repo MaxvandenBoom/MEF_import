@@ -101,7 +101,7 @@ void decomp_mef(char *f_name, unsigned long long int start_idx, unsigned long lo
 	
 	/* read in index data */
 	n_index_entries = (unsigned int) hdr_info.number_of_index_entries;
-	fseeko(fp, (off_t) hdr_info.index_data_offset, SEEK_SET);
+	fseek(fp, (long int) hdr_info.index_data_offset, SEEK_SET);
 	tot_index_fields = n_index_entries * 3;	// 3 fields per entry
 	index_data = (unsigned long long int *) malloc(tot_index_fields * sizeof(unsigned long long int));
 	if (index_data == NULL) {
@@ -159,7 +159,7 @@ void decomp_mef(char *f_name, unsigned long long int start_idx, unsigned long lo
 	}
     
 	/* read in compressed data */
-	fseeko(fp, (off_t) start_block_file_offset, SEEK_SET);
+	fseek(fp, (long int) start_block_file_offset, SEEK_SET);
 	n_read = fread(comp_data, sizeof(char), (size_t) comp_data_len, fp);
 	if (n_read != comp_data_len) {
 		mexErrMsgIdAndTxt("decompress_mef_mex:decomp_mef",
