@@ -27,14 +27,12 @@
 #include "mef_2p1.h"
 
 
-#define EXPORT __attribute__((visibility("default")))
 #define EPSILON 0.0001
 #define FLOAT_EQUAL(x,y) ( ((y - EPSILON) < x) && (x <( y + EPSILON)) )
 
 
 
 
-EXPORT
 si4	build_mef_header_block(ui1 *encrypted_hdr_block, MEF_HEADER_INFO *hdr_struct, si1 *password)
 {
 	MEF_HEADER_INFO	*hs;
@@ -108,7 +106,7 @@ si4	build_mef_header_block(ui1 *encrypted_hdr_block, MEF_HEADER_INFO *hdr_struct
 		srand(time(NULL));
 		rn = (si4 *) ehb;
 		for (i = MEF_HEADER_LENGTH / 4; i--;)
-			*rn++ = (si4)random();
+			*rn++ = (si4)(rand() % 2000000000);
 	}
 	
 	/* build unencrypted block */
@@ -203,7 +201,6 @@ si4	build_mef_header_block(ui1 *encrypted_hdr_block, MEF_HEADER_INFO *hdr_struct
 }
 
 
-EXPORT
 si4	read_mef_header_block(ui1 *header_block, MEF_HEADER_INFO *header_struct, si1 *password)
 {
 	MEF_HEADER_INFO	*hs;
@@ -453,7 +450,6 @@ ui4 calculate_header_CRC(ui1 *header)
 //
 //check password for validity - returns 1 for subject password, 2 for session password, 0 for no match
 //
-EXPORT
 si4	validate_password(ui1 *header_block, si1 *password)
 {	
 	ui1	decrypted_header[MEF_HEADER_LENGTH], *hbp, *dhbp;
@@ -533,7 +529,6 @@ si4	validate_password(ui1 *header_block, si1 *password)
 //	void showHeader(MEF_HEADER_INFO *headerStruct)
 //
 
-EXPORT
 void showHeader(MEF_HEADER_INFO *headerStruct)
 {
 	si8	long_file_time;
@@ -707,7 +702,6 @@ void showHeader(MEF_HEADER_INFO *headerStruct)
 }
 
 
-EXPORT
 ui8 generate_unique_ID(ui1 *array)
 {
     static ui1 first_time = 1; 
@@ -721,13 +715,13 @@ ui8 generate_unique_ID(ui1 *array)
     
     if (first_time)
     {
-        srandom(time(NULL));
+        srand(time(NULL));
         first_time = 0;
     }
     
 	for (i=0; i<SESSION_UNIQUE_ID_LENGTH; i++) 
 	{
-		array[i] = (ui1)(random() % 255);
+		array[i] = (ui1)(rand() % 255);
 		long_output += array[i] >> i; 
 	}
 	
@@ -735,7 +729,6 @@ ui8 generate_unique_ID(ui1 *array)
 }
 
 
-EXPORT
 void set_hdr_unique_ID(MEF_HEADER_INFO *header, ui1 *array)
 {
 	//check input
@@ -756,7 +749,6 @@ void set_hdr_unique_ID(MEF_HEADER_INFO *header, ui1 *array)
 }
 
 
-EXPORT
 void set_block_hdr_unique_ID(ui1 *block_header, ui1 *array)
 {
 	
@@ -771,7 +763,6 @@ void set_block_hdr_unique_ID(ui1 *block_header, ui1 *array)
 }
 
 
-EXPORT
 ui8 set_session_unique_ID(char *file_name, ui1 *array)
 {
 	FILE *mef_fp;
@@ -779,7 +770,7 @@ ui8 set_session_unique_ID(char *file_name, ui1 *array)
 	
 	
 	//Open file
-	mef_fp = fopen(file_name, "r+");
+	mef_fp = fopen(file_name, "rb+");
 	if (mef_fp == NULL) {
 		fprintf(stderr, "%s: Could not open file %s\n", __FUNCTION__, file_name);
 		return(1);
@@ -803,7 +794,6 @@ ui8 set_session_unique_ID(char *file_name, ui1 *array)
 }
 
 
-EXPORT
 si4 check_header_block_alignment(ui1 *header_block, si4 verbose)
 {
 	if ((ui8) header_block % 8) {
@@ -816,7 +806,6 @@ si4 check_header_block_alignment(ui1 *header_block, si4 verbose)
 }
 
 
-EXPORT
 void strncpy2(si1 *s1, si1 *s2, si4 n)
 {
 	si4      len;
@@ -853,7 +842,6 @@ void init_hdr_struct(MEF_HEADER_INFO *header)
 	return; 
 }
 
-EXPORT
 si4	write_mef(si4 *samps, MEF_HEADER_INFO *mef_header, ui8 len, si1 *out_file, si1 *subject_password)
 {
 	ui1	*header, byte_padding[8], discontinuity_flag;
@@ -926,7 +914,7 @@ si4	write_mef(si4 *samps, MEF_HEADER_INFO *mef_header, ui8 len, si1 *out_file, s
 		fprintf(stderr, "no \".mef\" on input name => exiting\n");
 		return(1);
 	}
-	fp = fopen(out_file, "w");
+	fp = fopen(out_file, "wb");
 	if (fp == NULL) {fprintf(stderr, "Error [%s]: Can't open file %s for writing\n\n", __FUNCTION__, out_file); exit(1);}
 	
 	
@@ -1005,7 +993,6 @@ si4	write_mef(si4 *samps, MEF_HEADER_INFO *mef_header, ui8 len, si1 *out_file, s
 	return(0);
 }
 
-EXPORT
 si4	write_mef_ind(si4 *samps, MEF_HEADER_INFO *mef_header, ui8 len, si1 *out_file, si1 *subject_password, INDEX_DATA *index_block, si4 num_blocks, ui1 *discontinuity_array)
 {
 	ui1 *header, byte_padding[8], *compressed_buffer, *cbp, encryption_key[240];
@@ -1065,7 +1052,7 @@ si4	write_mef_ind(si4 *samps, MEF_HEADER_INFO *mef_header, ui8 len, si1 *out_fil
 		fprintf(stderr, "no \".mef\" on input name => exiting\n");
 		return(1);
 	}
-	fp = fopen(out_file, "w");
+	fp = fopen(out_file, "wb");
 	if (fp == NULL) {fprintf(stderr, "Error [%s]: Can't open file %s for writing\n\n", __FUNCTION__, out_file); exit(1);}
 	
 	memset(header, 0, MEF_HEADER_LENGTH); //fill mef header space with zeros - will write real info after writing blocks and indices
@@ -1189,7 +1176,6 @@ si4	write_mef_ind(si4 *samps, MEF_HEADER_INFO *mef_header, ui8 len, si1 *out_fil
 }
 
 
-EXPORT
 si4	build_RED_block_header(ui1 *header_block, RED_BLOCK_HDR_INFO *header_struct)
 {
 	ui1	*ui1_p, *ui1_p2;
@@ -1256,7 +1242,6 @@ si4	build_RED_block_header(ui1 *header_block, RED_BLOCK_HDR_INFO *header_struct)
 	return(0);
 }
 
-EXPORT
 si4	read_RED_block_header(ui1 *header_block, RED_BLOCK_HDR_INFO *header_struct)
 {
 	ui1	*ib_p, *ui1_p;
@@ -1373,18 +1358,18 @@ si4 validate_mef(char *mef_filename, char *log_filename, char *password)
 	else {
 		//check to see if log file exists
 		logfile = 1;
-		lfp = fopen(log_filename, "r");
+		lfp = fopen(log_filename, "rb");
 		if (lfp != NULL)
 			fprintf(stdout, "[%s] Appending to existing logfile %s\n", __FUNCTION__, log_filename);
 		fclose(lfp);
-		lfp = fopen(log_filename, "a+");
+		lfp = fopen(log_filename, "ab+");
 		if (lfp == NULL) {
 			fprintf(stderr, "[%s] Error opening %s for writing\n", __FUNCTION__, log_filename);
 			return(1);
 		}
 	}
 
-	mfp = fopen(mef_filename, "r");
+	mfp = fopen(mef_filename, "rb");
 	if (mfp == NULL) {fprintf(stderr, "[%s] Error opening mef file %s\n", __FUNCTION__, mef_filename); return(1);}
 
 	n = fread(encr_hdr, 1, MEF_HEADER_LENGTH, mfp);
@@ -1769,12 +1754,14 @@ ui8 RED_compress_block(si4 *in_buffer, ui1 *out_buffer, ui4 num_entries, ui8 uUT
 {
 	ui4	cum_cnts[256], cnts[256], max_cnt, scaled_tot_cnts, extra_bytes;
 	ui4	diff_cnts, comp_block_len, comp_len, checksum;
-	ui1	diff_buffer[num_entries * 4], *ui1_p1, *ui1_p2, *ehbp;
+	ui1	*ui1_p1, *ui1_p2, *ehbp;
 	si1	*si1_p1, *si1_p2;
 	si4	i, diff, max_data_value, min_data_value;
 	sf8	stats_scale;
 	RANGE_STATS rng_st;
 	void AES_encryptWithKey();
+	
+	ui1	*diff_buffer = (ui1*) malloc(num_entries * 4 * sizeof(ui1));
 	
 		
 	/*** generate differences ***/
@@ -1884,6 +1871,7 @@ ui8 RED_compress_block(si4 *in_buffer, ui1 *out_buffer, ui4 num_entries, ui8 uUT
 	if (data_encryption==MEF_TRUE) {
 		if (key==NULL) {
 			fprintf(stderr, "[%s] Error: Null Encryption Key with encrypted block header\n", __FUNCTION__);
+			free(diff_buffer);
 			return(-1);
 		}
 		else
@@ -1901,6 +1889,9 @@ ui8 RED_compress_block(si4 *in_buffer, ui1 *out_buffer, ui4 num_entries, ui8 uUT
 	ui1_p2 = (ui1 *) &checksum;
 	for (i = 0; i < 4; ++i)
 		*ui1_p1++ = *ui1_p2++;
+	
+	// 
+	free(diff_buffer);
 	
 	return(comp_block_len + BLOCK_HEADER_BYTES);
 }
