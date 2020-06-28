@@ -24,7 +24,7 @@ function vers = eegplugin_mefimport(fig, try_strings, catch_strings)
 % See also .
 
 % Copyright 2019-2020 Richard J. Cui. Created: Sun 04/28/2019  9:51:01.691 PM
-% $Revision: 1.8 $  $Date: Tue 02/18/2020 10:39:50.006 PM $
+% $Revision: 1.9 $  $Date: Sat 06/27/2020 10:45:24.087 PM $
 %
 % 1026 Rocky Creek Dr NE
 % Rochester, MN 55906, USA
@@ -33,7 +33,7 @@ function vers = eegplugin_mefimport(fig, try_strings, catch_strings)
 
 % version info
 % ------------
-vers='MEF_import1.17';
+vers='MEF_import1.18';
 
 % parse inputs
 % ------------
