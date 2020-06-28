@@ -13,19 +13,11 @@
  *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
  *  You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-// Copyright 2020 Richard J. Cui. Created: Sun 02/16/2020 10:34:49.777 PM
-// $Revision: 0.1 $  $Date: Sun 02/16/2020 10:34:49.777 PM $
-//
-// 1026 Rocky Creek Dr NE
-// Rochester, MN 55906, USA
-//
-// Email: richard.cui@utoronto.ca
-
 #include "mex.h"
-#include "meflib.h"
 #include "matmef_mapping.h"
 
+#include "meflib/meflib/meflib.c"
+#include "meflib/meflib/mefrec.c"
 
 
 /**
@@ -134,6 +126,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 	initialize_meflib();
 
 	// read the session metadata
+	MEF_globals->behavior_on_fail = SUPPRESS_ERROR_OUTPUT;
 	SESSION *session = read_MEF_session(	NULL, 					// allocate new session object
 											session_path, 			// session filepath
 											password, 				// password
@@ -141,8 +134,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 											MEF_FALSE, 				// do not read time series data
 											MEF_TRUE				// read record data
 										);
-	
-	
+	MEF_globals->behavior_on_fail = EXIT_ON_FAIL;
 	
 	// check for error
 	if (session == NULL)	mexErrMsgTxt("Error while reading session metadata");
@@ -150,14 +142,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 	// check if the data is encrypted and/or the correctness of password
 	if (session->time_series_metadata.section_1 != NULL) {
 		if (session->time_series_metadata.section_1->section_2_encryption > 0 || session->time_series_metadata.section_1->section_2_encryption > 0) {
+			free_session(session, MEF_TRUE);
 			if (password == NULL)
 				mexErrMsgTxt("Error: data is encrypted, but no password is given, exiting...\n");
 			else
 				mexErrMsgTxt("Error: wrong password for encrypted data, exiting...\n");
+			
 		}
 	}
 	if (session->video_metadata.section_1 != NULL) {
 		if (session->video_metadata.section_1->section_2_encryption > 0 || session->video_metadata.section_1->section_2_encryption > 0) {
+			free_session(session, MEF_TRUE);
 			if (password == NULL)
 				mexErrMsgTxt("Error: data is encrypted, but no password is given, exiting...\n");
 			else
@@ -173,6 +168,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
 		plhs[0] = map_mef3_session(session, map_indices_flag);
 		
 	}		
+	
+	// free the session memory
+	free_session(session, MEF_TRUE);
 	
 	// 
 	return;
