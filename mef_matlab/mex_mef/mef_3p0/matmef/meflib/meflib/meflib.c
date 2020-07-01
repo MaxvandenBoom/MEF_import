@@ -4035,9 +4035,8 @@ void	free_session(SESSION *session, si4 free_session_structure)
 	        }
 	    }
 
-		// clean up
 	    FindClose(hFind);
-		
+    
 	    // now read again and allocate and build
 	    sprintf(temp_path, "%s\\*.*", enclosing_directory);
 		hFind = FindFirstFile(temp_path, &fdFile);
