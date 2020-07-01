@@ -57,7 +57,7 @@ int read_mef_header(char *f_name, MEF_HEADER_INFO *hdr_info, char *password)
 	}
 	
 	/* read header */
-	fp = fopen(f_name, "rb");
+	fp = fopen(f_name, "r");
 	if (fp == NULL) { 
 		printf("[%s] could not open the file \"%s\" => exiting\n", __FUNCTION__, f_name);
 		return(1);

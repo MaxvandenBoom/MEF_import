@@ -1,9 +1,7 @@
 MEF 2.1, 3.0 EEGLAB Plugin MEF_import (Ver 1.18)
 ===================================================
 
-[![Github license](https://img.shields.io/github/license/jiecui/MEF_import.svg)](https://github.com/jiecui/MEF_import/blob/master/LICENSE)
-[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/jiecui/MEF_import)](https://github.com/jiecui/MEF_import/releases/tag/v1.18)
-[![HitCount](http://hits.dwyl.io/jiecui/MEF_import.svg)](http://hits.dwyl.io/jiecui/MEF_import)
+_Caution: This version is under development, which may be unstable._
 
 Introduction
 ------------
@@ -33,6 +31,7 @@ Mex file
 --------
 Several mex files are required to read MEF data.
 After launch EEGLAB, run 'make_mex_mef.m' to build the mex files for different operating systems.
+The binary files for MacOS-64-bit are provided with the release, compiled by using Xcode with Clang.
  
 Data samples
 ------------
