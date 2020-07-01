@@ -41,11 +41,10 @@ function metadata = read_mef_session_metadata_3p0(this, varargin)
 %
 
 % Copyright 2020 Richard J. Cui. Adapted: Sat 02/01/2020 10:30:50.708 PM
-% $Revision: 0.5 $  $Date: Thu 04/09/2020 11:05:29.605 PM $
+% $Revision: 0.2 $  $Date: Thu 02/06/2020 11:27:26.453 AM $
 %
-% Multimodel Neuroimaging Lab (Dr. Dora Hermes)
-% Mayo Clinic St. Mary Campus
-% Rochester, MN 55905
+% 1026 Rocky Creek Dr NE
+% Rochester, MN 55906, USA
 %
 % Email: richard.cui@utoronto.ca
 

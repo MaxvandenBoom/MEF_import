@@ -1,7 +1,5 @@
-MEF 2.1, 3.0 EEGLAB Plugin MEF_import (Ver 1.18)
+MEF 2.1, 3.0 EEGLAB Plugin MEF_import (Ver 1.17)
 ===================================================
-
-_Caution: This version is under development, which may be unstable._
 
 Introduction
 ------------
@@ -14,7 +12,7 @@ The code repository for **MEF_import** is hosted on GitHub at https://github.com
 Installation
 ------------
 1. Download, decompress and copy the directory into the directory of plugins of EEGLAB (/root/directory/of/eeglab/plugins)
-1. Rename the folder name of MEF_import plugin to MEF_import1.18
+1. Rename the folder name of MEF_import plugin to MEF_import1.17
 1. Alternatively, you may prefer to install the plugin as a Git submodule: go to the directory of eeglab, then run 
 
         git submodule add https://github.com/jiecui/MEF_import ./plugins/MEF_import

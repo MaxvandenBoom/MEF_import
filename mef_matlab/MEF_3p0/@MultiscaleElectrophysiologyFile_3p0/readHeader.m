@@ -59,11 +59,10 @@ function [header, channel] = readHeader(this, varargin)
 % See also read_mef_header_mex_3p0.m.
 
 % Copyright 2020 Richard J. Cui. Created: Tue 02/04/2020  3:33:28.609 PM
-% $Revision: 0.3 $  $Date: Wed 04/01/2020  7:14:38.610 PM $
+% $Revision: 0.2 $  $Date: Tue 02/04/2020  8:31:09.815 PM $
 %
-% Multimodel Neuroimaging Lab (Dr. Dora Hermes)
-% Mayo Clinic St. Mary Campus
-% Rochester, MN 55905, USA
+% 1026 Rocky Creek Dr NE
+% Rochester, MN 55906, USA
 %
 % Email: richard.cui@utoronto.ca
 
@@ -88,11 +87,7 @@ else
     this.AccessLevel = al;
 end % if
 
-if isempty(pw)
-    [header, channel] = read_mef_header_mex_3p0(wholename);
-else
-    [header, channel] = read_mef_header_mex_3p0(wholename, pw);
-end % if
+[header, channel] = read_mef_header_mex_3p0(wholename, pw);
 
 end %function
 
